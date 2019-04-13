@@ -1,0 +1,31 @@
+<div class="container">
+    <form action="">
+        <div class="form-group">
+            <label for="input-author">Author</label>
+            <input type="text" class="form-control" id="input-author">
+        </div>
+        <div class="form-group">
+            <label for="input-image">Image URL</label>
+            <input type="url" class="form-control" id="input-image">
+        </div>
+        <div class="form-group">
+            <label for="input-title">Article Title</label>
+            <input type="text" class="form-control" id="input-title">
+        </div>
+        <div class="form-group">
+            <label for="articleText">Article Text</label>
+            <textarea class="form-control" id="articleText" rows="5"></textarea>
+        </div>
+        <button type="button" class="btn btn-secondary" data-toggle="modal" data-target=".bd-example-modal-lg">
+            Preview</button>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+
+    <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                #Article text would go here
+            </div>
+        </div>
+    </div>
