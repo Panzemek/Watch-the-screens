@@ -24,16 +24,74 @@ module.exports = function(app) {
     var org = req.params.org;
     var gameId = req.params.gameId;
     //TODO: Needs to do an database call to the network table to get the network object data in order to poulate the reporter preview modal and return it to newsOrg.
-    var fakeOrgData = {network_full: "Watch The Skies", network_short: "WTS"};
+    var fakeOrgData = { network_full: "Watch The Skies", network_short: "WTS" };
     var newsOrg = fakeOrgData;
     res.render("reporter", newsOrg); //handlebars news org here
   });
 
   app.get("/:gameId/newsViewer", function(req, res) {
-      var gameId = req.params.gameId
-      res.render("newsViewer")
+    var gameId = req.params.gameId;
+    //TODO: Needs to do a database call to get all articles (with the join of network). Then we need to construct an object with the following format
+    /*
+      {
+        rounds: [{
+          round: whatever the articles are from,
+          articles: [array of articleObjects from that round]
+        },{
+          round: whatever the articles are from,
+          articles: [array of articleObjects from that round]
+        }]
+      }
+      */
+    var fakeRoundData = {
+      rounds: [
+        {
+          round: 1,
+          articles: [
+            {
+              network_full: "Watch The Skies",
+              network_short: "WTS",
+              author: "mario",
+              title: "Bobcats on the loose",
+              article_body:
+                "There are bobcats, and they are on the loose! More at ten"
+            },
+            {
+              network_full: "Watch The Skies",
+              network_short: "WTS",
+              author: "mario",
+              title: "Bobcats on the loose",
+              article_body:
+                "There are bobcats, and they are on the loose! More at ten"
+            }
+          ]
+        },
+        {
+          round: 2,
+          articles: [
+            {
+              network_full: "Watch The Skies",
+              network_short: "WTS",
+              author: "mario",
+              title: "Bobcats on the loose",
+              article_body:
+                "There are bobcats, and they are on the loose! More at ten"
+            },
+            {
+              network_full: "Watch The Skies",
+              network_short: "WTS",
+              author: "mario",
+              title: "Bobcats on the loose",
+              article_body:
+                "There are bobcats, and they are on the loose! More at ten"
+            }
+          ]
+        }
+      ]
+    };
+    var rounds = fakeRoundData;
+    res.render("newsViewer", rounds);
   });
-
 
   // Load example page and pass in an example by id
   app.get("/:gameId/example/:id", function(req, res) {
@@ -47,8 +105,8 @@ module.exports = function(app) {
   });
 
   //This would default all routes other than those above to the default game page - do we want this or the 404 page?
-  app.get('*', function (req, res) {
-    res.redirect('/');
+  app.get("*", function(req, res) {
+    res.redirect("/");
   });
 
   // Render 404 page for any unmatched routes
