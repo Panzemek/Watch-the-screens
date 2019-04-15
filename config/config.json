@@ -9,7 +9,7 @@
   "test": {
     "username": "root",
     "password": null,
-    "database": "testdb",
+    "database": "wts_game_db_test",
     "host": "localhost",
     "dialect": "mysql",
     "logging": false
