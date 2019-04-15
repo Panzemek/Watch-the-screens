@@ -1,31 +1,37 @@
 <div class="container">
-    <form action="">
+    <form id="article-form">
         <div class="form-group">
             <label for="input-author">Author</label>
             <input type="text" class="form-control" id="input-author">
         </div>
         <div class="form-group">
             <label for="input-image">Image URL</label>
-            <input type="url" class="form-control" id="input-image">
+            <input type="text" class="form-control" id="input-image">
         </div>
         <div class="form-group">
             <label for="input-title">Article Title</label>
             <input type="text" class="form-control" id="input-title">
         </div>
         <div class="form-group">
-            <label for="articleText">Article Text</label>
-            <textarea class="form-control" id="articleText" rows="5"></textarea>
+            <label for="input-body">Article Text</label>
+            <textarea class="form-control" id="input-body" rows="15"></textarea>
         </div>
-        <button type="button" class="btn btn-secondary" data-toggle="modal" data-target=".bd-example-modal-lg">
+        <button id="article-preview-button" type="button" class="btn btn-primary" data-toggle="modal" data-target=".bd-example-modal-lg">
             Preview</button>
-        <button type="submit" class="btn btn-primary">Submit</button>
     </form>
 
     <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
         aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
-                {{> article}}
+                <div class="modal-body">
+                    {{> article}}
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <button id="article-submit-button" type="button" class="btn btn-primary" data-dismiss="modal">Submit</button>
+                </div>
             </div>
         </div>
+
     </div>
