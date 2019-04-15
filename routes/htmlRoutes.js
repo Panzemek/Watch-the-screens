@@ -24,8 +24,16 @@ module.exports = function(app) {
     var org = req.params.org;
     var gameId = req.params.gameId;
     //TODO: Needs to do an database call to the network table to get the network object data in order to poulate the reporter preview modal and return it to newsOrg.
-    var fakeOrgData = { network_full: "Watch The Skies", network_short: "WTS" };
+    var fakeOrgData = {
+      // eslint-disable-next-line camelcase
+      network_full: "Watch The Skies",
+      // eslint-disable-next-line camelcase
+      network_short: "WTS"
+    };
     var newsOrg = fakeOrgData;
+    // eslint-disable-next-line camelcase
+    newsOrg[game_id] = req.params.gameId;
+    // eslint-disable-next-line camelcase
     res.render("reporter", newsOrg); //handlebars news org here
   });
 
