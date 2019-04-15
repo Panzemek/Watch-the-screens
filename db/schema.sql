@@ -1,6 +1,7 @@
 DROP DATABASE IF EXISTS wts_game_db;
-CREATE DATABASE wts_game_db;
 
+CREATE DATABASE wts_game_db;
+USE wts_game_db;
 CREATE TABLE game
 (
     id int NOT NULL
@@ -45,7 +46,7 @@ CREATE TABLE game
         CREATE TABLE network
         (
             id int NOT NULL
-            AUTO_INCREMENT, 
+            AUTO_INCREMENT,
     network_image varchar
             (255) NOT NULL,
     network_full varchar
@@ -79,3 +80,4 @@ CREATE TABLE game
     PRIMARY KEY
                 (id)
 );
+

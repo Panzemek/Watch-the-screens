@@ -1,7 +1,7 @@
 {
   "development": {
     "username": "root",
-    "password": null,
+    "password": "null",
     "database": "wts_game_db",
     "host": "localhost",
     "dialect": "mysql"
