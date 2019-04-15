@@ -9,7 +9,6 @@ $("#terror-button").click(function() {
 
 //Send global post button click
 $("#global-post-submit-button").click(function() {
-    // TODO: check duration for numbers only and kick back if 
   console.log($("#global-post-text").val(), $("#global-post-duration").val());
   $.ajax("/api/postGlobal", {
     type: "post",
