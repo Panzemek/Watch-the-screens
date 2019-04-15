@@ -13,9 +13,10 @@ module.exports = function(app) {
 
   //this is the admin 'control' interface
   app.get("/:gameId/admin", function(req, res) {
-    var gameId = req.params.gameId;
+    // eslint-disable-next-line camelcase
+    var data = { game_id: req.params.gameId };
     //database call for current values
-    res.render("admin"); //admin page
+    res.render("admin", data); //admin page
   });
 
   //reporter news publish location here
@@ -32,7 +33,9 @@ module.exports = function(app) {
     };
     var newsOrg = fakeOrgData;
     // eslint-disable-next-line camelcase
-    newsOrg[game_id] = req.params.gameId;
+    newsOrg.game_id = gameId;
+    // eslint-disable-next-line camelcase
+    newsOrg.network_short = org;
     // eslint-disable-next-line camelcase
     res.render("reporter", newsOrg); //handlebars news org here
   });
