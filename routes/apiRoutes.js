@@ -1,6 +1,12 @@
 var db = require("../models");
 
 module.exports = function(app) {
+  app.post("/api/createGame", function(req, res) {
+    //TODO: Make a post call to the db to add a game, return the gameId and use that to redirect to /<game.id>/admin.
+    console.log(req.body);
+    res.redirect("/1/admin");
+  });
+
   // Get all examples
   app.get("/api/examples", function(req, res) {
     db.Example.findAll({}).then(function(dbExamples) {
