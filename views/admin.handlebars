@@ -75,16 +75,17 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form>
+                    <form id="global-post-form">
                         <label for="global-post-text">Post Text</label>
-                        <input id="global-post-text" type="text">
+                        <textarea class="form-control global-post-control" id="global-post-text" rows=5></textarea>
+                        <br />
                         <label for="global-post-text">Post Duration</label>
-                        <input id="global-post-duration" type="number">
+                        <input class="form-control global-post-control" id="global-post-duration" type="number">
                     </form>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-primary">Send Global Post</button>
+                    <button id="global-post-submit-button" type="button" class="btn btn-primary" data-dismiss="modal">Send Global Post</button>
                 </div>
             </div>
         </div>
