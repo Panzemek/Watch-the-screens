@@ -1,34 +1,38 @@
 <div>
-    <h2>Round #</h2>
-    <h1>##:##</h1>
+{{> clock}}
 </div>
 <div class="container">
-    <div class="row">
-        <div class="col-md-8 border">
-            <ul>
-                <li>Rioters: #</li>
-                <li>#Cat Fight +5</li>
-                <li>#Dog Fight -3</li>
-                <li>Terror Level ##</li>
-            </ul>
-        </div>
-        <div class="col-md-8">
-            <div class="row">
-                <div class="col-m-6 border">#NEWS ARTICLE</div>
-                <div class="col-m-6 border">#NEWS ARTICLE</div>
-            </div>
-        </div>
-    </div>
-    <button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bd-example-modal-lg">TEMPORARY MODAL BUTTON! Remove me when back end is set up to push to modal</button>
+   <div class="row">
+       <div class="col-md-8 border">
+           <ul>
+               <li>Rioters: #</li>
+               <li>#Cat Fight +5</li>
+               <li>#Dog Fight -3</li>
+               <li>Terror Level ##</li>
+           </ul>
+       </div>
+       <div class="col-md-8">
+           <div class="row">
+               <div class="col-m-6 border">#NEWS ARTICLE</div>
+               <div class="col-m-6 border">#NEWS ARTICLE</div>
+           </div>
+       </div>
+   </div>
+   <button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bd-example-modal-lg">TEMPORARY MODAL BUTTON! Remove me when back end is set up to push to modal</button>
 
 <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      ...
-    </div>
-  </div>
+ <div class="modal-dialog modal-lg">
+   <div class="modal-content">
+     ...
+   </div>
+ </div>
 </div>
-    <div class="row border">
-    <p>#TICKER</p>
-</div>
+<div class="row border"> <!--this is for scroll bar-->
+ <div class="scrolling-text">
+   <!--//Suppress the <span/> after the the newArticleDisplay is T -->
+   <div class = "breaking-news">
+     <icon id="breaking-title-image">BK Read more pic>></icon><span class="breaking-title"> WTS BREAKING NEWS
+  </span>
+   <marquee direction="left">Scrolling WTS news ticker</marquee>
+ </div>
 </div>
