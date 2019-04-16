@@ -8,6 +8,7 @@ module.exports = function(app) {
     res.redirect("/1/admin");
   });
 
+  //Used by the admin view. Ends a game.
   app.put("/api/endGame", function(req, res) {
     //TODO: Make a put call to the db to switch the is_complete flag to true. Then on success handle end of game
     console.log(req.body);
@@ -29,6 +30,11 @@ module.exports = function(app) {
   //Used by the admin view. Updates the time that a round starts out with (should not affect current round).
   app.put("/api/updateDefaultTime", function(req, res) {
     //TODO: make a put call to the db to update the round_duration value in the game table
+    console.log(req.body);
+  });
+
+  app.put("/api/toggleArticle", function(req, res) {
+    //TODO: make a put call to the db to update the is hidden status of the article. Then, on success, update admin and overview views with article data.
     console.log(req.body);
   });
 };

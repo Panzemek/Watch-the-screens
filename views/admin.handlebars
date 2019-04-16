@@ -28,13 +28,18 @@
         </div>
         <div class="col col-md-4">
             <div class="row">
-                <h2>Remove Article</h2>
-                <form action="POST">
-                    <select name="article-for-removal" id="remove-article-dropdown">
-                        <option value="article1ID">#Article 1 title</option>
-                        <option value="article2ID">#Article 2 title</option>
+                <h2>Hide/Show Article</h2>
+                <form>
+                    <select id="toggle-article-dropdown">
+                        {{#each articles}}
+                            <option value="{{id}}" data-hidden="{{is_hidden}}">{{title}}
+                            {{#if is_hidden}}
+                            (hidden)
+                            {{/if}}
+                            </option>
+                        {{/each}}
                     </select>
-                    <button id="remove-article-button">Remove</button>
+                    <button type="button" class="btn btn-primary" id="toggle-article-button">Hide</button>
                 </form>
             </div>
             <div class="row">

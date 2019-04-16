@@ -13,9 +13,25 @@ module.exports = function(app) {
 
   //this is the admin 'control' interface
   app.get("/:gameId/admin", function(req, res) {
-    var gameId = req.params.gameId;
+    //TODO: Make a call to the db and return all news.title, news.id, and news.is_hidden values for each article
+    var fakeArticles = [
+      {
+        id: 1,
+        title: "Cowabunga Dude!",
+        is_hidden: true
+      },
+      {
+        id: 2,
+        title: "Turtles in time!",
+        is_hidden: false
+      }
+    ];
+    var data = {
+      game: req.params.gameId,
+      articles: fakeArticles
+    };
     //database call for current values
-    res.render("admin"); //admin page
+    res.render("admin", data); //admin page
   });
 
   //reporter news publish location here

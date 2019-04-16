@@ -54,3 +54,33 @@ $("#end-game-confirm-button").click(function() {
     data: { id: $("#admin-container").data("game") }
   });
 });
+
+//Sends put call to db toggling whether or not an article is visible.
+$("#toggle-article-button").click(function() {
+  var newState;
+  var selected = $("#toggle-article-dropdown option:selected");
+  if (selected.data("hidden")) {
+    newState = false;
+    console.log("Toggling to show");
+  } else {
+    newState = true;
+    console.log("Toggling to hide");
+  }
+  $.ajax("/api/toggleArticle", {
+    type: "put",
+    data: {
+      id: selected.val(),
+      // eslint-disable-next-line camelcase
+      is_hidden: newState
+    }
+  });
+});
+
+//Changes the state of the text on the article dropdown submit button based on whether or not the article is already hidden or not.
+$("#toggle-article-dropdown").change(function() {
+  if ($("#toggle-article-dropdown option:selected").data("hidden")) {
+    $("#toggle-article-button").text("Show");
+  } else {
+    $("#toggle-article-button").text("Hide");
+  }
+});
