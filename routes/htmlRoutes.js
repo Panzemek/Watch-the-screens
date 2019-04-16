@@ -3,7 +3,8 @@ var db = require("../models");
 module.exports = function(app) {
   // Load index page
   app.get("/", function(req, res) {
-    res.render("overview");
+    var data = { current_round: 1, time_left: "20:00" };
+    res.render("overview", data);
   });
 
   //this route should be the inital game setup route
@@ -14,6 +15,7 @@ module.exports = function(app) {
   //this is the admin 'control' interface
   app.get("/:gameId/admin", function(req, res) {
     //TODO: Make a call to the db and return all news.title, news.id, and news.is_hidden values for each article
+    //TODO: Make a call to the db and return games.current_round and round_started (I think we need this) to calculate time left.
     var fakeArticles = [
       {
         id: 1,
@@ -28,7 +30,9 @@ module.exports = function(app) {
     ];
     var data = {
       game: req.params.gameId,
-      articles: fakeArticles
+      articles: fakeArticles,
+      current_round: 1,
+      time_left: "20:00"
     };
     //database call for current values
     res.render("admin", data); //admin page
