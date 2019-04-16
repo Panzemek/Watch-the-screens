@@ -7,7 +7,7 @@ $("#terror-button").click(function() {
     type: "put",
     data: { terror: $("#terror-tracker-text").val() }
   });
-  socket.broadcast.emit("terrorUpd", $("#terror-tracker-text").val());
+  socket.emit("terrorUpd", $("#terror-tracker-text").val());
 });
 
 //Send global post button click
@@ -19,10 +19,19 @@ $("#global-post-submit-button").click(function() {
       text: $("#global-post-text").val(),
       duration: $("#global-post-duration").val()
     }
-  });
+  }).then((data) => {
+    console.log("data is" + data)
+    var globalTextPostData = {
+      text: $("#global-post-text").val(),
+      duration: $("#global-post-duration").val()
+    };
+  
+    socket.emit("globalTextPost", globalTextPostData);
+  })
   $("#global-post-form")
     .find(".global-post-control")
     .val("");
+  
 });
 
 //Update subsequent round time

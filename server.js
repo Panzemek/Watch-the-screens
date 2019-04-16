@@ -52,9 +52,12 @@ db.sequelize.sync(syncOptions).then(function() {
 var test = 'aaaaaaaaaaaa'
 io.on('connection', (socket) => {
   console.log('a user connected')
-  socket.emit('test', test)
-  var clients = io.sockets.clients();
+  socket.on('terrorUpd', (terrorVal) => {
+    console.log(terrorVal)
+  })
 })
+
+
 
 module.exports = app;
   
