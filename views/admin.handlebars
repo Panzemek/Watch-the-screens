@@ -1,9 +1,11 @@
 <div id="admin-container" class="container" data-game="{{game_id}}">
     <div class="row">
-        <span id="round">Round#</span>
-        <input type="time" id="timer" value="##:##">
-        <button id="edit"></button>
-        <button id="pause-button">#Pause/Play</button>
+        <div>{{> clock}}</div>
+        <div>
+            <input type="time" id="number" value="##:##">
+            <button id="edit"></button>
+            <button id="pause-button">#Pause/Play</button>
+        </div>
     </div>
     <div class="row">
         <div class="col col-md-8">
