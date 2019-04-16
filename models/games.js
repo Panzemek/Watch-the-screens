@@ -2,51 +2,51 @@ module.exports = function(sequelize, DataTypes) {
   var game = sequelize.define("game", {
     id: {
       type: DataTypes.INTEGER,
-      AllowNull: false,
+      allowNull: false,
       autoIncrement: true,
       primaryKey: true
     },
     round_duration: {
       type: DataTypes.INTEGER,
       defaultValue: 1800,
-      AllowNull: false
+      allowNull: false
     },
     terror: {
       type: DataTypes.INTEGER,
       defaultValue: 0,
-      AllowNull: false
+      allowNull: false
     },
     rioters: {
       type: DataTypes.INTEGER,
       defaultValue: 0,
-      AllowNull: false
+      allowNull: false
     },
     current_round: {
       type: DataTypes.INTEGER,
       defaultValue: 0,
-      AllowNull: false
+      allowNull: false
     },
     article_decay: {
       type: DataTypes.INTEGER,
       defaultValue: 2,
-      AllowNull: false
+      allowNull: false
     },
     is_paused: {
       type: DataTypes.BOOLEAN,
       defautValue: false,
-      AllowNull: false
+      allowNull: false
     },
-    time_remaining: { type: DataTypes.INTEGER, AllowNull: true },
+    time_remaining: { type: DataTypes.INTEGER, allowNull: true },
     is_complete: {
       type: DataTypes.BOOLEAN,
       defautValue: false,
-      AllowNull: false
+      allowNull: false
     }
   });
 
   game.associate = function(models) {
     game.hasMany(models.article);
-    game.hasMany(models.globalEffect);
+    game.hasMany(models.global_effect);
   };
 
   return game;

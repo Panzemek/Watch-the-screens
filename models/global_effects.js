@@ -1,23 +1,23 @@
 module.exports = function(sequelize, DataTypes) {
-  var globalEffect = sequelize.define("globalEffect", {
+  var global_effect = sequelize.define("global_effect", {
     id: {
       type: DataTypes.INTEGER,
-      AllowNull: false,
+      allowNull: false,
       autoIncrement: true,
       primaryKey: true
     },
-    effect_text: { type: DataTypes.STRING, AllowNull: false },
-    round_created: { type: DataTypes.INTEGER, AllowNull: false },
-    start_trigger_type: { type: DataTypes.STRING, AllowNull: false },
-    start_trigger_value: { type: DataTypes.STRING, AllowNull: false },
-    end_trigger_type: { type: DataTypes.STRING, AllowNull: false },
-    end_trigger_value: { type: DataTypes.STRING, AllowNull: false },
-    is_hidden: { type: DataTypes.BOOLEAN, defautValue: false, AllowNull: false }
+    effect_text: { type: DataTypes.STRING, allowNull: false },
+    round_created: { type: DataTypes.INTEGER, allowNull: false },
+    start_trigger_type: { type: DataTypes.STRING, allowNull: true },
+    start_trigger_value: { type: DataTypes.STRING, allowNull: true },
+    end_trigger_type: { type: DataTypes.STRING, allowNull: true },
+    end_trigger_value: { type: DataTypes.STRING, allowNull: true },
+    is_hidden: { type: DataTypes.BOOLEAN, defautValue: false, allowNull: false }
   });
 
-  globalEffect.associate = function(models) {
-    globalEffect.belongsTo(models.game);
+  global_effect.associate = function(models) {
+    global_effect.belongsTo(models.game);
   };
 
-  return globalEffect;
+  return global_effect;
 };
