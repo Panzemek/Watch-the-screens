@@ -21,3 +21,36 @@ $("#global-post-submit-button").click(function() {
     .find(".global-post-control")
     .val("");
 });
+
+//Update subsequent round time
+$("#default-time-button").click(function() {
+  console.log($("#default-time-text").val());
+  $.ajax("/api/updateDefaultTime", {
+    type: "put",
+    data: {
+      // eslint-disable-next-line camelcase
+      round_duration: $("#default-time-text").val()
+    }
+  });
+});
+
+$("#link-ul").ready(function() {
+  $("#link-ul").append(location.hostname + "/1/newsViewer");
+});
+
+//Listener for game end confirm. Enables button only when text box reads CONFIRM.
+$("#end-game-confirm-text").keyup(function() {
+  if ($(this).val() === "CONFIRM") {
+    $("#end-game-confirm-button").prop("disabled", false);
+  } else {
+    $("#end-game-confirm-button").prop("disabled", true);
+  }
+});
+
+$("#end-game-confirm-button").click(function() {
+  console.log("GAME OVER, MAN!");
+  $.ajax("/api/endGame", {
+    type: "put",
+    data: { id: $("#admin-container").data("game") }
+  });
+});
