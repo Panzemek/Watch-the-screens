@@ -13,9 +13,25 @@ module.exports = function(app) {
 
   //this is the admin 'control' interface
   app.get("/:gameId/admin", function(req, res) {
-    var gameId = req.params.gameId;
+    //TODO: Make a call to the db and return all news.title, news.id, and news.is_hidden values for each article
+    var fakeArticles = [
+      {
+        id: 1,
+        title: "Cowabunga Dude!",
+        is_hidden: true
+      },
+      {
+        id: 2,
+        title: "Turtles in time!",
+        is_hidden: false
+      }
+    ];
+    var data = {
+      game: req.params.gameId,
+      articles: fakeArticles
+    };
     //database call for current values
-    res.render("admin"); //admin page
+    res.render("admin", data); //admin page
   });
 
   //reporter news publish location here
@@ -24,8 +40,18 @@ module.exports = function(app) {
     var org = req.params.org;
     var gameId = req.params.gameId;
     //TODO: Needs to do an database call to the network table to get the network object data in order to poulate the reporter preview modal and return it to newsOrg.
-    var fakeOrgData = { network_full: "Watch The Skies", network_short: "WTS" };
+    var fakeOrgData = {
+      // eslint-disable-next-line camelcase
+      network_full: "Watch The Skies",
+      // eslint-disable-next-line camelcase
+      network_short: "WTS"
+    };
     var newsOrg = fakeOrgData;
+    // eslint-disable-next-line camelcase
+    newsOrg.game_id = gameId;
+    // eslint-disable-next-line camelcase
+    newsOrg.network_short = org;
+    // eslint-disable-next-line camelcase
     res.render("reporter", newsOrg); //handlebars news org here
   });
 
