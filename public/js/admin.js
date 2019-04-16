@@ -1,10 +1,13 @@
 //Update Terror button click
+var socket = io();
+
 $("#terror-button").click(function() {
   console.log($("#terror-tracker-text").val());
   $.ajax("/api/updateTerror", {
     type: "put",
     data: { terror: $("#terror-tracker-text").val() }
   });
+  socket.broadcast.emit("terrorUpd", $("#terror-tracker-text").val());
 });
 
 //Send global post button click

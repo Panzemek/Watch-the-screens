@@ -16,6 +16,7 @@
         "no-irregular-whitespace":"error",
         "no-unreachable": "error",
         "curly": "error",
+        "eslint prefer-arrow-callback": "warn",
         "dot-notation": "error",
         "eqeqeq": "error",
         "no-empty-function": "error",

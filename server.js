@@ -49,10 +49,12 @@ db.sequelize.sync(syncOptions).then(function() {
 });
 
 //Socket server logic will go here.
-
+var test = 'aaaaaaaaaaaa'
 io.on('connection', (socket) => {
   console.log('a user connected')
-  console.log(socket)
+  socket.emit('test', test)
+  var clients = io.sockets.clients();
 })
 
 module.exports = app;
+  
