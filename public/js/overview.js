@@ -1,4 +1,4 @@
-//this is the work in progress for the scroll bar event listener for the
+//this is the work in progress for the scroll bar event listener for the scrolling Marquee section.
 //
 // <html>
 // <body>
