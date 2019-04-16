@@ -47,7 +47,7 @@ module.exports = function(app) {
         end_trigger_value: 11,
         is_hidden: true
       }
-    ]
+    ];
     var data = {
       game: req.params.gameId,
       articles: fakeArticles,

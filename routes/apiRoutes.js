@@ -135,5 +135,5 @@ module.exports = function(app) {
   app.put("/api/updateGlobalEffect", function(req, res) {
     //TODO: Make a put call to the db to update the global effect. Then, on success, update admin and overview views with global effects (all of them).
     console.log(req.body);
-  })
+  });
 };
