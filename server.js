@@ -52,7 +52,6 @@ db.sequelize.sync(syncOptions).then(function() {
 
 io.on('connection', (socket) => {
   console.log('a user connected')
-  console.log(socket)
 })
 
 module.exports = app;

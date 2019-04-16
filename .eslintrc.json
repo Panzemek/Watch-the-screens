@@ -2,7 +2,8 @@
     "env": {
         "browser": true,
         "commonjs": true,
-        "node": true
+        "node": true,
+        "es6": true
     },
     "extends": "prettier",
     "plugins": [
@@ -16,6 +17,7 @@
         "no-irregular-whitespace":"error",
         "no-unreachable": "error",
         "curly": "error",
+        "eslint prefer-arrow-callback": "warn",
         "dot-notation": "error",
         "eqeqeq": "error",
         "no-empty-function": "error",
