@@ -12,11 +12,15 @@ $("#article-submit-button").click(function() {
     img_url: $("#input-image").val(),
     author: $("#input-author").val(),
     // eslint-disable-next-line camelcase
-    article_body: $("#input-body").val()
+    article_body: $("#input-body").val(),
+    // eslint-disable-next-line camelcase
+    game_id: $("#reporter-container").data("game"),
+    // eslint-disable-next-line camelcase
+    network_id: $("#reporter-container").data("network")
   };
   if (formFilled(newArticle)) {
     //TODO: Need to make an API call to post this info but it needs round_created, game_id, and network_id added to it (maybe through params? and passing the object through the body?)
-    console.log(newArticle);
+    console.log("TODO: article submitted");
     //Clear form
     $("#article-form")
       .find("input:text, textarea")
