@@ -6,13 +6,32 @@ module.exports = function(app) {
   // Overview view routes
 
   // Returns games table relevant information
+  // Req.body requires nothing
   app.get("/:gameid/overviewGame", function(req, res) {
     db.game
       .findAll({
-        attributes: ["terror", "rioters", "current_round"]
+        attributes: ["terror", "rioters", "current_round"],
+        where: {
+          gameId: req.params.gameid
+        }
       })
       .then(function(overviewData) {
         res.json(overviewData);
+      });
+  });
+
+  // Returns game global effects.
+  // Req.body requires nothing
+  app.get("/:gameid/overviewGlobalEffects", function(req, res) {
+    db.global_effect
+      .findAll({
+        where: {
+          gameId: req.params.gameid,
+          is_hidden: false
+        }
+      })
+      .then(function(effectsResult) {
+        res.json(effectsResult);
       });
   });
 
@@ -28,6 +47,35 @@ module.exports = function(app) {
       })
       .then(function(articleResult) {
         res.json(articleResult);
+      });
+  });
+
+  app.get("/:gameid/overviewArticles", function(req, res) {
+    db.game
+      .findByPk(req.params.gameid, {
+        include: [
+          {
+            model: db.article,
+            where: {
+              is_hidden: false
+            },
+            include: [db.network]
+          }
+        ]
+      })
+      .then(function(articleResult) {
+        let showableArts = [];
+        articleResult.articles.forEach(article => {
+          console.log(articleResult.current_round - article.round_created);
+          if (
+            articleResult.current_round - article.round_created <=
+            articleResult.article_decay
+          ) {
+            showableArts.push(article);
+            console.log(showableArts);
+          }
+        });
+        res.json(showableArts);
       });
   });
 
@@ -49,7 +97,7 @@ module.exports = function(app) {
 
   app.get("/:gameid/articles", function(req, res) {
     db.game
-      .findById(req.params.gameid, {
+      .findByPk(req.params.gameid, {
         include: [
           {
             model: db.article,
@@ -115,7 +163,8 @@ module.exports = function(app) {
     //TODO: if the response is good, send update to overview views with updated terror level.
   });
 
-  // Article hide put route
+  // Article hide put route.
+  // Req.body requires is_hidden, article ID
   app.put("/api/hideArticle", function(req, res) {
     console.log(req.body);
     db.article

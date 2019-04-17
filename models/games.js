@@ -6,6 +6,10 @@ module.exports = function(sequelize, DataTypes) {
       autoIncrement: true,
       primaryKey: true
     },
+    game_description: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
     round_duration: {
       type: DataTypes.INTEGER,
       defaultValue: 1800,
