@@ -6,3 +6,7 @@
   /* preserves the whitespace put in by the author in the textarea input field */
   white-space: pre-wrap;
 }
+
+.hidden {
+  display: none;
+}

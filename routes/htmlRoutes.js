@@ -29,9 +29,16 @@ module.exports = function(app,pausedState, io) {
       current_round: 1,
       is_paused: pausedState,
       time_left: "20:00",
-      articles: fakeArticles
+      articles: fakeArticles,
+      rioters: 100,
+      terror: 30
     };
+    console.log(data);
     res.render("overview", data);
+  });
+
+  app.get("/:gameid", function(req, res) {
+    //TODO: Render the overview page with the specific game functions
   });
 
   //this route should be the inital game setup route
@@ -92,20 +99,18 @@ module.exports = function(app,pausedState, io) {
     //query for news org info here
     var org = req.params.org;
     var gameId = req.params.gameId;
+
     //TODO: Needs to do an database call to the network table to get the network object data in order to poulate the reporter preview modal and return it to newsOrg.
-    var fakeOrgData = {
-      // eslint-disable-next-line camelcase
-      network_full: "Watch The Skies",
-      // eslint-disable-next-line camelcase
-      network_short: "WTS"
-    };
-    var newsOrg = fakeOrgData;
-    // eslint-disable-next-line camelcase
-    newsOrg.game_id = gameId;
-    // eslint-disable-next-line camelcase
-    newsOrg.network_short = org;
-    // eslint-disable-next-line camelcase
-    res.render("reporter", newsOrg); //handlebars news org here
+    db.network
+      .findAll({
+        where: {
+          network_short: org
+        }
+      })
+      .then(function(networkResult) {
+        // eslint-disable-next-line camelcase
+        res.render("reporter", networkResult[0].dataValues);
+      });
   });
 
   app.get("/:gameId/newsViewer", function(req, res) {

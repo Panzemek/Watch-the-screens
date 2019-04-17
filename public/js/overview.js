@@ -1,12 +1,14 @@
 var articles = [];
 var lastUsedArticle = 1;
+var carouselListener;
+// var pageLoaded = moment();
 
 //TEMP BUTTON CLICK REMOVE ONCE ARTICLES ARE SETUP
 $("#temp-article").click(function() {
   $.ajax("/" + $("#overview-container").data("game") + "/articles", {
     type: "get"
   }).then(function(data) {
-    articles.push(...data);
+    articles.push(...data.articles);
     checkArticleArray();
   });
 });
@@ -16,7 +18,12 @@ $(this).ready(function() {
   $.ajax("/" + $("#overview-container").data("game") + "/articles", {
     type: "get"
   }).then(function(data) {
-    articles.push(...data);
+    console.log(data);
+    var newArticles = [...data.articles];
+    for (i in newArticles) {
+      newArticles[i].seen = false;
+      articles.push(newArticles[i]);
+    }
     checkArticleArray();
   });
 });
@@ -36,25 +43,38 @@ function checkArticleArray() {
     populateArticle($(".carousel-item:not(.active)"), articles[0]);
     $("#article-carousel").carousel(1);
     $("#article-carousel").one("slid.bs.carousel", function() {
-      console.log("called!");
       $("#carousel-1").remove();
       $("#article-carousel").carousel("cycle");
     });
-    $("#article-carousel").on("slid.bs.carousel", function() {
-      populateArticle(
-        $(".carousel-item:not(.active)"),
-        articles[lastUsedArticle]
+    if (!carouselListener) {
+      carouselListener = $("#article-carousel").on(
+        "slid.bs.carousel",
+        function() {
+          populateArticle(
+            $(".carousel-item:not(.active)"),
+            articles[lastUsedArticle]
+          );
+          lastUsedArticle++;
+          if (lastUsedArticle >= articles.length) {
+            lastUsedArticle = 0;
+          }
+        }
       );
-      lastUsedArticle++;
-      if (lastUsedArticle >= articles.length) {
-        lastUsedArticle = 0;
-      }
-    });
+    }
   }
 }
 
 // Takes in an article html object and an article json object and populates the html with the json.
 function populateArticle(html, article) {
+  if (html.length > 1) {
+    html = $(html[0]);
+  }
+  if (!article.seen) {
+    html.find(".breaking-news").removeClass("hidden");
+  } else {
+    html.find(".breaking-news").addClass("hidden");
+  }
+  article.seen = true;
   html.find(".network-icon").attr("src", article.network_image);
   html.find(".network-icon").attr("alt", article.network_short);
   html.find(".network-name").text(article.network_full);
