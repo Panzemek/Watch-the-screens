@@ -27,15 +27,29 @@ module.exports = function(app) {
   // Article view routes
 
   app.get("/:gameid/articles", function(req, res) {
-    db.article
-      .findAllArticles({
-        where: {
-          gameId: req.params.gameid
-        }
-      })
-      .then(function(articles) {
-        res.json(articles);
-      });
+    //Fake reply
+    res.json([
+      {
+        network_full: "Watch The Skies",
+        network_short: "WTS",
+        img_url: "https://picsum.photos/200/300/?random",
+        author: "mario",
+        title: "Wildebeasts on the loose",
+        article_body:
+          "There are bobcats, and they are on the loose! More at ten " +
+          Math.floor(Math.random() * 1000)
+      }
+    ]);
+
+    // db.article
+    //   .findAllArticles({
+    //     where: {
+    //       gameId: req.params.gameid
+    //     }
+    //   })
+    //   .then(function(articles) {
+    //     res.json(articles);
+    //   });
   });
 
   //

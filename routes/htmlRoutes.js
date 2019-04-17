@@ -3,7 +3,32 @@ var db = require("../models");
 module.exports = function(app) {
   // Load index page
   app.get("/", function(req, res) {
-    var data = { current_round: 1, time_left: "20:00" };
+    var fakeArticles = [
+      {
+        network_full: "Watch The Skies",
+        network_short: "WTS",
+        img_url: "https://picsum.photos/200/300/?random",
+        author: "mario",
+        title: "Bobcats on the loose",
+        article_body:
+          "There are bobcats, and they are on the loose! More at ten"
+      },
+      {
+        network_full: "Watch The Skies",
+        network_short: "WTS",
+        img_url: "https://picsum.photos/200/300/?random",
+        author: "mario",
+        title: "Bobcats on the loose",
+        article_body:
+          "There are bobcats, and they are on the loose! More at ten"
+      }
+    ];
+    var data = {
+      id: 1,
+      current_round: 1,
+      time_left: "20:00",
+      articles: fakeArticles
+    };
     res.render("overview", data);
   });
 
