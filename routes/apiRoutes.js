@@ -4,10 +4,31 @@ module.exports = function(app) {
   //
   //
   // Overview view routes
-  app.get("/1/overview", function(req, res) {
-    db.game.overviewInfo({
-      where: {}
-    });
+
+  // Returns games table relevant information
+  app.get("/:gameid/overviewGame", function(req, res) {
+    db.game
+      .findAll({
+        attributes: ["terror", "rioters", "current_round"]
+      })
+      .then(function(overviewData) {
+        res.json(overviewData);
+      });
+  });
+
+  app.get("/:gameid/newOverviewArticle", function(req, res) {
+    db.article
+      .findAll({
+        limit: 1,
+        where: {
+          gameId: req.params.gameid
+        },
+        order: [["createdAt", "DESC"]],
+        include: [db.network]
+      })
+      .then(function(articleResult) {
+        res.json(articleResult);
+      });
   });
 
   //
@@ -26,15 +47,21 @@ module.exports = function(app) {
   //
   // Article view routes
 
-  app.get("/:gameid/articles", function(req, res) {
-    db.article
-      .findAllArticles({
-        where: {
-          gameId: req.params.gameid
-        }
+  app.get("/:gameid/allArticles", function(req, res) {
+    db.game
+      .findById(req.params.gameid, {
+        include: [
+          {
+            model: db.article,
+            where: {
+              is_hidden: false
+            },
+            include: [db.network]
+          }
+        ]
       })
-      .then(function(articles) {
-        res.json(articles);
+      .then(function(articleResult) {
+        res.json(articleResult);
       });
   });
 
