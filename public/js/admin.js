@@ -3,13 +3,17 @@ var socket = io();
 
 $("#terror-button").click(function() {
   console.log($("#admin-container").data("game"));
+  data = {
+    terror: $("#terror-tracker-text").val(),
+    id: $("#admin-container").data("game")
+  };
   $.ajax("/api/updateTerror", {
     type: "put",
     data: {
       terror: $("#terror-tracker-text").val(),
       id: $("#admin-container").data("game")
     }
-  }).then(socket.emit("terror update", $("#terror-tracker-text").val()));
+  }).then(socket.emit("terror update", data));
 });
 
 //Send global post button click
@@ -141,9 +145,5 @@ $("#global-effect-submit-button").click(function() {
       // eslint-disable-next-line camelcase
       is_hidden: $("#global-effect-is-hidden").prop("checked")
     }
-  }).then(socket.emit("global effect change", dataForSocket));
+  }).then(socket.emit("global effect submit", data));
 });
-
-socket.on("global effect change", data => {
-  //global effect change code goes here
-})
