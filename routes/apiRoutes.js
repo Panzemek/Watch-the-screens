@@ -143,6 +143,7 @@ module.exports = function(app) {
 
   //Used by the admin view. Updates the terror level.
   app.put("/api/updateTerror", function(req, res) {
+    console.log(req.body)
     db.game
       .update({ terror: req.body.terror }, { where: { id: req.body.id } })
       .then(function(dbterror) {

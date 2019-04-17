@@ -1,7 +1,8 @@
 var db = require("../models");
 
-module.exports = function(app) {
+module.exports = function(app,pausedState, io) {
   // Load index page
+  console.log('pausedState:',pausedState)
   app.get("/", function(req, res) {
     var fakeArticles = [
       {
@@ -26,6 +27,7 @@ module.exports = function(app) {
     var data = {
       id: 1,
       current_round: 1,
+      is_paused: pausedState,
       time_left: "20:00",
       articles: fakeArticles,
       rioters: 100,
@@ -84,6 +86,7 @@ module.exports = function(app) {
       game_id: req.params.gameId,
       articles: fakeArticles,
       globalEffects: fakeGlobalEffects,
+      is_paused: pausedState,
       current_round: 1,
       time_left: "20:00"
     };
@@ -189,6 +192,8 @@ module.exports = function(app) {
   app.get("*", function(req, res) {
     res.redirect("/");
   });
+
+  
 
   // Render 404 page for any unmatched routes
   // app.get("*", function(req, res) {
