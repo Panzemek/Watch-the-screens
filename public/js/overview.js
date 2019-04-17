@@ -17,7 +17,8 @@ $(this).ready(function() {
   $.ajax("/" + $("#overview-container").data("game") + "/articles", {
     type: "get"
   }).then(function(data) {
-    articles.push(...data);
+    console.log(data)
+    articles.push(...data.articles);
     checkArticleArray();
   });
 });
@@ -37,7 +38,6 @@ function checkArticleArray() {
     populateArticle($(".carousel-item:not(.active)"), articles[0]);
     $("#article-carousel").carousel(1);
     $("#article-carousel").one("slid.bs.carousel", function() {
-      console.log("called!");
       $("#carousel-1").remove();
       $("#article-carousel").carousel("cycle");
     });
