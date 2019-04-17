@@ -1,7 +1,11 @@
 {
   "development": {
     "username": "root",
+<<<<<<< HEAD
     "password": "MyNewPass",
+=======
+    "password": null,
+>>>>>>> a0a6f9df3fb2dff6538003580f57b5b234a6071c
     "database": "wts_game_db",
     "host": "localhost",
     "port": "3306",

@@ -1,9 +1,9 @@
 <div>
 {{> clock}}
 </div>
-<div class="container">
+<div id="overview-container" class="container" data-game={{id}}>
    <div class="row">
-       <div class="col-md-8 border">
+       <div class="col-md-4 border">
            <ul>
                <li>Rioters: #</li>
                <li>#Cat Fight +5</li>
@@ -12,13 +12,24 @@
            </ul>
        </div>
        <div class="col-md-8">
-           <div class="row">
-               <div class="col-m-6 border">#NEWS ARTICLE</div>
-               <div class="col-m-6 border">#NEWS ARTICLE</div>
-           </div>
+           <div id="article-carousel" class="carousel slide" data-ride="false"
+           data-pause="false">
+            <div class="carousel-inner">
+              <div id="carousel-1" class="carousel-item active">
+                  <h2>Watch The Sky</h2>
+              </div>
+              <div id="carousel-2" class="carousel-item article-holder">
+                  {{> article}}
+              </div>
+              <div id="carousel-3" class="carousel-item article-holder">
+                  {{> article}}
+              </div>
+            </div>
+</div>
        </div>
    </div>
    <button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bd-example-modal-lg">TEMPORARY MODAL BUTTON! Remove me when back end is set up to push to modal</button>
+   <button type="button" id="temp-article" class="btn btn-primary">TEMPORARY ARTICLE BUTTON! Remove me when back end is set up to push new articles</button>
 
 <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
  <div class="modal-dialog modal-lg">
