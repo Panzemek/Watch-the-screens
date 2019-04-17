@@ -1,13 +1,14 @@
 var articles = [];
 var lastUsedArticle = 1;
 var carouselListener;
+// var pageLoaded = moment();
 
 //TEMP BUTTON CLICK REMOVE ONCE ARTICLES ARE SETUP
 $("#temp-article").click(function() {
   $.ajax("/" + $("#overview-container").data("game") + "/articles", {
     type: "get"
   }).then(function(data) {
-    articles.push(...data);
+    articles.push(...data.articles);
     checkArticleArray();
   });
 });
@@ -17,8 +18,12 @@ $(this).ready(function() {
   $.ajax("/" + $("#overview-container").data("game") + "/articles", {
     type: "get"
   }).then(function(data) {
-    console.log(data)
-    articles.push(...data.articles);
+    console.log(data);
+    var newArticles = [...data.articles];
+    for (i in newArticles) {
+      newArticles[i].seen = false;
+      articles.push(newArticles[i]);
+    }
     checkArticleArray();
   });
 });
@@ -61,6 +66,14 @@ function checkArticleArray() {
 
 // Takes in an article html object and an article json object and populates the html with the json.
 function populateArticle(html, article) {
+  if (!article.seen) {
+    console.log("BOOM!");
+    console.log(html.class());
+    html.removeClass("hidden");
+  } else {
+    html.addClass("hidden");
+  }
+  article.seen = true;
   html.find(".network-icon").attr("src", article.network_image);
   html.find(".network-icon").attr("alt", article.network_short);
   html.find(".network-name").text(article.network_full);

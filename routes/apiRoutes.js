@@ -9,7 +9,8 @@ module.exports = function(app) {
   app.get("/:gameid/overviewGame", function(req, res) {
     db.game
       .findAll({
-        attributes: ["terror", "rioters", "current_round"]
+        attributes: ["terror", "rioters", "current_round"],
+        where: { id: req.params.gameid }
       })
       .then(function(overviewData) {
         res.json(overviewData);

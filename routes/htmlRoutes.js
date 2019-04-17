@@ -35,9 +35,9 @@ module.exports = function(app) {
     res.render("overview", data);
   });
 
-  app.get("/:id", function(req, res) {
-    //TODO: Copy "/:gameid/overviewGame" from api routes.
-  })
+  app.get("/:gameid", function(req, res) {
+    //TODO: Render the overview page with the specific game functions
+  });
 
   //this route should be the inital game setup route
   app.get("/admin", function(req, res) {
