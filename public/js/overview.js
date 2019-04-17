@@ -186,8 +186,7 @@ $('.marquee')
 //every 1k intvl call null and bind, passing current st";//pass param to setIntFxn//every 1k intvl call null and bind, passing current st.""
 var oldState = state; //read pre/post:MR- .bind; .closures: https://hackernoon.com/how-to-use-javascript-closures-with-confidence-85cd1f841a6b
 //using first arg Null, to be populated w/oldState,nextParam
-// setInterval(onInterval.bind(null, oldState, state),5000);
-
+// setInterval(onInterval.bind(null, oldState, state),5000;
 
 function onInterval (oldState,state){
   // if (state === oldState.state){
