@@ -37,7 +37,7 @@ module.exports = function(app) {
 
   app.get("/:id", function(req, res) {
     //TODO: Copy "/:gameid/overviewGame" from api routes.
-  })
+  });
 
   //this route should be the inital game setup route
   app.get("/admin", function(req, res) {
@@ -98,15 +98,16 @@ module.exports = function(app) {
     var gameId = req.params.gameId;
 
     //TODO: Needs to do an database call to the network table to get the network object data in order to poulate the reporter preview modal and return it to newsOrg.
-    db.network.findAll({
-      where: {
-        network_short: org,
-        gameId: gameId
-      }
-    }).then(networkResult){
-      // eslint-disable-next-line camelcase
-      res.render("reporter", networkResult);
-    }
+    db.network
+      .findAll({
+        where: {
+          network_short: org
+        }
+      })
+      .then(function(networkResult) {
+        // eslint-disable-next-line camelcase
+        res.render("reporter", networkResult[0].dataValues);
+      });
   });
 
   app.get("/:gameId/newsViewer", function(req, res) {
