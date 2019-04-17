@@ -126,8 +126,15 @@ module.exports = function(app) {
     console.log(req.body);
   });
 
+  //Used by the admin vivew. Toggles an article's visibility on the overview page.
   app.put("/api/toggleArticle", function(req, res) {
     //TODO: make a put call to the db to update the is hidden status of the article. Then, on success, update admin and overview views with article data.
+    console.log(req.body);
+  });
+
+  //Used by the Admin view. Updates an existing global effect.
+  app.put("/api/updateGlobalEffect", function(req, res) {
+    //TODO: Make a put call to the db to update the global effect. Then, on success, update admin and overview views with global effects (all of them).
     console.log(req.body);
   });
 };
