@@ -50,8 +50,31 @@ db.sequelize.sync(syncOptions).then(function() {
 
 //Socket server logic will go here.
 
-io.on('connection', (socket) => {
-  console.log('a user connected')
-})
+io.on("connection", (socket) => {
+  console.log("a user connected")
+  //terror update
+  socket.on("terror update", (terrorVal) => {
+    io.emit("terror update", terrorVal);
+  });
+  
+  //global modal post
+  socket.on("global modal post", (data) => {
+    io.emit("global modal post", data);
+  });
+
+  //global mod changes
+
+  //game end - what do we need to pass into callback? game end route?
+  socket.on("game ended", (placeholder) => {
+    io.broadcast.emit("game ended", (placeholder));
+  });
+  //TODO:clientside logic
+  
+  //new news article
+
+  //hide news article
+
+  //
+});
 
 module.exports = app;

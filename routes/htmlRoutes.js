@@ -31,6 +31,7 @@ module.exports = function(app) {
     var data = {
       game: req.params.gameId,
       articles: fakeArticles,
+      id: 1,
       current_round: 1,
       time_left: "20:00"
     };

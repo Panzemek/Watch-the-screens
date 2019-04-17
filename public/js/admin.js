@@ -1,22 +1,30 @@
 //Update Terror button click
+var socket = io();
 $("#terror-button").click(function() {
-  console.log($("#terror-tracker-text").val());
+  console.log($("#admin-container").data("game"));
   $.ajax("/api/updateTerror", {
     type: "put",
-    data: { terror: $("#terror-tracker-text").val() }
-  });
+    data: {
+      terror: $("#terror-tracker-text").val(),
+      id: $("#admin-container").data("game")
+    }
+  }).then(socket.emit("terror update", $("#terror-tracker-text").val()));
 });
 
 //Send global post button click
 $("#global-post-submit-button").click(function() {
   console.log($("#global-post-text").val(), $("#global-post-duration").val());
+  modalData = {
+    text: $("#global-post-text").val(),
+    duration: $("#global-post-duration").val()
+  };
   $.ajax("/api/postGlobal", {
     type: "post",
     data: {
       text: $("#global-post-text").val(),
       duration: $("#global-post-duration").val()
     }
-  });
+  }).then(socket.emit("global modal post", modalData));
   $("#global-post-form")
     .find(".global-post-control")
     .val("");
@@ -52,7 +60,7 @@ $("#end-game-confirm-button").click(function() {
   $.ajax("/api/endGame", {
     type: "put",
     data: { id: $("#admin-container").data("game") }
-  });
+  }).then(socket.emit("game ended", true));
 });
 
 //Sends put call to db toggling whether or not an article is visible.
