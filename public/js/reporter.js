@@ -1,3 +1,5 @@
+var socket = io();
+
 $("#article-preview-button").click(function() {
   $("#author").html($("#input-author").val());
   $("#image").attr("src", $("#input-image").val());
@@ -25,6 +27,7 @@ $("#article-submit-button").click(function() {
     $("#article-form")
       .find("input:text, textarea")
       .val("");
+    socket.emit("new article", newArticle);
   } else {
     //TODO: Give feedback to reporter that author, title, and body need to not be null.
     console.log("Need to give feedback on not fully filled out form");

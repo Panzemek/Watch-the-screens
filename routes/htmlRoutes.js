@@ -1,10 +1,44 @@
 var db = require("../models");
 
-module.exports = function(app) {
+module.exports = function(app,pausedState, io) {
   // Load index page
+  console.log('pausedState:',pausedState)
   app.get("/", function(req, res) {
-    var data = { current_round: 1, time_left: "20:00" };
+    var fakeArticles = [
+      {
+        network_full: "Watch The Skies",
+        network_short: "WTS",
+        img_url: "https://picsum.photos/200/300/?random",
+        author: "mario",
+        title: "Bobcats on the loose",
+        article_body:
+          "There are bobcats, and they are on the loose! More at ten"
+      },
+      {
+        network_full: "Watch The Skies",
+        network_short: "WTS",
+        img_url: "https://picsum.photos/200/300/?random",
+        author: "mario",
+        title: "Bobcats on the loose",
+        article_body:
+          "There are bobcats, and they are on the loose! More at ten"
+      }
+    ];
+    var data = {
+      id: 1,
+      current_round: 1,
+      is_paused: pausedState,
+      time_left: "20:00",
+      articles: fakeArticles,
+      rioters: 100,
+      terror: 30
+    };
+    console.log(data);
     res.render("overview", data);
+  });
+
+  app.get("/:gameid", function(req, res) {
+    //TODO: Render the overview page with the specific game functions
   });
 
   //this route should be the inital game setup route
@@ -28,9 +62,31 @@ module.exports = function(app) {
         is_hidden: false
       }
     ];
+    var fakeGlobalEffects = [
+      {
+        id: 1,
+        event_text: "Cat attack +2",
+        start_trigger_type: "round",
+        start_trigger_value: 5,
+        end_trigger_type: "round",
+        end_trigger_value: 12,
+        is_hidden: false
+      },
+      {
+        id: 2,
+        event_text: "Dog attack -5",
+        start_trigger_type: "round",
+        start_trigger_value: 4,
+        end_trigger_type: "round",
+        end_trigger_value: 11,
+        is_hidden: true
+      }
+    ];
     var data = {
-      game: req.params.gameId,
+      game_id: req.params.gameId,
       articles: fakeArticles,
+      globalEffects: fakeGlobalEffects,
+      is_paused: pausedState,
       current_round: 1,
       time_left: "20:00"
     };
@@ -43,20 +99,18 @@ module.exports = function(app) {
     //query for news org info here
     var org = req.params.org;
     var gameId = req.params.gameId;
+
     //TODO: Needs to do an database call to the network table to get the network object data in order to poulate the reporter preview modal and return it to newsOrg.
-    var fakeOrgData = {
-      // eslint-disable-next-line camelcase
-      network_full: "Watch The Skies",
-      // eslint-disable-next-line camelcase
-      network_short: "WTS"
-    };
-    var newsOrg = fakeOrgData;
-    // eslint-disable-next-line camelcase
-    newsOrg.game_id = gameId;
-    // eslint-disable-next-line camelcase
-    newsOrg.network_short = org;
-    // eslint-disable-next-line camelcase
-    res.render("reporter", newsOrg); //handlebars news org here
+    db.network
+      .findAll({
+        where: {
+          network_short: org
+        }
+      })
+      .then(function(networkResult) {
+        // eslint-disable-next-line camelcase
+        res.render("reporter", networkResult[0].dataValues);
+      });
   });
 
   app.get("/:gameId/newsViewer", function(req, res) {
@@ -138,6 +192,8 @@ module.exports = function(app) {
   app.get("*", function(req, res) {
     res.redirect("/");
   });
+
+  
 
   // Render 404 page for any unmatched routes
   // app.get("*", function(req, res) {

@@ -1,13 +1,14 @@
 <div class="container article-container">
     <div id="article-header" class="row">
-        <img id="network-icon" src="{{network_image}}" alt="{{network_short}} icon">
-        <span class="text-uppercase text-left text-weight-bold" id="network-name">{{network_full}}</span>
+        <span class="breaking-news hidden">BREAKING NEWS</span>
+        <img class="network-icon" id="network-icon" src="{{network_image}}" alt="{{network_short}} icon">
+        <span class="text-uppercase text-left text-weight-bold network-name" id="network-name">{{network_full}}</span>
     </div>
 
     <div class="row" id="article-body">
-        <span id="title">{{title}}</span>
-        <span class="font-italic text-black-50" id="author">By {{author}}</span>
-        <img id="image" src="{{img_url}}" alt="Article Image">
+        <span id="title" class="title">{{title}}</span>
+        <span class="font-italic text-black-50 author" id="author">By {{author}}</span>
+        <img id="image" class="image" src="{{img_url}}" alt="Article Image">
         <p id="article-text" class="article-text">{{article_body}}</p>
     </div>
 </div>

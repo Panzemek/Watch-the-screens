@@ -1,25 +1,40 @@
-<div id="admin-container" class="container" data-game="{{game_id}}">
+<div id="admin-container" class="container" data-game="{{id}}">
     <div class="row">
-        <div>{{> clock}}</div>
-        <div>
-            <input type="time" id="number" value="##:##">
-            <button id="edit"></button>
-            <button id="pause-button">#Pause/Play</button>
-        </div>
+        <span>{{> clock}}<button class="btn btn-primary" id="pause-button">#Pause/Play</button></span>
     </div>
     <div class="row">
         <div class="col col-md-8">
             <div class="row">
+                        <div>
+            <label for="update-time-text">Update Current Round time</label>
+            <input type="number" id="update-time-text">
+            <button class="btn btn-primary" id="edit">Update</button>
+        </div>
                 <ul>
-                    <li>Cat attack +5
-                        <button>edit</button>
+                    {{#each globalEffects}}
+                        <li>
+                        <span>{{event_text}}
+                            {{#if is_hidden}}
+                                (Hidden)
+                            {{/if}}
+                        </span>
+                        <button 
+                            type="button" 
+                            class="btn btn-primary global-event-button" 
+                            data-toggle="modal" 
+                            data-target="#global-event-modal"
+                            data-event_text="{{event_text}}"
+                            data-start_trigger_type="{{start_trigger_type}}"
+                            data-start_trigger_value="{{start_trigger_value}}"
+                            data-end_trigger_type="{{end_trigger_type}}"
+                            data-end_trigger_value="{{end_trigger_value}}"
+                            data-is_hidden="{{is_hidden}}"
+                            data-id={{id}}
+                        >
+                        Edit
+                        </button>
                     </li>
-                    <li>Dog attack -5
-                        <button>edit</button>
-                    </li>
-                    <li>
-                        <button>+</button>
-                    </li>
+                {{/each}}
                 </ul>
             </div>
             <div class="row">
@@ -99,6 +114,27 @@
         </div>
     </div>
 
+<!-- Global Event Modal -->
+    <div class="modal fade" id="global-event-modal" tabindex="-1" role="dialog" aria-labelledby="global-post-Label"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="global-post-label">Create Global Post</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                   {{> globalEffectForm}}
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <button id="global-effect-submit-button" type="button" class="btn btn-primary" data-dismiss="modal" data-effect-id="-1">Update Event</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
 
 <!-- Game End Modal -->
