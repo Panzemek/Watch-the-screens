@@ -48,10 +48,19 @@ db.sequelize.sync(syncOptions).then(function() {
   });
 });
 
-//Socket server logic will go here.
+//server countdown timer here
+//TODO: this will need to work on round start
+var serverClock = null;
+var isPaused = true;
+timerInterval = setInterval(function() {
+  if (!isPaused) {
+    serverClock.subtract(1, "second");
+  }
+}, 1000);
 
+//Socket server logic will go here.
 io.on("connection", socket => {
-  console.log("a user connected");
+  io.emit("clock value", serverClock);
   //terror update
   socket.on("terror update", terrorVal => {
     io.emit("terror update", terrorVal);
@@ -89,11 +98,18 @@ io.on("connection", socket => {
   socket.on("stop timer", timerVal => {
     timerVal = moment().format(timerVal, "mm:ss");
     io.emit("stop timer", timerVal);
+    isPaused = true;
     console.log("timer stopped");
   });
   socket.on("start timer", timerVal => {
     timerVal = moment().format(timerVal, "mm:ss");
+    if (serverClock) {
+      timerVal = moment().format(serverClock, "mm:ss");
+    } else {
+      serverClock = timerVal;
+    }
     io.emit("start timer", timerVal);
+    isPaused = false;
     console.log("timer started");
   });
   //TODO: the functionality to enter a new timer change still needs to be written.

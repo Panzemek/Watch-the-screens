@@ -1,4 +1,4 @@
-var isPaused = false;
+var isPaused = true;
 var time;
 var socket = io();
 
@@ -59,5 +59,6 @@ socket.on("start timer", timerVal => {
 
 //change timer does not start the time, should probabaly only work when timer is stopped
 socket.on("change timer", newTime => {
+  //TODO: Where are we getting new timer value from?
   time = newTime;
 });

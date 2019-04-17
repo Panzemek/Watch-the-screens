@@ -1,5 +1,6 @@
 //Update Terror button click
 var socket = io();
+
 $("#terror-button").click(function() {
   console.log($("#admin-container").data("game"));
   $.ajax("/api/updateTerror", {
