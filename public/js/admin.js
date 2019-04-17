@@ -85,9 +85,8 @@ $("#toggle-article-dropdown").change(function() {
   }
 });
 
+//Binds an event listener to each edit global event button. On click, a modal is shown with a form filled out with the editable values of the global event (current values already filled).
 $(".global-event-button").click(function() {
-  console.log("hello!");
-  console.log($(this).data("event_text"));
   $("#global-effect-text").val($(this).data("event_text"));
   $("#global-effect-start-trigger-type").val(
     $(this).data("start_trigger_type")
@@ -98,7 +97,6 @@ $(".global-event-button").click(function() {
   $("#global-effect-end-trigger-type").val($(this).data("end_trigger_type"));
   $("#global-effect-end-trigger-value").val($(this).data("end_trigger_value"));
   if ($(this).data("is_hidden") === true) {
-    console.log("true", $(this).data("is_hidden"));
     $("#global-effect-is-hidden").prop("checked", true);
   } else {
     console.log("false", $(this).data("is_hidden"));
@@ -107,8 +105,9 @@ $(".global-event-button").click(function() {
   $("#global-effect-submit-button").data("effect-id", $(this).data("id"));
 });
 
+//Sends an api put call to update a global effect.
 $("#global-effect-submit-button").click(function() {
-  $.ajax("/api/toggleArticle", {
+  $.ajax("/api/updateGlobalEffect", {
     type: "put",
     data: {
       id: $("#global-effect-submit-button").data("effect-id"),

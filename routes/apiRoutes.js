@@ -136,4 +136,10 @@ module.exports = function(app) {
     //TODO: Make a put call to the db to update the global effect. Then, on success, update admin and overview views with global effects (all of them).
     console.log(req.body);
   });
+
+  //Used by the Admin view (called in the clock.js file). Updates the is_paused state for the game.
+  app.put("/api/toggleGamePauseState", function(req, res) {
+    //TODO: Make a put call to the db to update the is_paused flag for the game. Then, on success, broadcast the new value to admin and overview views.
+    console.log(req.body);
+  });
 };
