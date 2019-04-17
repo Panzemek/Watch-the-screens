@@ -187,18 +187,62 @@ module.exports = function(app) {
   app.put("/api/updateDefaultTime", function(req, res) {
     //TODO: make a put call to the db to update the round_duration value in the game table
     console.log(req.body);
+    db.game
+      .update(
+        {
+          round_duration: req.body.round_duration
+        },
+        { where: { id: req.body.gameId } }
+      )
+      .then(function(data) {
+        console.log(data);
+        res.json(data);
+      });
   });
 
-  //Used by the admin vivew. Toggles an article's visibility on the overview page.
+  //Used by the admin view. Toggles an article's visibility on the overview page.
   app.put("/api/toggleArticle", function(req, res) {
     //TODO: make a put call to the db to update the is hidden status of the article. Then, on success, update admin and overview views with article data.
     console.log(req.body);
+    db.news
+      .update(
+        {
+          is_hidden: req.body.is_hidden
+        },
+        { where: { id: req.body.effectId } }
+      )
+      .then(function(data) {
+        console.log(data);
+        res.json(data);
+      });
+  });
+
+  //Used by the Admin view. Creates a global effect.
+  app.post("/api/newGlobalEffect", function(req, res) {
+    //TODO: Then, on success, update admin and overview views with global effects (all of them).
+    console.log(req.body);
+    db.global_effect.create(req.body).then(function(data) {
+      console.log(data);
+      res.json(data);
+    });
   });
 
   //Used by the Admin view. Updates an existing global effect.
   app.put("/api/updateGlobalEffect", function(req, res) {
     //TODO: Make a put call to the db to update the global effect. Then, on success, update admin and overview views with global effects (all of them).
     console.log(req.body);
+    db.global_effect
+      .update(
+        {
+          effect_text: req.body.effect_text,
+          is_hidden: req.body.is_hidden
+        },
+        { where: { id: req.body.effectId } }
+      )
+      .then(function(data) {
+        console.log(data);
+        res.json(data);
+      });
   });
 
   //Used by the Admin view (called in the clock.js file). Updates the is_paused state for the game.
@@ -211,7 +255,7 @@ module.exports = function(app) {
           time_remaining: req.body.time_remaining,
           is_paused: req.body.is_paused
         },
-        { where: { id: req.body.id } }
+        { where: { id: req.body.gameId } }
       )
       .then(function(pauseData) {
         res.json(pauseData);

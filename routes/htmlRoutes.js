@@ -27,9 +27,25 @@ module.exports = function(app) {
       id: 1,
       current_round: 1,
       time_left: "20:00",
-      articles: fakeArticles
+      articles: fakeArticles,
+      rioters: 100,
+      terror: 30
     };
+    console.log(data);
     res.render("overview", data);
+  });
+
+  app.get("/:gameId", function(req, res) {
+    db.game
+      .findAll({
+        attributes: ["terror", "rioters", "current_round"],
+        where: {
+          id: req.params.gameId
+        }
+      })
+      .then(function(overviewData) {
+        res.json(overviewData);
+      });
   });
 
   //this route should be the inital game setup route
@@ -39,9 +55,7 @@ module.exports = function(app) {
 
   //this is the admin 'control' interface
   app.get("/:gameId/admin", function(req, res) {
-    //TODO: Make a call to the db and return all news.title, news.id, and news.is_hidden values for each article
-    //TODO: Make a call to the db and return games.current_round and round_started (I think we need this) to calculate time left.
-    var allAdminJson = [];
+    var allAdminJson = {};
     db.article
       .findAll({
         attributes: ["title", "id", "is_hidden"],
@@ -51,48 +65,34 @@ module.exports = function(app) {
       })
       .then(function(articleResult) {
         allAdminJson.push(articleResult);
+        db.global_effect
+          .findAll({
+            where: {
+              gameId: req.params.gameId
+            }
+          })
+          .then(function(eventResult) {
+            allAdminJson.push(eventResult);
+            db.game
+              .findAll({
+                attributes: ["id", "current_round", "terror", "rioters"],
+                where: {
+                  gameId: req.params.gameId
+                }
+              })
+              .then(function(gameResult) {
+                allAdminJson.push(gameResult);
+                res.json(allAdminJson);
+              });
+          });
       });
   });
-
-  db.global_effect.findAll({});
-
-  //   var fakeGlobalEffects = [
-  //     {
-  //       id: 1,
-  //       event_text: "Cat attack +2",
-  //       start_trigger_type: "round",
-  //       start_trigger_value: 5,
-  //       end_trigger_type: "round",
-  //       end_trigger_value: 12,
-  //       is_hidden: false
-  //     },
-  //     {
-  //       id: 2,
-  //       event_text: "Dog attack -5",
-  //       start_trigger_type: "round",
-  //       start_trigger_value: 4,
-  //       end_trigger_type: "round",
-  //       end_trigger_value: 11,
-  //       is_hidden: true
-  //     }
-  //   ];
-  //   var data = {
-  //     game_id: req.params.gameId,
-  //     articles: fakeArticles,
-  //     globalEffects: fakeGlobalEffects,
-  //     current_round: 1,
-  //     time_left: "20:00"
-  //   };
-  //   //database call for current values
-  //   res.render("admin", data); //admin page
-  // });
 
   //reporter news publish location here
   app.get("/:gameId/news/:org", function(req, res) {
     //query for news org info here
     var org = req.params.org;
 
-    //TODO: Needs to do an database call to the network table to get the network object data in order to poulate the reporter preview modal and return it to newsOrg.
     db.network
       .findAll({
         where: {
@@ -101,14 +101,26 @@ module.exports = function(app) {
       })
       .then(function(networkResult) {
         // eslint-disable-next-line camelcase
-        res.render("reporter", networkResult);
+        res.render("reporter", networkResult[0].dataValues);
       });
   });
 
   app.get("/:gameId/newsViewer", function(req, res) {
     var gameId = req.params.gameId;
-    //TODO: Needs to do a database call to get all articles (with the join of network). Then we need to construct an object with the following format
-    /*
+
+    db.article
+      .findAll({
+        where: {
+          gameId: gameId
+        },
+        include: [db.network]
+      })
+      .then(function(articleResult) {
+        res.render("newsViewer", articleResult);
+      });
+  });
+  //TODO: Needs to do a database call to get all articles (with the join of network). Then we need to construct an object with the following format
+  /*
       {
         rounds: [{
           round: whatever the articles are from,
@@ -119,55 +131,53 @@ module.exports = function(app) {
         }]
       }
       */
-    var fakeRoundData = {
-      rounds: [
-        {
-          round: 1,
-          articles: [
-            {
-              network_full: "Watch The Skies",
-              network_short: "WTS",
-              author: "mario",
-              title: "Bobcats on the loose",
-              article_body:
-                "There are bobcats, and they are on the loose! More at ten"
-            },
-            {
-              network_full: "Watch The Skies",
-              network_short: "WTS",
-              author: "mario",
-              title: "Bobcats on the loose",
-              article_body:
-                "There are bobcats, and they are on the loose! More at ten"
-            }
-          ]
-        },
-        {
-          round: 2,
-          articles: [
-            {
-              network_full: "Watch The Skies",
-              network_short: "WTS",
-              author: "mario",
-              title: "Bobcats on the loose",
-              article_body:
-                "There are bobcats, and they are on the loose! More at ten"
-            },
-            {
-              network_full: "Watch The Skies",
-              network_short: "WTS",
-              author: "mario",
-              title: "Bobcats on the loose",
-              article_body:
-                "There are bobcats, and they are on the loose! More at ten"
-            }
-          ]
-        }
-      ]
-    };
-    var rounds = fakeRoundData;
-    res.render("newsViewer", rounds);
-  });
+  // var fakeRoundData = {
+  //   rounds: [
+  //     {
+  //       round: 1,
+  //       articles: [
+  //         {
+  //           network_full: "Watch The Skies",
+  //           network_short: "WTS",
+  //           author: "mario",
+  //           title: "Bobcats on the loose",
+  //           article_body:
+  //             "There are bobcats, and they are on the loose! More at ten"
+  //         },
+  //         {
+  //           network_full: "Watch The Skies",
+  //           network_short: "WTS",
+  //           author: "mario",
+  //           title: "Bobcats on the loose",
+  //           article_body:
+  //             "There are bobcats, and they are on the loose! More at ten"
+  //         }
+  //       ]
+  //     },
+  //     {
+  //       round: 2,
+  //       articles: [
+  //         {
+  //           network_full: "Watch The Skies",
+  //           network_short: "WTS",
+  //           author: "mario",
+  //           title: "Bobcats on the loose",
+  //           article_body:
+  //             "There are bobcats, and they are on the loose! More at ten"
+  //         },
+  //         {
+  //           network_full: "Watch The Skies",
+  //           network_short: "WTS",
+  //           author: "mario",
+  //           title: "Bobcats on the loose",
+  //           article_body:
+  //             "There are bobcats, and they are on the loose! More at ten"
+  //         }
+  //       ]
+  //     }
+  //   ]
+  // };
+  // var rounds = fakeRoundData;
 
   // Load example page and pass in an example by id
   app.get("/:gameId/example/:id", function(req, res) {
