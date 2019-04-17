@@ -49,7 +49,7 @@ module.exports = function(app) {
       }
     ];
     var data = {
-      game: req.params.gameId,
+      game_id: req.params.gameId,
       articles: fakeArticles,
       globalEffects: fakeGlobalEffects,
       current_round: 1,
