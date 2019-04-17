@@ -50,7 +50,7 @@ db.sequelize.sync(syncOptions).then(function() {
 
 //Socket server logic will go here.
 
-io.on("connection", (socket) => {
+io.on("connection", socket => {
   console.log("a user connected")
   //terror update
   socket.on("terror update", terrorVal => {
@@ -69,13 +69,13 @@ io.on("connection", (socket) => {
 
   //game end - what do we need to pass into callback? game end route?
   socket.on("game ended", placeholder => {
-    io.broadcast.emit("game ended", placeholder);
+    io.emit("game ended", placeholder);
   });
   //TODO:clientside logic
 
   //new news article
   socket.on("new article", article => {
-    socket.emit("new article", article);
+    io.emit("new article", article);
   });
   //TODO:clientside and admin client logic;
 
