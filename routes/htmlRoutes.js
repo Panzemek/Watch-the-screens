@@ -96,20 +96,17 @@ module.exports = function(app) {
     //query for news org info here
     var org = req.params.org;
     var gameId = req.params.gameId;
+
     //TODO: Needs to do an database call to the network table to get the network object data in order to poulate the reporter preview modal and return it to newsOrg.
-    var fakeOrgData = {
+    db.network.findAll({
+      where: {
+        network_short: org,
+        gameId: gameId
+      }
+    }).then(networkResult){
       // eslint-disable-next-line camelcase
-      network_full: "Watch The Skies",
-      // eslint-disable-next-line camelcase
-      network_short: "WTS"
-    };
-    var newsOrg = fakeOrgData;
-    // eslint-disable-next-line camelcase
-    newsOrg.game_id = gameId;
-    // eslint-disable-next-line camelcase
-    newsOrg.network_short = org;
-    // eslint-disable-next-line camelcase
-    res.render("reporter", newsOrg); //handlebars news org here
+      res.render("reporter", networkResult);
+    }
   });
 
   app.get("/:gameId/newsViewer", function(req, res) {
