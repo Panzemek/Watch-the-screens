@@ -47,7 +47,7 @@ module.exports = function(app) {
   //
   // Article view routes
 
-  app.get("/:gameid/allArticles", function(req, res) {
+  app.get("/:gameid/articles", function(req, res) {
     db.game
       .findById(req.params.gameid, {
         include: [
@@ -152,8 +152,21 @@ module.exports = function(app) {
     console.log(req.body);
   });
 
+  //Used by the admin vivew. Toggles an article's visibility on the overview page.
   app.put("/api/toggleArticle", function(req, res) {
     //TODO: make a put call to the db to update the is hidden status of the article. Then, on success, update admin and overview views with article data.
+    console.log(req.body);
+  });
+
+  //Used by the Admin view. Updates an existing global effect.
+  app.put("/api/updateGlobalEffect", function(req, res) {
+    //TODO: Make a put call to the db to update the global effect. Then, on success, update admin and overview views with global effects (all of them).
+    console.log(req.body);
+  });
+
+  //Used by the Admin view (called in the clock.js file). Updates the is_paused state for the game.
+  app.put("/api/toggleGamePauseState", function(req, res) {
+    //TODO: Make a put call to the db to update the is_paused flag for the game. Then, on success, broadcast the new value to admin and overview views.
     console.log(req.body);
   });
 };

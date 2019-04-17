@@ -84,3 +84,40 @@ $("#toggle-article-dropdown").change(function() {
     $("#toggle-article-button").text("Hide");
   }
 });
+
+//Binds an event listener to each edit global event button. On click, a modal is shown with a form filled out with the editable values of the global event (current values already filled).
+$(".global-event-button").click(function() {
+  $("#global-effect-text").val($(this).data("event_text"));
+  $("#global-effect-start-trigger-type").val(
+    $(this).data("start_trigger_type")
+  );
+  $("#global-effect-start-trigger-value").val(
+    $(this).data("start_trigger_value")
+  );
+  $("#global-effect-end-trigger-type").val($(this).data("end_trigger_type"));
+  $("#global-effect-end-trigger-value").val($(this).data("end_trigger_value"));
+  if ($(this).data("is_hidden") === true) {
+    $("#global-effect-is-hidden").prop("checked", true);
+  } else {
+    console.log("false", $(this).data("is_hidden"));
+    $("#global-effect-is-hidden").prop("checked", false);
+  }
+  $("#global-effect-submit-button").data("effect-id", $(this).data("id"));
+});
+
+//Sends an api put call to update a global effect.
+$("#global-effect-submit-button").click(function() {
+  $.ajax("/api/updateGlobalEffect", {
+    type: "put",
+    data: {
+      id: $("#global-effect-submit-button").data("effect-id"),
+      event_text: $("#global-effect-text").val(),
+      start_trigger_type: $("#global-effect-start-trigger-type").val(),
+      start_trigger_value: $("#global-effect-start-trigger-value").val(),
+      end_trigger_type: $("#global-effect-end-trigger-type").val(),
+      end_trigger_value: $("#global-effect-end-trigger-value").val(),
+      // eslint-disable-next-line camelcase
+      is_hidden: $("#global-effect-is-hidden").prop("checked")
+    }
+  });
+});

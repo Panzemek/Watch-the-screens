@@ -3,7 +3,33 @@ var db = require("../models");
 module.exports = function(app) {
   // Load index page
   app.get("/", function(req, res) {
-    res.render("overview");
+    var fakeArticles = [
+      {
+        network_full: "Watch The Skies",
+        network_short: "WTS",
+        img_url: "https://picsum.photos/200/300/?random",
+        author: "mario",
+        title: "Bobcats on the loose",
+        article_body:
+          "There are bobcats, and they are on the loose! More at ten"
+      },
+      {
+        network_full: "Watch The Skies",
+        network_short: "WTS",
+        img_url: "https://picsum.photos/200/300/?random",
+        author: "mario",
+        title: "Bobcats on the loose",
+        article_body:
+          "There are bobcats, and they are on the loose! More at ten"
+      }
+    ];
+    var data = {
+      id: 1,
+      current_round: 1,
+      time_left: "20:00",
+      articles: fakeArticles
+    };
+    res.render("overview", data);
   });
 
   //this route should be the inital game setup route
@@ -14,6 +40,7 @@ module.exports = function(app) {
   //this is the admin 'control' interface
   app.get("/:gameId/admin", function(req, res) {
     //TODO: Make a call to the db and return all news.title, news.id, and news.is_hidden values for each article
+    //TODO: Make a call to the db and return games.current_round and round_started (I think we need this) to calculate time left.
     var fakeArticles = [
       {
         id: 1,
@@ -26,9 +53,32 @@ module.exports = function(app) {
         is_hidden: false
       }
     ];
+    var fakeGlobalEffects = [
+      {
+        id: 1,
+        event_text: "Cat attack +2",
+        start_trigger_type: "round",
+        start_trigger_value: 5,
+        end_trigger_type: "round",
+        end_trigger_value: 12,
+        is_hidden: false
+      },
+      {
+        id: 2,
+        event_text: "Dog attack -5",
+        start_trigger_type: "round",
+        start_trigger_value: 4,
+        end_trigger_type: "round",
+        end_trigger_value: 11,
+        is_hidden: true
+      }
+    ];
     var data = {
-      game: req.params.gameId,
-      articles: fakeArticles
+      game_id: req.params.gameId,
+      articles: fakeArticles,
+      globalEffects: fakeGlobalEffects,
+      current_round: 1,
+      time_left: "20:00"
     };
     //database call for current values
     res.render("admin", data); //admin page
