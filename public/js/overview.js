@@ -1,3 +1,69 @@
+var articles = [];
+var lastUsedArticle = 1;
+
+//TEMP BUTTON CLICK REMOVE ONCE ARTICLES ARE SETUP
+$("#temp-article").click(function() {
+  $.ajax("/" + $("#overview-container").data("game") + "/articles", {
+    type: "get"
+  }).then(function(data) {
+    articles.push(...data);
+    checkArticleArray();
+  });
+});
+
+// On page load we need to get all available articles and put them in our articles array.
+$(this).ready(function() {
+  $.ajax("/" + $("#overview-container").data("game") + "/articles", {
+    type: "get"
+  }).then(function(data) {
+    articles.push(...data);
+    checkArticleArray();
+  });
+});
+
+// Check the articles array length and start behavior based on it.
+function checkArticleArray() {
+  //One article, Advance to the one article and wait there. Remove the template carousel panel.
+  if (articles.length === 1) {
+    populateArticle($(".carousel-item:not(.active)"), articles[0]);
+    $("#article-carousel").carousel(1);
+    $("#article-carousel").one("slid.bs.carousel", function() {
+      $("#carousel-1").remove();
+      $("#article-carousel").carousel("pause");
+    });
+    //More than one article, Advance to the next article and begin cycling the articles.
+  } else if (articles.length > 1) {
+    populateArticle($(".carousel-item:not(.active)"), articles[0]);
+    $("#article-carousel").carousel(1);
+    $("#article-carousel").one("slid.bs.carousel", function() {
+      console.log("called!");
+      $("#carousel-1").remove();
+      $("#article-carousel").carousel("cycle");
+    });
+    $("#article-carousel").on("slid.bs.carousel", function() {
+      populateArticle(
+        $(".carousel-item:not(.active)"),
+        articles[lastUsedArticle]
+      );
+      lastUsedArticle++;
+      if (lastUsedArticle >= articles.length) {
+        lastUsedArticle = 0;
+      }
+    });
+  }
+}
+
+// Takes in an article html object and an article json object and populates the html with the json.
+function populateArticle(html, article) {
+  html.find(".network-icon").attr("src", article.network_image);
+  html.find(".network-icon").attr("alt", article.network_short);
+  html.find(".network-name").text(article.network_full);
+  html.find(".title").text(article.title);
+  html.find(".author").text("By " + article.author);
+  html.find(".image").attr("src", article.img_url);
+  html.find(".article-text").text(article.article_body);
+}
+
 //this is the work in progress for the scroll bar event listener for the scrolling Marquee section.
 //
 // <html>
