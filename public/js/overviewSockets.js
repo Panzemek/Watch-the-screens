@@ -1,6 +1,7 @@
 // eslint-disable-next-line eslint prefer-arrow-callback
 var socket = io();
 
+
 socket.on("terror update", terrorVal => {
   console.log(terrorVal);
   //TODO: update the terror val HTML here
@@ -40,4 +41,11 @@ socket.on("new article", data => {
   var placeholder = [];
   //TODO: what exactly does data object look like?
   placeholder.unshift(data.article);
+});
+
+socket.on("new page load", data => {
+  console.log("new page recieved");
+  time = moment(data.time);
+  console.log(time);
+  isPaused = data.pause;
 });

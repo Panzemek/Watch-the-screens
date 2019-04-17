@@ -5,6 +5,10 @@ var moment = require("moment");
 
 var db = require("./models");
 
+var serverClock = null;
+var isPaused = true;
+
+
 var app = express();
 var PORT = process.env.PORT || 3000;
 //sockets stuff
@@ -27,7 +31,7 @@ app.set("view engine", "handlebars");
 
 // Routes
 require("./routes/apiRoutes")(app);
-require("./routes/htmlRoutes")(app);
+require("./routes/htmlRoutes")(app,isPaused, io);
 
 var syncOptions = { force: false };
 
@@ -50,21 +54,27 @@ db.sequelize.sync(syncOptions).then(function() {
 
 //server countdown timer here
 //TODO: this will need to work on round start
-var serverClock = null;
-var isPaused = true;
+
 timerInterval = setInterval(function() {
   if (!isPaused) {
-    serverClock.subtract(1, "second");
+    serverClock = moment(serverClock).subtract(1, "second");
+    console.log(serverClock);
   }
 }, 1000);
 
 //Socket server logic will go here.
 io.on("connection", socket => {
-  io.emit("clock value", serverClock);
   //terror update
   socket.on("terror update", terrorVal => {
     io.emit("terror update", terrorVal);
   });
+  if (serverClock) {
+    socket.on("new page", () => {
+      console.log("new page is firing");
+      data = { time: serverClock, pause: isPaused };
+      io.emit("new page load", data);
+    });
+  }
 
   //global modal post
   socket.on("global modal post", data => {
@@ -95,20 +105,19 @@ io.on("connection", socket => {
   //TODO: write clientside and admin hide logic
 
   //**The following sockets listen for timer start/stop/change calls**//
-  socket.on("stop timer", timerVal => {
-    timerVal = moment().format(timerVal, "mm:ss");
-    io.emit("stop timer", timerVal);
+  socket.on("stop timer", (timerVal) => {
+    //timer val above isnt needed, but if I remove it things break, so... ¯\_(ツ)_/¯
+    //timerVal = moment().format(timerVal, "mm:ss");
+    io.emit("stop timer", serverClock);
     isPaused = true;
     console.log("timer stopped");
   });
   socket.on("start timer", timerVal => {
-    timerVal = moment().format(timerVal, "mm:ss");
-    if (serverClock) {
-      timerVal = moment().format(serverClock, "mm:ss");
-    } else {
-      serverClock = timerVal;
+    //timerVal = moment().format(timerVal, "mm:ss");
+    if (!serverClock) {
+      serverClock = moment().format(timerVal, "mm:ss");
     }
-    io.emit("start timer", timerVal);
+    io.emit("start timer", serverClock);
     isPaused = false;
     console.log("timer started");
   });
