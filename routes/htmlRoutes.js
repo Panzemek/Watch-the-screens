@@ -27,10 +27,17 @@ module.exports = function(app) {
       id: 1,
       current_round: 1,
       time_left: "20:00",
-      articles: fakeArticles
+      articles: fakeArticles,
+      rioters: 100,
+      terror: 30
     };
+    console.log(data);
     res.render("overview", data);
   });
+
+  app.get("/:id", function(req, res) {
+    //TODO: Copy "/:gameid/overviewGame" from api routes.
+  })
 
   //this route should be the inital game setup route
   app.get("/admin", function(req, res) {

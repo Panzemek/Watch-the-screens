@@ -49,7 +49,7 @@ module.exports = function(app) {
 
   app.get("/:gameid/articles", function(req, res) {
     db.game
-      .findById(req.params.gameid, {
+      .findByPk(req.params.gameid, {
         include: [
           {
             model: db.article,
