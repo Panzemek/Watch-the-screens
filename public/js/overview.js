@@ -1,13 +1,14 @@
 var articles = [];
 var lastUsedArticle = 1;
 var carouselListener;
+// var pageLoaded = moment();
 
 //TEMP BUTTON CLICK REMOVE ONCE ARTICLES ARE SETUP
 $("#temp-article").click(function() {
   $.ajax("/" + $("#overview-container").data("game") + "/articles", {
     type: "get"
   }).then(function(data) {
-    articles.push(...data);
+    articles.push(...data.articles);
     checkArticleArray();
   });
 });
@@ -17,8 +18,12 @@ $(this).ready(function() {
   $.ajax("/" + $("#overview-container").data("game") + "/articles", {
     type: "get"
   }).then(function(data) {
-    console.log(data)
-    articles.push(...data.articles);
+    console.log(data);
+    var newArticles = [...data.articles];
+    for (i in newArticles) {
+      newArticles[i].seen = false;
+      articles.push(newArticles[i]);
+    }
     checkArticleArray();
   });
 });
@@ -61,6 +66,15 @@ function checkArticleArray() {
 
 // Takes in an article html object and an article json object and populates the html with the json.
 function populateArticle(html, article) {
+  if (html.length > 1) {
+    html = $(html[0]);
+  }
+  if (!article.seen) {
+    html.find(".breaking-news").removeClass("hidden");
+  } else {
+    html.find(".breaking-news").addClass("hidden");
+  }
+  article.seen = true;
   html.find(".network-icon").attr("src", article.network_image);
   html.find(".network-icon").attr("alt", article.network_short);
   html.find(".network-name").text(article.network_full);
@@ -172,8 +186,7 @@ $('.marquee')
 //every 1k intvl call null and bind, passing current st";//pass param to setIntFxn//every 1k intvl call null and bind, passing current st.""
 var oldState = state; //read pre/post:MR- .bind; .closures: https://hackernoon.com/how-to-use-javascript-closures-with-confidence-85cd1f841a6b
 //using first arg Null, to be populated w/oldState,nextParam
-// setInterval(onInterval.bind(null, oldState, state),5000);
-
+// setInterval(onInterval.bind(null, oldState, state),5000;
 
 function onInterval (oldState,state){
   // if (state === oldState.state){
