@@ -66,12 +66,13 @@ function checkArticleArray() {
 
 // Takes in an article html object and an article json object and populates the html with the json.
 function populateArticle(html, article) {
+  if (html.length > 1) {
+    html = $(html[0]);
+  }
   if (!article.seen) {
-    console.log("BOOM!");
-    console.log(html.class());
-    html.removeClass("hidden");
+    html.find(".breaking-news").removeClass("hidden");
   } else {
-    html.addClass("hidden");
+    html.find(".breaking-news").addClass("hidden");
   }
   article.seen = true;
   html.find(".network-icon").attr("src", article.network_image);
