@@ -53,28 +53,37 @@ db.sequelize.sync(syncOptions).then(function() {
 io.on("connection", (socket) => {
   console.log("a user connected")
   //terror update
-  socket.on("terror update", (terrorVal) => {
+  socket.on("terror update", terrorVal => {
     io.emit("terror update", terrorVal);
   });
-  
+
   //global modal post
-  socket.on("global modal post", (data) => {
+  socket.on("global modal post", data => {
     io.emit("global modal post", data);
   });
 
   //global mod changes
+  socket.on("global effect submit", data => {
+    io.emit("global effect submit", data);
+  });
 
   //game end - what do we need to pass into callback? game end route?
-  socket.on("game ended", (placeholder) => {
-    io.broadcast.emit("game ended", (placeholder));
+  socket.on("game ended", placeholder => {
+    io.broadcast.emit("game ended", placeholder);
   });
   //TODO:clientside logic
-  
+
   //new news article
+  socket.on("new article", article => {
+    socket.emit("new article", article);
+  });
+  //TODO:clientside and admin client logic;
 
   //hide news article
-
-  //
+  socket.on("hide article", data => {
+    socket.emit("hide article", data);
+  });
+  //TODO: write clientside and admin hide logic
 });
 
 module.exports = app;

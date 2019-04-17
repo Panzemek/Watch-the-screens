@@ -81,7 +81,10 @@ $("#toggle-article-button").click(function() {
       // eslint-disable-next-line camelcase
       is_hidden: newState
     }
-  });
+  //sockets for article hide state
+  }).then(
+    socket.emit("hide article", { id: selected.val(), is_hidden: newState })
+  );
 });
 
 //Changes the state of the text on the article dropdown submit button based on whether or not the article is already hidden or not.
@@ -116,6 +119,16 @@ $(".global-event-button").click(function() {
 });
 
 $("#global-effect-submit-button").click(function() {
+  dataForSocket = {
+    id: $("#global-effect-submit-button").data("effect-id"),
+    event_text: $("#global-effect-text").val(),
+    start_trigger_type: $("#global-effect-start-trigger-type").val(),
+    start_trigger_value: $("#global-effect-start-trigger-value").val(),
+    end_trigger_type: $("#global-effect-end-trigger-type").val(),
+    end_trigger_value: $("#global-effect-end-trigger-value").val(),
+    // eslint-disable-next-line camelcase
+    is_hidden: $("#global-effect-is-hidden").prop("checked")
+  }
   $.ajax("/api/toggleArticle", {
     type: "put",
     data: {
@@ -128,5 +141,5 @@ $("#global-effect-submit-button").click(function() {
       // eslint-disable-next-line camelcase
       is_hidden: $("#global-effect-is-hidden").prop("checked")
     }
-  });
+  }).then(socket.emit("global effect submit", data));
 });

@@ -51,11 +51,7 @@ module.exports = function(app) {
     var data = {
       game: req.params.gameId,
       articles: fakeArticles,
-<<<<<<< HEAD
-      id: 1,
-=======
       globalEffects: fakeGlobalEffects,
->>>>>>> 9ae2aa5caa294ba3f7877925ef080fd9cb7d73be
       current_round: 1,
       time_left: "20:00"
     };
