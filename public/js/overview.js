@@ -1,5 +1,6 @@
 var articles = [];
 var lastUsedArticle = 1;
+var carouselListener;
 
 //TEMP BUTTON CLICK REMOVE ONCE ARTICLES ARE SETUP
 $("#temp-article").click(function() {
@@ -40,16 +41,21 @@ function checkArticleArray() {
       $("#carousel-1").remove();
       $("#article-carousel").carousel("cycle");
     });
-    $("#article-carousel").on("slid.bs.carousel", function() {
-      populateArticle(
-        $(".carousel-item:not(.active)"),
-        articles[lastUsedArticle]
+    if (!carouselListener) {
+      carouselListener = $("#article-carousel").on(
+        "slid.bs.carousel",
+        function() {
+          populateArticle(
+            $(".carousel-item:not(.active)"),
+            articles[lastUsedArticle]
+          );
+          lastUsedArticle++;
+          if (lastUsedArticle >= articles.length) {
+            lastUsedArticle = 0;
+          }
+        }
       );
-      lastUsedArticle++;
-      if (lastUsedArticle >= articles.length) {
-        lastUsedArticle = 0;
-      }
-    });
+    }
   }
 }
 
