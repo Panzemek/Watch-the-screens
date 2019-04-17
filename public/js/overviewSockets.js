@@ -7,6 +7,8 @@ socket.on("terror update", terrorVal => {
   //TODO: update the terror val HTML here
 });
 
+
+
 socket.on("global modal post", data => {
   console.log(data);
   //TODO: update the modal text value here
@@ -19,7 +21,7 @@ socket.on("global effect submit", data => {
 });
 
 socket.on("hide article", data => {
-  var placeholder = [];
+  var placeholder = []; //TODO: replace with actual article array
   var index = placeholder.indexOf(data.id);
   if (index !== -1) {
     placeholder.splice(index, 1);
@@ -29,7 +31,7 @@ socket.on("hide article", data => {
 });
 
 socket.on("show article", data => {
-  var placeholder = [];
+  var placeholder = []; //TODO: replace with actual article array
   placeholder.push(data);
 });
 

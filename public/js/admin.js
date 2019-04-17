@@ -141,5 +141,9 @@ $("#global-effect-submit-button").click(function() {
       // eslint-disable-next-line camelcase
       is_hidden: $("#global-effect-is-hidden").prop("checked")
     }
-  }).then(socket.emit("global effect submit", data));
+  }).then(socket.emit("global effect change", dataForSocket));
 });
+
+socket.on("global effect change", data => {
+  //global effect change code goes here
+})

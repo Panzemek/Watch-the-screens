@@ -82,8 +82,8 @@ io.on("connection", socket => {
   });
 
   //global mod changes
-  socket.on("global effect submit", data => {
-    io.emit("global effect submit", data);
+  socket.on("global effect change", data => {
+    io.emit("global effect change", data);
   });
 
   //game end - what do we need to pass into callback? game end route?
