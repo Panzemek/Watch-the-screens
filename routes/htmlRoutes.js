@@ -28,9 +28,30 @@ module.exports = function(app) {
         is_hidden: false
       }
     ];
+    var fakeGlobalEffects = [
+      {
+        id: 1,
+        event_text: "Cat attack +2",
+        start_trigger_type: "round",
+        start_trigger_value: 5,
+        end_trigger_type: "round",
+        end_trigger_value: 12,
+        is_hidden: false
+      },
+      {
+        id: 2,
+        event_text: "Dog attack -5",
+        start_trigger_type: "round",
+        start_trigger_value: 4,
+        end_trigger_type: "round",
+        end_trigger_value: 11,
+        is_hidden: true
+      }
+    ];
     var data = {
       game: req.params.gameId,
       articles: fakeArticles,
+      globalEffects: fakeGlobalEffects,
       current_round: 1,
       time_left: "20:00"
     };
