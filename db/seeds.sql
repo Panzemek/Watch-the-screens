@@ -29,3 +29,8 @@ INSERT INTO articles
     (title, img_url, author, article_body, round_created, is_hidden, createdAt, updatedAt, gameId, networkId)
 VALUES
     ("ZENOCORP <3 NEREUS", "http://lorempixel.com/400/300/", "Person McPersonface", "MOSCOW - Senior Government officials have confirmed to this reporter that Zenocorp brokered a technology deal with House Nereus (the Other aliens). The CIO of Zenocorp indicated that he was “too busy with the stock market” to bother with this concerning news. German officials have indicated that “all science must be re-examined” in the face of this threat.", 1, false, now(), now(), 1, 1);
+
+INSERT INTO articles
+    (title, img_url, author, article_body, round_created, is_hidden, createdAt, updatedAt, gameId, networkId)
+VALUES
+    ("Volcya Cured My Chakra!", "http://lorempixel.com/400/300/", "Dude McDuderson", "Seattle - I've never felt so disconnected from the universe!.", 1, false, now(), now(), 1, 1);

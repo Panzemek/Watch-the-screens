@@ -4,10 +4,31 @@ module.exports = function(app) {
   //
   //
   // Overview view routes
-  app.get("/1/overview", function(req, res) {
-    db.game.overviewInfo({
-      where: {}
-    });
+
+  // Returns games table relevant information
+  app.get("/:gameid/overviewGame", function(req, res) {
+    db.game
+      .findAll({
+        attributes: ["terror", "rioters", "current_round"]
+      })
+      .then(function(overviewData) {
+        res.json(overviewData);
+      });
+  });
+
+  app.get("/:gameid/newOverviewArticle", function(req, res) {
+    db.article
+      .findAll({
+        limit: 1,
+        where: {
+          gameId: req.params.gameid
+        },
+        order: [["createdAt", "DESC"]],
+        include: [db.network]
+      })
+      .then(function(articleResult) {
+        res.json(articleResult);
+      });
   });
 
   //
@@ -27,29 +48,21 @@ module.exports = function(app) {
   // Article view routes
 
   app.get("/:gameid/articles", function(req, res) {
-    //Fake reply
-    res.json([
-      {
-        network_full: "Watch The Skies",
-        network_short: "WTS",
-        img_url: "https://picsum.photos/200/300/?random",
-        author: "mario",
-        title: "Wildebeasts on the loose",
-        article_body:
-          "There are bobcats, and they are on the loose! More at ten " +
-          Math.floor(Math.random() * 1000)
-      }
-    ]);
-
-    // db.article
-    //   .findAllArticles({
-    //     where: {
-    //       gameId: req.params.gameid
-    //     }
-    //   })
-    //   .then(function(articles) {
-    //     res.json(articles);
-    //   });
+    db.game
+      .findById(req.params.gameid, {
+        include: [
+          {
+            model: db.article,
+            where: {
+              is_hidden: false
+            },
+            include: [db.network]
+          }
+        ]
+      })
+      .then(function(articleResult) {
+        res.json(articleResult);
+      });
   });
 
   //
