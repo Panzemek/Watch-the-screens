@@ -41,77 +41,68 @@ module.exports = function(app) {
   app.get("/:gameId/admin", function(req, res) {
     //TODO: Make a call to the db and return all news.title, news.id, and news.is_hidden values for each article
     //TODO: Make a call to the db and return games.current_round and round_started (I think we need this) to calculate time left.
+    var allAdminJson = [];
     db.article
       .findAll({
-        attributes: ["title","id","is_hidden"],
+        attributes: ["title", "id", "is_hidden"],
         where: {
           gameId: req.params.gameId
         }
       })
       .then(function(articleResult) {
-        res.json(articleResult);
+        allAdminJson.push(articleResult);
       });
   });
-    
-    var fakeArticles = [
-      {
-        id: 1,
-        title: "Cowabunga Dude!",
-        is_hidden: true
-      },
-      {
-        id: 2,
-        title: "Turtles in time!",
-        is_hidden: false
-      }
-    ];
-    var fakeGlobalEffects = [
-      {
-        id: 1,
-        event_text: "Cat attack +2",
-        start_trigger_type: "round",
-        start_trigger_value: 5,
-        end_trigger_type: "round",
-        end_trigger_value: 12,
-        is_hidden: false
-      },
-      {
-        id: 2,
-        event_text: "Dog attack -5",
-        start_trigger_type: "round",
-        start_trigger_value: 4,
-        end_trigger_type: "round",
-        end_trigger_value: 11,
-        is_hidden: true
-      }
-    ];
-    var data = {
-      game_id: req.params.gameId,
-      articles: fakeArticles,
-      globalEffects: fakeGlobalEffects,
-      current_round: 1,
-      time_left: "20:00"
-    };
-    //database call for current values
-    res.render("admin", data); //admin page
-  });
+
+  db.global_effect.findAll({});
+
+  //   var fakeGlobalEffects = [
+  //     {
+  //       id: 1,
+  //       event_text: "Cat attack +2",
+  //       start_trigger_type: "round",
+  //       start_trigger_value: 5,
+  //       end_trigger_type: "round",
+  //       end_trigger_value: 12,
+  //       is_hidden: false
+  //     },
+  //     {
+  //       id: 2,
+  //       event_text: "Dog attack -5",
+  //       start_trigger_type: "round",
+  //       start_trigger_value: 4,
+  //       end_trigger_type: "round",
+  //       end_trigger_value: 11,
+  //       is_hidden: true
+  //     }
+  //   ];
+  //   var data = {
+  //     game_id: req.params.gameId,
+  //     articles: fakeArticles,
+  //     globalEffects: fakeGlobalEffects,
+  //     current_round: 1,
+  //     time_left: "20:00"
+  //   };
+  //   //database call for current values
+  //   res.render("admin", data); //admin page
+  // });
 
   //reporter news publish location here
   app.get("/:gameId/news/:org", function(req, res) {
     //query for news org info here
     var org = req.params.org;
-    var gameId = req.params.gameId;
 
     //TODO: Needs to do an database call to the network table to get the network object data in order to poulate the reporter preview modal and return it to newsOrg.
-    db.network.findAll({
-      where: {
-        network_short: org,
-        gameId: gameId
-      }
-    }).then(function(networkResult){
-      // eslint-disable-next-line camelcase
-      res.render("reporter", networkResult);
-    });
+    db.network
+      .findAll({
+        where: {
+          network_short: org
+        }
+      })
+      .then(function(networkResult) {
+        // eslint-disable-next-line camelcase
+        res.render("reporter", networkResult);
+      });
   });
 
   app.get("/:gameId/newsViewer", function(req, res) {
