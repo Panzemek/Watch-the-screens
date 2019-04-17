@@ -41,6 +41,18 @@ module.exports = function(app) {
   app.get("/:gameId/admin", function(req, res) {
     //TODO: Make a call to the db and return all news.title, news.id, and news.is_hidden values for each article
     //TODO: Make a call to the db and return games.current_round and round_started (I think we need this) to calculate time left.
+    db.article
+      .findAll({
+        attributes: ["title","id","is_hidden"],
+        where: {
+          gameId: req.params.gameId
+        }
+      })
+      .then(function(articleResult) {
+        res.json(articleResult);
+      });
+  });
+    
     var fakeArticles = [
       {
         id: 1,
@@ -96,10 +108,10 @@ module.exports = function(app) {
         network_short: org,
         gameId: gameId
       }
-    }).then(networkResult){
+    }).then(function(networkResult){
       // eslint-disable-next-line camelcase
       res.render("reporter", networkResult);
-    }
+    });
   });
 
   app.get("/:gameId/newsViewer", function(req, res) {
