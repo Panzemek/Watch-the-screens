@@ -27,6 +27,11 @@ socket.on("hide article", data => {
   //remove article from articles array here
 });
 
+socket.on("show article", data => {
+  var placeholder = [];
+  placeholder.push(data);
+});
+
 //adds a new article to the array of articles
 //one idea for this - store locally on admin and overview (with the exact same name)
 //this JS exists on both pages, so it will handle both.

@@ -1,7 +1,9 @@
 var isPaused = false;
 var time;
+var socket = io();
 
 $(this).ready(function() {
+  //TODO: put a timer start socket call here
   isPaused = $("#clock").data("is_paused");
   setPauseButtonText();
   time = moment($("#clock").text(), "mm:ss");
@@ -17,9 +19,11 @@ $("#pause-button").click(function() {
   if (isPaused) {
     isPaused = false;
     setPauseButtonText();
+    socket.emit("start timer", time);
   } else {
     isPaused = true;
     setPauseButtonText();
+    socket.emit("stop timer", time);
   }
   $.ajax("/api/toggleGamePauseState", {
     type: "put",
@@ -37,3 +41,23 @@ function setPauseButtonText() {
     $("#pause-button").text("Pause");
   }
 }
+
+//Socket listeners to determine when timer is start/stopped from admin.
+socket.on("stop timer", timerVal => {
+  time = moment(timerVal);
+  console.log(time);
+  isPaused = true;
+  setPauseButtonText();
+});
+
+socket.on("start timer", timerVal => {
+  time = moment(timerVal);
+  console.log(time);
+  isPaused = false;
+  setPauseButtonText();
+});
+
+//change timer does not start the time, should probabaly only work when timer is stopped
+socket.on("change timer", newTime => {
+  time = newTime;
+});

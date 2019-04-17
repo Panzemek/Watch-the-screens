@@ -1,14 +1,14 @@
 require("dotenv").config();
 var express = require("express");
 var exphbs = require("express-handlebars");
-
+var moment = require("moment");
 
 var db = require("./models");
 
 var app = express();
 var PORT = process.env.PORT || 3000;
 //sockets stuff
-var http = require('http').Server(app);
+var http = require("http").Server(app);
 var io = require("socket.io")(http);
 
 // Middleware
@@ -51,7 +51,7 @@ db.sequelize.sync(syncOptions).then(function() {
 //Socket server logic will go here.
 
 io.on("connection", socket => {
-  console.log("a user connected")
+  console.log("a user connected");
   //terror update
   socket.on("terror update", terrorVal => {
     io.emit("terror update", terrorVal);
@@ -81,9 +81,27 @@ io.on("connection", socket => {
 
   //hide news article
   socket.on("hide article", data => {
-    socket.emit("hide article", data);
+    io.emit("hide article", data);
   });
   //TODO: write clientside and admin hide logic
+
+  //**The following sockets listen for timer start/stop/change calls**//
+  socket.on("stop timer", timerVal => {
+    timerVal = moment().format(timerVal, "mm:ss");
+    io.emit("stop timer", timerVal);
+    console.log("timer stopped");
+  });
+  socket.on("start timer", timerVal => {
+    timerVal = moment().format(timerVal, "mm:ss");
+    io.emit("start timer", timerVal);
+    console.log("timer started");
+  });
+  //TODO: the functionality to enter a new timer change still needs to be written.
+  socket.on("change timer", newTimerVal => {
+    timer = moment().format(newTimerVal, "mm:ss");
+    io.emit("change timer", newTimerVal);
+    console.log("timer changed");
+  });
 });
 
 module.exports = app;
