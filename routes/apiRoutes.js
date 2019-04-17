@@ -80,19 +80,7 @@ module.exports = function(app) {
   });
 
   //Used by the admin view. Pauses the timer and sets Time Remaining.
-  app.put("/api/pauseTimer", function(req, res) {
-    db.game
-      .update(
-        {
-          time_remaining: req.body.time_remaining,
-          is_paused: req.body.is_paused
-        },
-        { where: { id: req.body.id } }
-      )
-      .then(function(pauseData) {
-        res.json(pauseData);
-      });
-  });
+  app.put("/api/pauseTimer", function(req, res) {});
 
   //Used by the admin view. Ends a game.
   app.put("/api/endGame", function(req, res) {
@@ -168,5 +156,16 @@ module.exports = function(app) {
   app.put("/api/toggleGamePauseState", function(req, res) {
     //TODO: Make a put call to the db to update the is_paused flag for the game. Then, on success, broadcast the new value to admin and overview views.
     console.log(req.body);
+    db.game
+      .update(
+        {
+          time_remaining: req.body.time_remaining,
+          is_paused: req.body.is_paused
+        },
+        { where: { id: req.body.id } }
+      )
+      .then(function(pauseData) {
+        res.json(pauseData);
+      });
   });
 };
