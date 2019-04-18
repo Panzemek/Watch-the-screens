@@ -66,8 +66,15 @@ timerInterval = setInterval(function() {
 io.on("connection", socket => {
   //terror update
   socket.on("terror update", terrorVal => {
+    console.log("terror upd makes to server");
     io.emit("terror update", terrorVal);
   });
+
+  socket.on("riot update", riotVal => {
+    console.log("riot update makes it to server");
+    io.emit("riot update", riotVal);
+  });
+
   if (serverClock) {
     socket.on("new page", () => {
       console.log("new page is firing");
@@ -82,8 +89,8 @@ io.on("connection", socket => {
   });
 
   //global mod changes
-  socket.on("global effect submit", data => {
-    io.emit("global effect submit", data);
+  socket.on("global effect change", data => {
+    io.emit("global effect change", data);
   });
 
   //game end - what do we need to pass into callback? game end route?
@@ -102,7 +109,6 @@ io.on("connection", socket => {
   socket.on("hide article", data => {
     io.emit("hide article", data);
   });
-  //TODO: write clientside and admin hide logic
 
   //**The following sockets listen for timer start/stop/change calls**//
   socket.on("stop timer", (timerVal) => {

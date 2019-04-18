@@ -1,6 +1,7 @@
 var articles = [];
 var lastUsedArticle = 1;
 var carouselListener;
+var socket = io();
 // var pageLoaded = moment();
 
 //TEMP BUTTON CLICK REMOVE ONCE ARTICLES ARE SETUP
@@ -123,7 +124,7 @@ Step 4: Make the button add an element to the array and trigger a marquee update
 //     margin: 10px;
 //     font-family:'Lato', sans-serif;
 // }
-// .marquee1 {
+// .marquee1 {ws
 //     width: 300px;
 //     overflow: hidden;
 //     border:1px solid #ccc;
@@ -132,91 +133,83 @@ Step 4: Make the button add an element to the array and trigger a marquee update
 // }
 // </style>
 
-$(document).ready(function(){
-  $(".marquee1").text("hi");
-  console.log("anythingX"); //step2b.
+$(document).ready(function() {
+  //*window for images();
+
+  $(".marquee").marquee({
+    //, .marquee1 removed
+    duration: 6000, //speed in milliseconds of the marquee
+    gap: 50, //gap in pixels between the tickers
+    delayBeforeStart: 0, //time in milliseconds before the marquee will start animating
+    direction: "right", //'left' or 'right'
+    duplicated: true //true or false - should the marquee be duplicated to show an effect of continues flow
+  });
+  $(".marquee")
+    .bind("finished", function() {
+      $(this).marquee("before");
+      console.log("Welcome"); //Change text to something else after first loop finishes
+      $(this).marquee("destroy");
+      // alert("finished.destroy");WORKS!
+      //Load new content using Ajax and update the marquee container
+      $(this)
+        .html("Some new data loaded using ajax")
+        //Apply marquee plugin again
+        .marquee();
+    })
+    .showMarquee();
 });
 
-$("#newArticleBtn").click( function() { //click handler
-    $(".marquee1").html("bye arrayToStringarrayToStringarrayToStringarrayToString");
- 
+//**** Sockets stuff below ****/
+
+socket.on("terror update", terrorVal => {
+  console.log("Terror val is " + terrorVal);
+  $("#terror").html(terrorVal.terror);
 });
 
-function arrayToString() {
-  
-};
-const arrToStr = function(arr) {  //aka arrayToString
-  const str = arr.join(" "); //adds a space
-  return str;
-};
-// var headlines = ["Coding Bootcamp Alum Leads Org. to a $1,000,000,000 valuation", "Live in Seattle"]
-
-// for(var i=0, i < headlines.length; i++){
-//   var div = $('<div class="marquee">').text(headlines[i]);
-//   $('.headlines').append(div);
-// }
-
-
-$('.marquee, .marquee1').marquee({
-  
-  //speed in milliseconds of the marquee
-  duration: 6000,
-  //gap in pixels between the tickers
-  gap: 50,
-  //time in milliseconds before the marquee will start animating
-  delayBeforeStart: 0,
-  //'left' or 'right'
-  direction: 'right',
-  //true or false - should the marquee be duplicated to show an effect of continues flow
-  duplicated: true
+socket.on("riot update", riotVal => {
+  console.log("Riot value is " + riotVal);
+  $("#rioters").html(riotVal.riot);
 });
-$('.marquee')
-.bind('finished', function(){
-  //Change text to something else after first loop finishes
-  $(this).marquee('destroy');
-      alert("finished.destroy");
-  //Load new content using Ajax and update the marquee container
-  $(this).html('Some new data loaded using ajax')
-    //Apply marquee plugin again
-    .marquee()
-})
-.marquee();
-// $('.marquee').marquee()
-// var state = "init 2://todo:pass something here  param to setIntFxn";
-//every 1k intvl call null and bind, passing current st";//pass param to setIntFxn//every 1k intvl call null and bind, passing current st.""
-var oldState = state; //read pre/post:MR- .bind; .closures: https://hackernoon.com/how-to-use-javascript-closures-with-confidence-85cd1f841a6b
-//using first arg Null, to be populated w/oldState,nextParam
-// setInterval(onInterval.bind(null, oldState, state),5000;
 
-function onInterval (oldState,state){
-  // if (state === oldState.state){
-  //   return; //bc nothing's changed;
-  // };
-//Ideally, will scroll and every sec will add word/to become: array.i;
-state = $('.marquee').text();
-oldState = "gbye";
-if(oldState != state){
-  $(".marquee").html(state); 
-  oldState = state;
-};
-// state = state + "add something";
-// $(".marquee").html("static:initial string goes here"); //initial str
-}
+socket.on("global modal post", data => {
+  console.log(data);
+  $("#modalBlastText").html(data.text);
+  $("#modalBlast").modal("show");
+});
 
-//TODO: want to close over it, MUST CLOSE OUT 
-// timer running over it at marquis; chg txt by input array[]//
+socket.on("global effect submit", data => {
+  console.log(data);
+});
 
-// $('.marquee').
-//     .bind('beforeStarting', function () {
-//         //code you want to execute before starting the animations
-//         //simply to read from the aritcle.arrayList
-//         console.log('starting')
-//     })
-//     .bind('finished', function () {
-//         //code you want to execute before after each animation loop
-//         //reset the state to be the current 'marquee' being displayed
-//         console.log('finished')
-//     });
+socket.on("hide article", data => {
+  for (var i = 0; i++; i < articles.length) {
+    if (articles[i].id === data.id) {
+      articles.splice(index, 1);
+    }
+  }
+});
+
+socket.on("show article", data => {
+  articles.push(data);
+  articles[articles.length - 1].seen = false;
+});
+
+//adds a new article to the array of articles
+//one idea for this - store locally on admin and overview (with the exact same name)
+//this JS exists on both pages, so it will handle both.
+socket.on("new article", article => {
+  console.log("new article is: " + data);
+  //TODO: what exactly does data object look like?
+  articles.unshift(data.article);
+  articles[0].seen = false;
+});
+
+socket.on("new page load", data => {
+  console.log("new page recieved");
+  time = moment(data.time);
+  console.log(time);
+  isPaused = data.pause;
+});
 
 /*question of closures: https://hackernoon.com/how-to-use-javascript-closures-with-confidence-85cd1f841a6b
 Links: inventor: documentation:

@@ -1,25 +1,24 @@
 // eslint-disable-next-line eslint prefer-arrow-callback
 var socket = io();
 
-
 socket.on("terror update", terrorVal => {
-  console.log(terrorVal);
-  //TODO: update the terror val HTML here
+  console.log("Terror val is " + terrorVal);
+  $("#rioters").html(terrorVal.terror);
 });
 
 socket.on("global modal post", data => {
   console.log(data);
-  //TODO: update the modal text value here
-  //also .show the modal
+  $("#modalBlastText").html(data.text);
+  $("#modalBlast").modal("show");
 });
 
 socket.on("global effect submit", data => {
   console.log(data);
-  //refresh global effect page with values here
+  
 });
 
 socket.on("hide article", data => {
-  var placeholder = [];
+  var placeholder = []; //TODO: replace with actual article array
   var index = placeholder.indexOf(data.id);
   if (index !== -1) {
     placeholder.splice(index, 1);
@@ -29,7 +28,7 @@ socket.on("hide article", data => {
 });
 
 socket.on("show article", data => {
-  var placeholder = [];
+  var placeholder = []; //TODO: replace with actual article array
   placeholder.push(data);
 });
 
