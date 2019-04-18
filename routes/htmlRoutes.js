@@ -1,8 +1,7 @@
 var db = require("../models");
 
-module.exports = function(app, pausedState, io) {
+module.exports = function(app) {
   // Load index page
-  console.log("pausedState:", pausedState);
   app.get("/", function(req, res) {
     db.game
       .findAll({

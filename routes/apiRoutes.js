@@ -155,6 +155,8 @@ module.exports = function(app) {
     db.game
       .update({ rioters: req.body.rioters }, { where: { id: req.body.id } })
       .then(function(dbRiot) {
+        console.log("should only happen if update");
+        console.log(dbRiot)
         res.json(dbRiot);
       });
 
