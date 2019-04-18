@@ -58,7 +58,6 @@ db.sequelize.sync(syncOptions).then(function() {
 timerInterval = setInterval(function() {
   if (!isPaused) {
     serverClock = moment(serverClock).subtract(1, "second");
-    console.log(serverClock);
   }
 }, 1000);
 

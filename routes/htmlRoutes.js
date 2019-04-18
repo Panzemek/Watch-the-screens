@@ -95,7 +95,7 @@ module.exports = function(app, pausedState, io) {
 
   //this is the admin 'control' interface
   app.get("/:gameId/admin", function(req, res) {
-    var allAdminJson = [];
+    var allAdminJson = {};
     db.article
       .findAll({
         attributes: ["title", "id", "is_hidden"],
@@ -104,7 +104,7 @@ module.exports = function(app, pausedState, io) {
         }
       })
       .then(function(articleResult) {
-        allAdminJson.push(articleResult);
+        allAdminJson.articles = articleResult;
         db.global_effect
           .findAll({
             where: {
@@ -112,7 +112,7 @@ module.exports = function(app, pausedState, io) {
             }
           })
           .then(function(eventResult) {
-            allAdminJson.push(eventResult);
+            allAdminJson.global_events = eventResult;
             db.game
               .findAll({
                 attributes: [
@@ -128,8 +128,8 @@ module.exports = function(app, pausedState, io) {
                 }
               })
               .then(function(gameResult) {
-                allAdminJson.push(gameResult);
-                res.json(allAdminJson);
+                allAdminJson.game_params = gameResult[0];
+                res.render("admin", allAdminJson);
               });
           });
       });
@@ -164,7 +164,27 @@ module.exports = function(app, pausedState, io) {
         include: [db.network]
       })
       .then(function(articleResult) {
-        res.render("newsViewer", articleResult);
+        console.log(
+          "---------------------articleResultss--------------------------"
+        );
+        var articleObject = {};
+        for (i in articleResult) {
+          if (
+            Object.keys(articleObject).includes(
+              articleResult[i].round_created.toString()
+            )
+          ) {
+            articleObject[articleResult[i].round_created].articles.push(
+              articleResult[i]
+            );
+          } else {
+            articleObject[articleResult[i].round_created] = {
+              articles: [articleResult[i]],
+              round: articleResult[i].round_created
+            };
+          }
+        }
+        res.render("newsViewer", { rounds: articleObject });
       });
   });
   //TODO: Needs to do a database call to get all articles (with the join of network). Then we need to construct an object with the following format
