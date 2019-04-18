@@ -141,6 +141,7 @@ module.exports = function(app, pausedState, io) {
       })
       .then(function(networkResult) {
         // eslint-disable-next-line camelcase
+        networkResult[0].dataValues.game_id = req.params.gameId;
         res.render("reporter", networkResult[0].dataValues);
       });
   });
