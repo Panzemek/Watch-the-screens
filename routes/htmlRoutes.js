@@ -95,7 +95,7 @@ module.exports = function(app, pausedState, io) {
 
   //this is the admin 'control' interface
   app.get("/:gameId/admin", function(req, res) {
-    var allAdminJson = {};
+    var allAdminJson = [];
     db.article
       .findAll({
         attributes: ["title", "id", "is_hidden"],
@@ -117,7 +117,7 @@ module.exports = function(app, pausedState, io) {
               .findAll({
                 attributes: ["id", "current_round", "terror", "rioters"],
                 where: {
-                  gameId: req.params.gameId
+                  id: req.params.gameId
                 }
               })
               .then(function(gameResult) {

@@ -57,8 +57,6 @@ socket.on("start timer", timerVal => {
   setPauseButtonText();
 });
 
-
-
 //change timer does not start the time, should probabaly only work when timer is stopped
 socket.on("change timer", newTime => {
   //TODO: Where are we getting new timer value from?
@@ -66,6 +64,8 @@ socket.on("change timer", newTime => {
 });
 $(this).ready(socket.emit("new page"));
 
+
+//TODO: This is where the button PLAY/PAUSE needs to be fixed
 socket.on("new page load", data => {
   console.log("new page recieved");
   time = moment(data.time);
