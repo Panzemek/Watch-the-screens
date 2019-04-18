@@ -16,7 +16,7 @@ $("#article-submit-button").click(function() {
     // eslint-disable-next-line camelcase
     article_body: $("#input-body").val(),
     // eslint-disable-next-line camelcase
-    game_id: $("#reporter-container").data("game"),
+    gameId: $("#reporter-container").data("game"),
     // eslint-disable-next-line camelcase
     network_id: $("#reporter-container").data("network")
   };
@@ -27,8 +27,11 @@ $("#article-submit-button").click(function() {
     $("#article-form")
       .find("input:text, textarea")
       .val("");
-
-    socket.emit("new article", newArticle);
+    $.ajax("/api/addArticle", {
+      type: "post"
+    }).then(function(data) {
+      socket.emit("new article", newArticle);
+    });
   } else {
     //TODO: Give feedback to reporter that author, title, and body need to not be null.
     console.log("Need to give feedback on not fully filled out form");

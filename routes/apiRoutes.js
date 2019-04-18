@@ -87,6 +87,7 @@ module.exports = function(app) {
     console.log(req.body);
     db.article.create(req.body).then(function(data) {
       console.log(data);
+      console.log("=================================================================");
       res.json(data);
     });
   });
