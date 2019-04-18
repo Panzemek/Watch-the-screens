@@ -9,7 +9,7 @@ module.exports = function(app, pausedState, io) {
         attributes: ["id", "game_description"]
       })
       .then(function(gameSummary) {
-        res.render("index", gameSummary);
+        res.render("index", { games: gameSummary });
       });
   });
 
@@ -29,50 +29,23 @@ module.exports = function(app, pausedState, io) {
       .then(function(articleResult) {
         let showableArts = [];
         articleResult.articles.forEach(article => {
-          console.log(articleResult.current_round - article.round_created);
           if (
             articleResult.current_round - article.round_created <=
             articleResult.article_decay
           ) {
             showableArts.push(article);
-            console.log(showableArts);
           }
         });
         articleResult.articles = showableArts;
-        res.render("overview", articleResults);
+        //TODO: this html route should include game id, terror, rioters, global_effects, 
+        result = {
+          id: articleResult.id,
+          terror: articleResult.terror,
+          rioters: articleResult.rioters
+        }
+        // res.render("overview", result);
+        res.json(articleResult);
       });
-    //   var fakeArticles = [
-    //     {
-    //       network_full: "Watch The Skies",
-    //       network_short: "WTS",
-    //       img_url: "https://picsum.photos/200/300/?random",
-    //       author: "mario",
-    //       title: "Bobcats on the loose",
-    //       article_body:
-    //         "There are bobcats, and they are on the loose! More at ten"
-    //     },
-    //     {
-    //       network_full: "Watch The Skies",
-    //       network_short: "WTS",
-    //       img_url: "https://picsum.photos/200/300/?random",
-    //       author: "mario",
-    //       title: "Bobcats on the loose",
-    //       article_body:
-    //         "There are bobcats, and they are on the loose! More at ten"
-    //     }
-    //   ];
-    //   var data = {
-    //     id: 1,
-    //     current_round: 1,
-    //     is_paused: pausedState,
-    //     time_left: "20:00",
-    //     articles: fakeArticles,
-    //     rioters: 100,
-    //     terror: 30
-    //   };
-    //   console.log(data);
-    //   res.render("overview", data);
-    // });
   });
 
   app.get("/:gameId", function(req, res) {
@@ -164,9 +137,6 @@ module.exports = function(app, pausedState, io) {
         include: [db.network]
       })
       .then(function(articleResult) {
-        console.log(
-          "---------------------articleResultss--------------------------"
-        );
         var articleObject = {};
         for (i in articleResult) {
           if (

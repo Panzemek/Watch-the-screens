@@ -64,7 +64,6 @@ socket.on("change timer", newTime => {
 });
 $(this).ready(socket.emit("new page"));
 
-
 //TODO: This is where the button PLAY/PAUSE needs to be fixed
 socket.on("new page load", data => {
   console.log("new page recieved");
