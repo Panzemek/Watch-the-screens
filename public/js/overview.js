@@ -167,8 +167,8 @@ socket.on("terror update", terrorVal => {
 });
 
 socket.on("riot update", riotVal => {
-  console.log("Riot value is " + riotVal);
-  $("#rioters").html(riotVal.riot);
+  console.log("Riot value is " + riotVal.rioters);
+  $("#rioters").html(riotVal.rioters);
 });
 
 socket.on("global modal post", data => {

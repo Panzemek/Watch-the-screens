@@ -1,8 +1,7 @@
 var db = require("../models");
 
-module.exports = function(app, pausedState, io) {
+module.exports = function(app) {
   // Load index page
-  console.log("pausedState:", pausedState);
   app.get("/", function(req, res) {
     db.game
       .findAll({
@@ -37,29 +36,30 @@ module.exports = function(app, pausedState, io) {
           }
         });
         articleResult.articles = showableArts;
-        //TODO: this html route should include game id, terror, rioters, global_effects, 
+        //TODO: this html route should include game id, terror, rioters, global_effects,
         result = {
           id: articleResult.id,
           terror: articleResult.terror,
           rioters: articleResult.rioters
-        }
-        // res.render("overview", result);
-        res.json(articleResult);
+        };
+        res.render("overview", result);
+        // res.json(articleResult);
       });
   });
 
-  app.get("/:gameId", function(req, res) {
-    db.game
-      .findAll({
-        attributes: ["terror", "rioters", "current_round"],
-        where: {
-          id: req.params.gameId
-        }
-      })
-      .then(function(overviewData) {
-        res.json(overviewData);
-      });
-  });
+  // app.get("/:gameId", function(req, res) {
+  //   db.game
+  //     .findAll({
+  //       attributes: ["terror", "rioters", "current_round"],
+  //       where: {
+  //         id: req.params.gameId
+  //       }
+  //     })
+  //     .then(function(overviewData) {
+  //       console.log("heeeeelo.");
+  //       res.json(overviewData);
+  //     });
+  // });
 
   //this route should be the inital game setup route
   app.get("/admin", function(req, res) {

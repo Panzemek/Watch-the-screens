@@ -17,7 +17,6 @@ $("#terror-button").click(function() {
 });
 
 $("#riot-button").click(function() {
-  console.log($("#admin-container").data("game"));
   data = {
     rioters: $("#riot-tracker-text").val(),
     id: $("#admin-container").data("game")
@@ -25,10 +24,16 @@ $("#riot-button").click(function() {
   $.ajax("/api/updateRioters", {
     type: "put",
     data: {
-      rioters: $("#rioters-tracker-text").val(),
+      rioters: $("#riot-tracker-text").val(),
       id: $("#admin-container").data("game")
     }
   }).then(socket.emit("riot update", data));
+});
+
+$("#edit").click(() => {
+  //TODO: the following line of code will likely need some fiddling
+  var newTimeVal = $("#update-time-text").val();
+  socket.emit("change timer", newTimeVal);
 });
 
 //Send global post button click
@@ -149,7 +154,7 @@ $("#global-effect-submit-button").click(function() {
     end_trigger_value: $("#global-effect-end-trigger-value").val(),
     // eslint-disable-next-line camelcase
     is_hidden: $("#global-effect-is-hidden").prop("checked")
-  }
+  };
   $.ajax("/api/updateGlobalEffect", {
     type: "put",
     data: {
@@ -162,5 +167,7 @@ $("#global-effect-submit-button").click(function() {
       // eslint-disable-next-line camelcase
       is_hidden: $("#global-effect-is-hidden").prop("checked")
     }
-  }).then(socket.emit("global effect submit", data));
+  }).then(result => {
+    socket.emit("global effect submit", result);
+  });
 });
