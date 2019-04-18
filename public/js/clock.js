@@ -64,6 +64,7 @@ socket.on("change timer", newTime => {
   $("#clock").text(time.format("mm:ss"));
 });
 
+
 $(this).ready(socket.emit("new page"));
 
 //TODO: This is where the button PLAY/PAUSE needs to be fixed
