@@ -2,6 +2,7 @@ require("dotenv").config();
 var express = require("express");
 var exphbs = require("express-handlebars");
 var moment = require("moment");
+var momentDurationFormatSetup = require("moment-duration-format");
 
 var db = require("./models");
 
@@ -117,18 +118,21 @@ io.on("connection", socket => {
     console.log("timer stopped");
   });
   socket.on("start timer", timerVal => {
-    //timerVal = moment().format(timerVal, "mm:ss");
+    timerVal = moment().format(timerVal, "mm:ss");
     if (!serverClock) {
-      serverClock = moment().format(timerVal, "mm:ss");
+      serverClock = moment(timerVal, "mm:ss");
     }
     io.emit("start timer", serverClock);
     isPaused = false;
     console.log("timer started");
   });
   socket.on("change timer", newTimerVal => {
+    newTimerVal = parseInt(newTimerVal);
     //following line of code might need some fiddling
-    serverClock = moment().format(newTimerVal, "mm:ss");
-    io.emit("change timer", newTimerVal);
+    //console.log(moment.duration(newTimerVal, "minutes").format("h:mm"));
+    serverClockNew = moment.duration(newTimerVal, "minutes").format();
+    serverClock = moment(serverClockNew, "mm:ss");
+    io.emit("change timer", serverClockNew);
     console.log("timer changed");
   });
 });
