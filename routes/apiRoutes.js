@@ -123,12 +123,9 @@ module.exports = function(app) {
     console.log(req.body);
     db.game.create(req.body).then(function(dbgame) {
       console.log(dbgame.id);
-      res.redirect("/1/admin");
+      res.redirect(dbgame.id + "/admin");
     });
   });
-
-  //Used by the admin view. Pauses the timer and sets Time Remaining.
-  app.put("/api/pauseTimer", function(req, res) {});
 
   //Used by the admin view. Ends a game.
   app.put("/api/endGame", function(req, res) {
@@ -143,7 +140,7 @@ module.exports = function(app) {
 
   //Used by the admin view. Updates the terror level.
   app.put("/api/updateTerror", function(req, res) {
-    console.log(req.body)
+    console.log(req.body);
     db.game
       .update({ terror: req.body.terror }, { where: { id: req.body.id } })
       .then(function(dbterror) {
