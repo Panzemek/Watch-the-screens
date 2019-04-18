@@ -1,15 +1,14 @@
 var db = require("../models");
 
-module.exports = function(app, pausedState, io) {
+module.exports = function(app) {
   // Load index page
-  console.log("pausedState:", pausedState);
   app.get("/", function(req, res) {
     db.game
       .findAll({
         attributes: ["id", "game_description"]
       })
       .then(function(gameSummary) {
-        res.render("index", gameSummary);
+        res.render("index", { games: gameSummary });
       });
   });
 
@@ -23,41 +22,8 @@ module.exports = function(app, pausedState, io) {
         include: [db.global_effect]
       })
       .then(function(overResult) {
-        res.json(overResult);
-        // res.render("overview", articleResult);
+        res.render("overview", articleResult);
       });
-    //   var fakeArticles = [
-    //     {
-    //       network_full: "Watch The Skies",
-    //       network_short: "WTS",
-    //       img_url: "https://picsum.photos/200/300/?random",
-    //       author: "mario",
-    //       title: "Bobcats on the loose",
-    //       article_body:
-    //         "There are bobcats, and they are on the loose! More at ten"
-    //     },
-    //     {
-    //       network_full: "Watch The Skies",
-    //       network_short: "WTS",
-    //       img_url: "https://picsum.photos/200/300/?random",
-    //       author: "mario",
-    //       title: "Bobcats on the loose",
-    //       article_body:
-    //         "There are bobcats, and they are on the loose! More at ten"
-    //     }
-    //   ];
-    //   var data = {
-    //     id: 1,
-    //     current_round: 1,
-    //     is_paused: pausedState,
-    //     time_left: "20:00",
-    //     articles: fakeArticles,
-    //     rioters: 100,
-    //     terror: 30
-    //   };
-    //   console.log(data);
-    //   res.render("overview", data);
-    // });
   });
 
   app.get("/:gameId", function(req, res) {
@@ -80,7 +46,7 @@ module.exports = function(app, pausedState, io) {
 
   //this is the admin 'control' interface
   app.get("/:gameId/admin", function(req, res) {
-    var allAdminJson = [];
+    var allAdminJson = {};
     db.article
       .findAll({
         attributes: ["title", "id", "is_hidden"],
@@ -89,7 +55,7 @@ module.exports = function(app, pausedState, io) {
         }
       })
       .then(function(articleResult) {
-        allAdminJson.push(articleResult);
+        allAdminJson.articles = articleResult;
         db.global_effect
           .findAll({
             where: {
@@ -97,7 +63,7 @@ module.exports = function(app, pausedState, io) {
             }
           })
           .then(function(eventResult) {
-            allAdminJson.push(eventResult);
+            allAdminJson.global_events = eventResult;
             db.game
               .findAll({
                 attributes: [
@@ -113,8 +79,8 @@ module.exports = function(app, pausedState, io) {
                 }
               })
               .then(function(gameResult) {
-                allAdminJson.push(gameResult);
-                res.json(allAdminJson);
+                allAdminJson.game_params = gameResult[0];
+                res.render("admin", allAdminJson);
               });
           });
       });
@@ -149,7 +115,24 @@ module.exports = function(app, pausedState, io) {
         include: [db.network]
       })
       .then(function(articleResult) {
-        res.render("newsViewer", articleResult);
+        var articleObject = {};
+        for (i in articleResult) {
+          if (
+            Object.keys(articleObject).includes(
+              articleResult[i].round_created.toString()
+            )
+          ) {
+            articleObject[articleResult[i].round_created].articles.push(
+              articleResult[i]
+            );
+          } else {
+            articleObject[articleResult[i].round_created] = {
+              articles: [articleResult[i]],
+              round: articleResult[i].round_created
+            };
+          }
+        }
+        res.render("newsViewer", { rounds: articleObject });
       });
   });
   //TODO: Needs to do a database call to get all articles (with the join of network). Then we need to construct an object with the following format

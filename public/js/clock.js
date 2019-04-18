@@ -4,7 +4,7 @@ var socket = io();
 
 $(this).ready(function() {
   //TODO: put a timer start socket call here
-  isPaused = $("#clock").data("is_paused");
+  //isPaused = $("#clock").data("is_paused");
   setPauseButtonText();
   time = moment($("#clock").text(), "mm:ss");
   timerInterval = setInterval(function() {
@@ -25,13 +25,13 @@ $("#pause-button").click(function() {
     setPauseButtonText();
     socket.emit("stop timer", time);
   }
-  $.ajax("/api/toggleGamePauseState", {
-    type: "put",
-    data: {
-      is_paused: isPaused,
-      id: $("#admin-container").data("game")
-    }
-  });
+  // $.ajax("/api/toggleGamePauseState", {
+  //   type: "put",
+  //   data: {
+  //     is_paused: isPaused,
+  //     id: $("#admin-container").data("game")
+  //   }
+  // });
 });
 
 function setPauseButtonText() {
@@ -57,13 +57,15 @@ socket.on("start timer", timerVal => {
   setPauseButtonText();
 });
 
-//change timer does not start the time, should probabaly only work when timer is stopped
 socket.on("change timer", newTime => {
-  //TODO: Where are we getting new timer value from?
-  time = newTime;
+  console.log(newTime);
+  time = moment(newTime, "mm:ss");
+  console.log(time)
+  $("#clock").text(time.format("mm:ss"));
 });
-$(this).ready(socket.emit("new page"));
 
+
+$(this).ready(socket.emit("new page"));
 
 //TODO: This is where the button PLAY/PAUSE needs to be fixed
 socket.on("new page load", data => {
