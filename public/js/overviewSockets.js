@@ -9,7 +9,7 @@ socket.on("terror update", terrorVal => {
 
 socket.on("global modal post", data => {
   console.log(data);
-  $("#modalBlastText").html(data)
+  $("#modalBlastText").html(data.terror)
   //TODO: update the modal text value here
   //also .show the modal
 });
