@@ -60,10 +60,9 @@ socket.on("start timer", timerVal => {
 socket.on("change timer", newTime => {
   console.log(newTime);
   time = moment(newTime, "mm:ss");
-  console.log(time)
+  console.log(time);
   $("#clock").text(time.format("mm:ss"));
 });
-
 
 $(this).ready(socket.emit("new page"));
 

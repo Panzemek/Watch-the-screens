@@ -13,7 +13,7 @@ $("#terror-button").click(function() {
       terror: $("#terror-tracker-text").val(),
       id: $("#admin-container").data("game")
     }
-  }).then(socket.emit("terror update", data))
+  }).then(socket.emit("terror update", data));
 });
 
 $("#riot-button").click(function() {
@@ -154,7 +154,7 @@ $("#global-effect-submit-button").click(function() {
     end_trigger_value: $("#global-effect-end-trigger-value").val(),
     // eslint-disable-next-line camelcase
     is_hidden: $("#global-effect-is-hidden").prop("checked")
-  }
+  };
   $.ajax("/api/updateGlobalEffect", {
     type: "put",
     data: {
@@ -167,5 +167,7 @@ $("#global-effect-submit-button").click(function() {
       // eslint-disable-next-line camelcase
       is_hidden: $("#global-effect-is-hidden").prop("checked")
     }
-  }).then(socket.emit("global effect submit", data));
+  }).then(result => {
+    socket.emit("global effect submit", result);
+  });
 });

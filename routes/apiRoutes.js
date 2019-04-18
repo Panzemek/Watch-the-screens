@@ -121,9 +121,11 @@ module.exports = function(app) {
   app.post("/api/createGame", function(req, res) {
     //TODO: Return the gameId and use that to redirect to /<game.id>/admin.
     console.log(req.body);
+    req.body.is_paused = true;
+    req.body.is_complete = false;
     db.game.create(req.body).then(function(dbgame) {
       console.log(dbgame.id);
-      res.redirect(dbgame.id + "/admin");
+      res.redirect("/" + dbgame.id + "/admin");
     });
   });
 
@@ -156,7 +158,7 @@ module.exports = function(app) {
       .update({ rioters: req.body.rioters }, { where: { id: req.body.id } })
       .then(function(dbRiot) {
         console.log("should only happen if update");
-        console.log(dbRiot)
+        console.log(dbRiot);
         res.json(dbRiot);
       });
 
@@ -237,7 +239,7 @@ module.exports = function(app) {
           effect_text: req.body.effect_text,
           is_hidden: req.body.is_hidden
         },
-        { where: { id: req.body.effectId } }
+        { where: { id: req.body.id } }
       )
       .then(function(data) {
         console.log(data);
