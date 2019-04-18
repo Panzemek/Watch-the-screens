@@ -115,7 +115,14 @@ module.exports = function(app, pausedState, io) {
             allAdminJson.push(eventResult);
             db.game
               .findAll({
-                attributes: ["id", "current_round", "terror", "rioters"],
+                attributes: [
+                  "id",
+                  "current_round",
+                  "terror",
+                  "rioters",
+                  "is_paused",
+                  "round_duration"
+                ],
                 where: {
                   id: req.params.gameId
                 }
