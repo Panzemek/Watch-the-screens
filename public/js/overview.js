@@ -198,9 +198,9 @@ socket.on("show article", data => {
 //one idea for this - store locally on admin and overview (with the exact same name)
 //this JS exists on both pages, so it will handle both.
 socket.on("new article", article => {
-  console.log("new article is: " + data);
+  console.log("new article is: " + article);
   //TODO: what exactly does data object look like?
-  articles.unshift(data.article);
+  articles.unshift(article);
   articles[0].seen = false;
 });
 

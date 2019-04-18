@@ -9,7 +9,6 @@ var db = require("./models");
 var serverClock = null;
 var isPaused = true;
 
-
 var app = express();
 var PORT = process.env.PORT || 3000;
 //sockets stuff
@@ -55,15 +54,21 @@ db.sequelize.sync(syncOptions).then(function() {
 
 //server countdown timer here
 //TODO: this will need to work on round start
-
 timerInterval = setInterval(function() {
+  //check round end logic goes here//
   if (!isPaused) {
+    //check if server clock = 00:00 or some permeation of that
+    //then fire off a "round end" emit call
     serverClock = moment(serverClock).subtract(1, "second");
   }
 }, 1000);
 
 //Socket server logic will go here.
 io.on("connection", socket => {
+  //round end
+  socket.on("round end", () => {
+    var placeholder;
+  });
   //terror update
   socket.on("terror update", terrorVal => {
     io.emit("terror update", terrorVal);
@@ -101,6 +106,7 @@ io.on("connection", socket => {
   //new news article
   socket.on("new article", article => {
     io.emit("new article", article);
+    console.log("article posted");
   });
   //TODO:clientside and admin client logic;
 
@@ -126,14 +132,17 @@ io.on("connection", socket => {
     isPaused = false;
     console.log("timer started");
   });
+
   socket.on("change timer", newTimerVal => {
-    newTimerVal = parseInt(newTimerVal);
-    //following line of code might need some fiddling
-    //console.log(moment.duration(newTimerVal, "minutes").format("h:mm"));
-    serverClockNew = moment.duration(newTimerVal, "minutes").format();
-    serverClock = moment(serverClockNew, "mm:ss");
-    io.emit("change timer", serverClockNew);
-    console.log("timer changed");
+    if (serverClock) {
+      newTimerVal = parseInt(newTimerVal);
+      //following line of code might need some fiddling
+      //console.log(moment.duration(newTimerVal, "minutes").format("h:mm"));
+      serverClockNew = moment.duration(newTimerVal, "minutes").format();
+      serverClock = moment(serverClockNew, "mm:ss");
+      io.emit("change timer", serverClockNew);
+      console.log("timer changed");
+    }
   });
 });
 
