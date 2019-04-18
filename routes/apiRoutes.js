@@ -85,8 +85,8 @@ module.exports = function(app) {
 
   app.post("/api/addArticle", function(req, res) {
     console.log(req.body);
+    //TODO: Then, on success, update admin and overview views with global effects (all of them).
     db.article.create(req.body).then(function(data) {
-      console.log(data);
       res.json(data);
     });
   });
