@@ -94,9 +94,17 @@ module.exports = function(app) {
         req.body.round_created = gameRound[0].current_round;
       })
       .then(function() {
-        db.article.create(req.body).then(function(data) {
-          res.json(data);
-        });
+        db.network
+          .findAll({
+            attributes: ["id"],
+            where: { network_short: req.body.network_short }
+          })
+          .then(function(networkData) {
+            req.body.network_id = networkData[0].id;
+            db.article.create(req.body).then(function(data) {
+              res.json(data);
+            });
+          });
       });
   });
 

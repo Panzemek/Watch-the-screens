@@ -9,6 +9,7 @@ $(this).ready(function() {
   time = moment($("#clock").text(), "mm:ss");
   timerInterval = setInterval(function() {
     if (!isPaused) {
+      console.log(Object.values(time));
       time.subtract(1, "second");
       $("#clock").text(time.format("mm:ss"));
     }
