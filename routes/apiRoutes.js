@@ -211,7 +211,7 @@ module.exports = function(app) {
         {
           is_hidden: req.body.is_hidden
         },
-        { where: { id: req.body.effectId } }
+        { where: { id: req.body.articleId } }
       )
       .then(function(data) {
         console.log(data);

@@ -14,7 +14,6 @@ socket.on("global modal post", data => {
 
 socket.on("global effect submit", data => {
   console.log(data);
-  
 });
 
 socket.on("hide article", data => {
