@@ -136,65 +136,6 @@ module.exports = function(app) {
         res.render("newsViewer", { rounds: articleObject });
       });
   });
-  //TODO: Needs to do a database call to get all articles (with the join of network). Then we need to construct an object with the following format
-  /*
-      {
-        rounds: [{
-          round: whatever the articles are from,
-          articles: [array of articleObjects from that round]
-        },{
-          round: whatever the articles are from,
-          articles: [array of articleObjects from that round]
-        }]
-      }
-      */
-  // var fakeRoundData = {
-  //   rounds: [
-  //     {
-  //       round: 1,
-  //       articles: [
-  //         {
-  //           network_full: "Watch The Skies",
-  //           network_short: "WTS",
-  //           author: "mario",
-  //           title: "Bobcats on the loose",
-  //           article_body:
-  //             "There are bobcats, and they are on the loose! More at ten"
-  //         },
-  //         {
-  //           network_full: "Watch The Skies",
-  //           network_short: "WTS",
-  //           author: "mario",
-  //           title: "Bobcats on the loose",
-  //           article_body:
-  //             "There are bobcats, and they are on the loose! More at ten"
-  //         }
-  //       ]
-  //     },
-  //     {
-  //       round: 2,
-  //       articles: [
-  //         {
-  //           network_full: "Watch The Skies",
-  //           network_short: "WTS",
-  //           author: "mario",
-  //           title: "Bobcats on the loose",
-  //           article_body:
-  //             "There are bobcats, and they are on the loose! More at ten"
-  //         },
-  //         {
-  //           network_full: "Watch The Skies",
-  //           network_short: "WTS",
-  //           author: "mario",
-  //           title: "Bobcats on the loose",
-  //           article_body:
-  //             "There are bobcats, and they are on the loose! More at ten"
-  //         }
-  //       ]
-  //     }
-  //   ]
-  // };
-  // var rounds = fakeRoundData;
 
   // Load example page and pass in an example by id
   app.get("/:gameId/example/:id", function(req, res) {
