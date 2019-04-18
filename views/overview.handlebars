@@ -1,54 +1,57 @@
 <div>
-{{> clock}}
+  {{> clock}}
 </div>
 <div id="overview-container" class="container" data-game={{id}}>
-   <div class="row">
-       <div class="col-md-4 border">
-           <ul>
-               <li>Rioters: <span id="rioters">{{rioters}}</span></li>
-               <li>Terror Level: <span id="terror">{{terror}}</span></li>
+  <div class="row">
+    <div class="col-md-4 border">
+      <ul>
+        <li>Rioters: <span id="rioters">{{rioters}}</span></li>
+        <li>Terror Level: <span id="terror">{{terror}}</span></li>
 
-                 {{#each global_effects}}
-                  <li> 
-                    <span class="global-effect" data-id={{id}}>{{effect_text}}</span>
-                  </li>
-                {{/each}}
-               
-           </ul>
-       </div>
-       <div class="col-md-8">
-           <div id="article-carousel" class="carousel slide" data-ride="false"
-           data-pause="false">
-            <div class="carousel-inner">
-              <div id="carousel-1" class="carousel-item active">
-                  <h2>Watch The Sky</h2>
-              </div>
-              <div id="carousel-2" class="carousel-item article-holder">
-                  {{> article}}
-              </div>
-              <div id="carousel-3" class="carousel-item article-holder">
-                  {{> article}}
-              </div>
-            </div>
-</div>
-       </div>
-   </div>
-   <button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bd-example-modal-lg">TEMPORARY MODAL BUTTON! Remove me when back end is set up to push to modal</button>
-   <button type="button" id="temp-article" class="btn btn-primary">TEMPORARY ARTICLE BUTTON! Remove me when back end is set up to push new articles</button>
+        {{#each global_effects}}
+        <li>
+          <span class="global-effect" data-id={{id}}>{{effect_text}}</span>
+        </li>
+        {{/each}}
 
-<div class="modal fade bd-example-modal-lg" id="modalBlast" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
- <div class="modal-dialog modal-lg">
-   <div id="modalBlastText" class="modal-content">
-     
-   </div>
- </div>
-</div>
-<div class="row border"> <!--this is for scroll bar-->
- <div class="scrolling-text">
-   <!--//Suppress the <span/> after the the newArticleDisplay is T -->
-   <div class = "breaking-news">
-     <icon id="breaking-title-image">BK Read more pic>></icon><span class="breaking-title"> WTS BREAKING NEWS
-  </span>
-   <marquee direction="left">Scrolling WTS news ticker</marquee>
- </div>
-</div>
+      </ul>
+    </div>
+    <div class="col-md-8">
+      <div id="article-carousel" class="carousel slide" data-ride="false" data-pause="false">
+        <div class="carousel-inner">
+          <div id="carousel-1" class="carousel-item active">
+            <h2>Watch The Sky</h2>
+          </div>
+          <div id="carousel-2" class="carousel-item article-holder">
+            {{> article}}
+          </div>
+          <div id="carousel-3" class="carousel-item article-holder">
+            {{> article}}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bd-example-modal-lg">TEMPORARY MODAL
+    BUTTON! Remove me when back end is set up to push to modal</button>
+  <button type="button" id="temp-article" class="btn btn-primary">TEMPORARY ARTICLE BUTTON! Remove me when back end is
+    set up to push new articles</button>
+
+  <div class="modal fade bd-example-modal-lg" id="modalBlast" tabindex="-1" role="dialog"
+    aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div id="modalBlastText" class="modal-content">
+
+      </div>
+    </div>
+  </div>
+  <div class="row border">
+    <!--this is for scroll bar-->
+    <div class="scrolling-text">
+      <!--//Suppress the <span/> after the the newArticleDisplay is T -->
+      <div class="breaking-news">
+        <icon id="breaking-title-image">BK Read more pic>></icon><span class="breaking-title"> WTS BREAKING NEWS
+        </span>
+        <marquee direction="left">Scrolling WTS news ticker</marquee>
+      </div>
+    </div>

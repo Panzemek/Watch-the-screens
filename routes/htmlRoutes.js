@@ -79,7 +79,7 @@ module.exports = function(app, pausedState, io) {
               .findAll({
                 attributes: ["id", "current_round", "terror", "rioters"],
                 where: {
-                  gameId: req.params.gameId
+                  id: req.params.gameId
                 }
               })
               .then(function(gameResult) {

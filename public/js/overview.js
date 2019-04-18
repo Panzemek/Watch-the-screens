@@ -1,6 +1,7 @@
 var articles = [];
 var lastUsedArticle = 1;
 var carouselListener;
+var socket = io();
 // var pageLoaded = moment();
 
 //TEMP BUTTON CLICK REMOVE ONCE ARTICLES ARE SETUP
@@ -123,7 +124,7 @@ Step 4: Make the button add an element to the array and trigger a marquee update
 //     margin: 10px;
 //     font-family:'Lato', sans-serif;
 // }
-// .marquee1 {
+// .marquee1 {ws
 //     width: 300px;
 //     overflow: hidden;
 //     border:1px solid #ccc;
@@ -132,28 +133,83 @@ Step 4: Make the button add an element to the array and trigger a marquee update
 // }
 // </style>
 
-$(document).ready(function(){ //*window for images();
+$(document).ready(function() {
+  //*window for images();
 
-$('.marquee').marquee({   //, .marquee1 removed   
-    duration: 6000,//speed in milliseconds of the marquee    
-    gap: 50,//gap in pixels between the tickers    
-    delayBeforeStart: 0,//time in milliseconds before the marquee will start animating
-    direction: 'right',//'left' or 'right'
-    duplicated: true//true or false - should the marquee be duplicated to show an effect of continues flow
+  $(".marquee").marquee({
+    //, .marquee1 removed
+    duration: 6000, //speed in milliseconds of the marquee
+    gap: 50, //gap in pixels between the tickers
+    delayBeforeStart: 0, //time in milliseconds before the marquee will start animating
+    direction: "right", //'left' or 'right'
+    duplicated: true //true or false - should the marquee be duplicated to show an effect of continues flow
+  });
+  $(".marquee")
+    .bind("finished", function() {
+      $(this).marquee("before");
+      console.log("Welcome"); //Change text to something else after first loop finishes
+      $(this).marquee("destroy");
+      // alert("finished.destroy");WORKS!
+      //Load new content using Ajax and update the marquee container
+      $(this)
+        .html("Some new data loaded using ajax")
+        //Apply marquee plugin again
+        .marquee();
+    })
+    .showMarquee();
 });
-$('.marquee')
-	.bind('finished', function(){
-    $(this).marquee('before'); 
-		 console.log("Welcome"); //Change text to something else after first loop finishes
-		$(this).marquee('destroy');
-       // alert("finished.destroy");WORKS!
-		//Load new content using Ajax and update the marquee container
-		$(this).html('Some new data loaded using ajax')
-			//Apply marquee plugin again
-			.marquee()
-	})
-	.showMarquee();
- });  
+
+//**** Sockets stuff below ****/
+
+socket.on("terror update", terrorVal => {
+  console.log("Terror val is " + terrorVal);
+  $("#terror").html(terrorVal.terror);
+});
+
+socket.on("riot update", riotVal => {
+  console.log("Riot value is " + riotVal);
+  $("#rioters").html(riotVal.riot);
+});
+
+socket.on("global modal post", data => {
+  console.log(data);
+  $("#modalBlastText").html(data.text);
+  $("#modalBlast").modal("show");
+});
+
+socket.on("global effect submit", data => {
+  console.log(data);
+});
+
+socket.on("hide article", data => {
+  for (var i = 0; i++; i < articles.length) {
+    if (articles[i].id === data.id) {
+      articles.splice(index, 1);
+    }
+  }
+});
+
+socket.on("show article", data => {
+  articles.push(data);
+  articles[articles.length - 1].seen = false;
+});
+
+//adds a new article to the array of articles
+//one idea for this - store locally on admin and overview (with the exact same name)
+//this JS exists on both pages, so it will handle both.
+socket.on("new article", article => {
+  console.log("new article is: " + data);
+  //TODO: what exactly does data object look like?
+  articles.unshift(data.article);
+  articles[0].seen = false;
+});
+
+socket.on("new page load", data => {
+  console.log("new page recieved");
+  time = moment(data.time);
+  console.log(time);
+  isPaused = data.pause;
+});
 
 /*question of closures: https://hackernoon.com/how-to-use-javascript-closures-with-confidence-85cd1f841a6b
 Links: inventor: documentation:

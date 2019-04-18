@@ -16,6 +16,21 @@ $("#terror-button").click(function() {
   }).then(socket.emit("terror update", data));
 });
 
+$("#riot-button").click(function() {
+  console.log($("#admin-container").data("game"));
+  data = {
+    rioters: $("#riot-tracker-text").val(),
+    id: $("#admin-container").data("game")
+  };
+  $.ajax("/api/updateRioters", {
+    type: "put",
+    data: {
+      rioters: $("#rioters-tracker-text").val(),
+      id: $("#admin-container").data("game")
+    }
+  }).then(socket.emit("riot update", data));
+});
+
 //Send global post button click
 $("#global-post-submit-button").click(function() {
   console.log($("#global-post-text").val(), $("#global-post-duration").val());
@@ -86,10 +101,12 @@ $("#toggle-article-button").click(function() {
       // eslint-disable-next-line camelcase
       is_hidden: newState
     }
-  //sockets for article hide state
-  }).then(
-    socket.emit("hide article", { id: selected.val(), is_hidden: newState })
-  );
+    //sockets for article hide state
+  }).then(result => {
+    if (result[0] !== 0) {
+      socket.emit("hide article", result[1]);
+    }
+  });
 });
 
 //Changes the state of the text on the article dropdown submit button based on whether or not the article is already hidden or not.

@@ -57,8 +57,6 @@ socket.on("start timer", timerVal => {
   setPauseButtonText();
 });
 
-
-
 //change timer does not start the time, should probabaly only work when timer is stopped
 socket.on("change timer", newTime => {
   //TODO: Where are we getting new timer value from?

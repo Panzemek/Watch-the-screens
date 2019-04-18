@@ -66,8 +66,13 @@ timerInterval = setInterval(function() {
 io.on("connection", socket => {
   //terror update
   socket.on("terror update", terrorVal => {
-    console.log('terror upd makes to server')
+    console.log("terror upd makes to server");
     io.emit("terror update", terrorVal);
+  });
+
+  socket.on("riot update", riotVal => {
+    console.log("riot update makes it to server");
+    io.emit("riot update", riotVal);
   });
 
   if (serverClock) {
@@ -104,7 +109,6 @@ io.on("connection", socket => {
   socket.on("hide article", data => {
     io.emit("hide article", data);
   });
-  //TODO: write clientside and admin hide logic
 
   //**The following sockets listen for timer start/stop/change calls**//
   socket.on("stop timer", (timerVal) => {

@@ -2,21 +2,19 @@
 var socket = io();
 
 socket.on("terror update", terrorVal => {
-  console.log(terrorVal);
-
-  //TODO: update the terror val HTML here
+  console.log("Terror val is " + terrorVal);
+  $("#rioters").html(terrorVal.terror);
 });
 
 socket.on("global modal post", data => {
   console.log(data);
-  $("#modalBlastText").html(data.terror)
-  //TODO: update the modal text value here
-  //also .show the modal
+  $("#modalBlastText").html(data.text);
+  $("#modalBlast").modal("show");
 });
 
 socket.on("global effect submit", data => {
   console.log(data);
-  //refresh global effect page with values here
+  
 });
 
 socket.on("hide article", data => {
