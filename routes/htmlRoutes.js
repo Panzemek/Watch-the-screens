@@ -57,7 +57,7 @@ module.exports = function(app, pausedState, io) {
 
   //this is the admin 'control' interface
   app.get("/:gameId/admin", function(req, res) {
-    var allAdminJson = [];
+    var allAdminJson = {};
     db.article
       .findAll({
         attributes: ["title", "id", "is_hidden"],
@@ -66,7 +66,7 @@ module.exports = function(app, pausedState, io) {
         }
       })
       .then(function(articleResult) {
-        allAdminJson.push(articleResult);
+        allAdminJson.articles = articleResult;
         db.global_effect
           .findAll({
             where: {
@@ -74,7 +74,7 @@ module.exports = function(app, pausedState, io) {
             }
           })
           .then(function(eventResult) {
-            allAdminJson.push(eventResult);
+            allAdminJson.global_events = eventResult;
             db.game
               .findAll({
                 attributes: ["id", "current_round", "terror", "rioters"],
@@ -83,8 +83,12 @@ module.exports = function(app, pausedState, io) {
                 }
               })
               .then(function(gameResult) {
-                allAdminJson.push(gameResult);
+                allAdminJson.game_params = gameResult[0];
+                console.log("-------------------------------------------allAdminJason----------------------------------------");
+                console.log(allAdminJson.length);
                 res.json(allAdminJson);
+                console.log("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+                // res.render("admin", allAdminJson);
               });
           });
       });
