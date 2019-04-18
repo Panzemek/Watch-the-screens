@@ -3,7 +3,7 @@ USE wts_game_db;
 INSERT INTO games
     (game_description, is_paused, is_complete, createdAt, updatedAt)
 VALUES
-    ("Seattle WtS December 2019", false, false, now(), now());
+    ("Seattle WtS December 2019", true, false, now(), now());
 
 INSERT INTO networks
     (network_full, network_short, createdAt, updatedAt)
