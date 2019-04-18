@@ -2,6 +2,7 @@ require("dotenv").config();
 var express = require("express");
 var exphbs = require("express-handlebars");
 var moment = require("moment");
+var momentDurationFormatSetup = require("moment-duration-format");
 
 var db = require("./models");
 
@@ -58,7 +59,6 @@ db.sequelize.sync(syncOptions).then(function() {
 timerInterval = setInterval(function() {
   if (!isPaused) {
     serverClock = moment(serverClock).subtract(1, "second");
-    console.log(serverClock);
   }
 }, 1000);
 
@@ -68,6 +68,12 @@ io.on("connection", socket => {
   socket.on("terror update", terrorVal => {
     io.emit("terror update", terrorVal);
   });
+
+  socket.on("riot update", riotVal => {
+    console.log("riot update makes it to server");
+    io.emit("riot update", riotVal);
+  });
+
   if (serverClock) {
     socket.on("new page", () => {
       console.log("new page is firing");
@@ -82,8 +88,8 @@ io.on("connection", socket => {
   });
 
   //global mod changes
-  socket.on("global effect submit", data => {
-    io.emit("global effect submit", data);
+  socket.on("global effect change", data => {
+    io.emit("global effect change", data);
   });
 
   //game end - what do we need to pass into callback? game end route?
@@ -102,7 +108,6 @@ io.on("connection", socket => {
   socket.on("hide article", data => {
     io.emit("hide article", data);
   });
-  //TODO: write clientside and admin hide logic
 
   //**The following sockets listen for timer start/stop/change calls**//
   socket.on("stop timer", (timerVal) => {
@@ -113,18 +118,21 @@ io.on("connection", socket => {
     console.log("timer stopped");
   });
   socket.on("start timer", timerVal => {
-    //timerVal = moment().format(timerVal, "mm:ss");
+    timerVal = moment().format(timerVal, "mm:ss");
     if (!serverClock) {
-      serverClock = moment().format(timerVal, "mm:ss");
+      serverClock = moment(timerVal, "mm:ss");
     }
     io.emit("start timer", serverClock);
     isPaused = false;
     console.log("timer started");
   });
-  //TODO: the functionality to enter a new timer change still needs to be written.
   socket.on("change timer", newTimerVal => {
-    timer = moment().format(newTimerVal, "mm:ss");
-    io.emit("change timer", newTimerVal);
+    newTimerVal = parseInt(newTimerVal);
+    //following line of code might need some fiddling
+    //console.log(moment.duration(newTimerVal, "minutes").format("h:mm"));
+    serverClockNew = moment.duration(newTimerVal, "minutes").format();
+    serverClock = moment(serverClockNew, "mm:ss");
+    io.emit("change timer", serverClockNew);
     console.log("timer changed");
   });
 });

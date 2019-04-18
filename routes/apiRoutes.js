@@ -121,14 +121,13 @@ module.exports = function(app) {
   app.post("/api/createGame", function(req, res) {
     //TODO: Return the gameId and use that to redirect to /<game.id>/admin.
     console.log(req.body);
+    req.body.is_paused = true;
+    req.body.is_complete = false;
     db.game.create(req.body).then(function(dbgame) {
       console.log(dbgame.id);
-      res.redirect("/1/admin");
+      res.redirect("/" + dbgame.id + "/admin");
     });
   });
-
-  //Used by the admin view. Pauses the timer and sets Time Remaining.
-  app.put("/api/pauseTimer", function(req, res) {});
 
   //Used by the admin view. Ends a game.
   app.put("/api/endGame", function(req, res) {
@@ -143,7 +142,7 @@ module.exports = function(app) {
 
   //Used by the admin view. Updates the terror level.
   app.put("/api/updateTerror", function(req, res) {
-    console.log(req.body)
+    console.log(req.body);
     db.game
       .update({ terror: req.body.terror }, { where: { id: req.body.id } })
       .then(function(dbterror) {
@@ -158,6 +157,8 @@ module.exports = function(app) {
     db.game
       .update({ rioters: req.body.rioters }, { where: { id: req.body.id } })
       .then(function(dbRiot) {
+        console.log("should only happen if update");
+        console.log(dbRiot);
         res.json(dbRiot);
       });
 
@@ -188,24 +189,67 @@ module.exports = function(app) {
   app.put("/api/updateDefaultTime", function(req, res) {
     //TODO: make a put call to the db to update the round_duration value in the game table
     console.log(req.body);
+    db.game
+      .update(
+        {
+          round_duration: req.body.round_duration
+        },
+        { where: { id: req.body.gameId } }
+      )
+      .then(function(data) {
+        console.log(data);
+        res.json(data);
+      });
   });
 
-  //Used by the admin vivew. Toggles an article's visibility on the overview page.
+  //Used by the admin view. Toggles an article's visibility on the overview page.
   app.put("/api/toggleArticle", function(req, res) {
     //TODO: make a put call to the db to update the is hidden status of the article. Then, on success, update admin and overview views with article data.
     console.log(req.body);
+    db.news
+      .update(
+        {
+          is_hidden: req.body.is_hidden
+        },
+        { where: { id: req.body.articleId } }
+      )
+      .then(function(data) {
+        console.log(data);
+        res.json(data);
+      });
+  });
+
+  //Used by the Admin view. Creates a global effect.
+  app.post("/api/newGlobalEffect", function(req, res) {
+    //TODO: Then, on success, update admin and overview views with global effects (all of them).
+    console.log(req.body);
+    db.global_effect.create(req.body).then(function(data) {
+      console.log(data);
+      res.json(data);
+    });
   });
 
   //Used by the Admin view. Updates an existing global effect.
   app.put("/api/updateGlobalEffect", function(req, res) {
     //TODO: Make a put call to the db to update the global effect. Then, on success, update admin and overview views with global effects (all of them).
     console.log(req.body);
+    db.global_effect
+      .update(
+        {
+          effect_text: req.body.effect_text,
+          is_hidden: req.body.is_hidden
+        },
+        { where: { id: req.body.id } }
+      )
+      .then(function(data) {
+        console.log(data);
+        res.json(data);
+      });
   });
 
   //Used by the Admin view (called in the clock.js file). Updates the is_paused state for the game.
   app.put("/api/toggleGamePauseState", function(req, res) {
     //TODO: Make a put call to the db to update the is_paused flag for the game. Then, on success, broadcast the new value to admin and overview views.
-    console.log(req.body);
     db.game
       .update(
         {

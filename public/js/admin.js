@@ -3,13 +3,37 @@ var socket = io();
 
 $("#terror-button").click(function() {
   console.log($("#admin-container").data("game"));
+  data = {
+    terror: $("#terror-tracker-text").val(),
+    id: $("#admin-container").data("game")
+  };
   $.ajax("/api/updateTerror", {
     type: "put",
     data: {
       terror: $("#terror-tracker-text").val(),
       id: $("#admin-container").data("game")
     }
-  }).then(socket.emit("terror update", $("#terror-tracker-text").val()));
+  }).then(socket.emit("terror update", data));
+});
+
+$("#riot-button").click(function() {
+  data = {
+    rioters: $("#riot-tracker-text").val(),
+    id: $("#admin-container").data("game")
+  };
+  $.ajax("/api/updateRioters", {
+    type: "put",
+    data: {
+      rioters: $("#riot-tracker-text").val(),
+      id: $("#admin-container").data("game")
+    }
+  }).then(socket.emit("riot update", data));
+});
+
+$("#edit").click(() => {
+  //TODO: the following line of code will likely need some fiddling
+  var newTimeVal = $("#update-time-text").val();
+  socket.emit("change timer", newTimeVal);
 });
 
 //Send global post button click
@@ -82,10 +106,12 @@ $("#toggle-article-button").click(function() {
       // eslint-disable-next-line camelcase
       is_hidden: newState
     }
-  //sockets for article hide state
-  }).then(
-    socket.emit("hide article", { id: selected.val(), is_hidden: newState })
-  );
+    //sockets for article hide state
+  }).then(result => {
+    if (result[0] !== 0) {
+      socket.emit("hide article", result[1]);
+    }
+  });
 });
 
 //Changes the state of the text on the article dropdown submit button based on whether or not the article is already hidden or not.
@@ -128,7 +154,7 @@ $("#global-effect-submit-button").click(function() {
     end_trigger_value: $("#global-effect-end-trigger-value").val(),
     // eslint-disable-next-line camelcase
     is_hidden: $("#global-effect-is-hidden").prop("checked")
-  }
+  };
   $.ajax("/api/updateGlobalEffect", {
     type: "put",
     data: {
@@ -141,5 +167,7 @@ $("#global-effect-submit-button").click(function() {
       // eslint-disable-next-line camelcase
       is_hidden: $("#global-effect-is-hidden").prop("checked")
     }
-  }).then(socket.emit("global effect submit", data));
+  }).then(result => {
+    socket.emit("global effect submit", result);
+  });
 });
