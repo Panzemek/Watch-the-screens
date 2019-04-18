@@ -122,32 +122,23 @@ module.exports = function(app, pausedState, io) {
         console.log(
           "---------------------articleResultss--------------------------"
         );
-        // console.log(articleResult[1].dataValues.id);
         var articleObject = {};
         for (i in articleResult) {
-          console.log(Object.keys(articleObject));
-          console.log("round create", articleResult[i].round_created);
           if (
             Object.keys(articleObject).includes(
               articleResult[i].round_created.toString()
             )
           ) {
-            console.log("Found");
             articleObject[articleResult[i].round_created].articles.push(
               articleResult[i]
             );
           } else {
-            console.log("Not Found!");
             articleObject[articleResult[i].round_created] = {
               articles: [articleResult[i]],
               round: articleResult[i].round_created
             };
           }
         }
-        console.log(articleObject[1].length);
-        console.log(
-          "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
-        );
         res.render("newsViewer", { rounds: articleObject });
       });
   });
