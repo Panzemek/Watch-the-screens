@@ -100,7 +100,8 @@ module.exports = function(app) {
       })
       .then(function(networkResult) {
         // eslint-disable-next-line camelcase
-        networkResult[0].dataValues.game_id = req.params.gameId;
+
+        networkResult[0].dataValues.gameId = req.params.gameId;
         res.render("reporter", networkResult[0].dataValues);
       });
   });
