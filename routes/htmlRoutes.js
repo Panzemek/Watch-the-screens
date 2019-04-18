@@ -15,31 +15,16 @@ module.exports = function(app, pausedState, io) {
 
   app.get("/:gameId/overview", function(req, res) {
     db.game
-      .findByPk(req.params.gameId, {
-        include: [
-          {
-            model: db.article,
-            where: {
-              is_hidden: false
-            },
-            include: [db.network]
-          }
-        ]
+      .findAll({
+        attributes: ["id", "terror", "rioters"],
+        where: {
+          id: req.params.gameId
+        },
+        include: [db.global_effect]
       })
-      .then(function(articleResult) {
-        let showableArts = [];
-        articleResult.articles.forEach(article => {
-          console.log(articleResult.current_round - article.round_created);
-          if (
-            articleResult.current_round - article.round_created <=
-            articleResult.article_decay
-          ) {
-            showableArts.push(article);
-            console.log(showableArts);
-          }
-        });
-        articleResult.articles = showableArts;
-        res.render("overview", articleResults);
+      .then(function(overResult) {
+        res.json(overResult);
+        // res.render("overview", articleResult);
       });
     //   var fakeArticles = [
     //     {
