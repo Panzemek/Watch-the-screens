@@ -33,7 +33,7 @@ module.exports = function(app, pausedState, io) {
       rioters: 100,
       terror: 30
     };
-    console.log(data);
+    // console.log(data);
     res.render("overview", data);
   });
 
@@ -119,7 +119,36 @@ module.exports = function(app, pausedState, io) {
         include: [db.network]
       })
       .then(function(articleResult) {
-        res.render("newsViewer", articleResult);
+        console.log(
+          "---------------------articleResultss--------------------------"
+        );
+        // console.log(articleResult[1].dataValues.id);
+        var articleObject = {};
+        for (i in articleResult) {
+          console.log(Object.keys(articleObject));
+          console.log("round create", articleResult[i].round_created);
+          if (
+            Object.keys(articleObject).includes(
+              articleResult[i].round_created.toString()
+            )
+          ) {
+            console.log("Found");
+            articleObject[articleResult[i].round_created].articles.push(
+              articleResult[i]
+            );
+          } else {
+            console.log("Not Found!");
+            articleObject[articleResult[i].round_created] = {
+              articles: [articleResult[i]],
+              round: articleResult[i].round_created
+            };
+          }
+        }
+        console.log(articleObject[1].length);
+        console.log(
+          "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
+        );
+        res.render("newsViewer", { rounds: articleObject });
       });
   });
   //TODO: Needs to do a database call to get all articles (with the join of network). Then we need to construct an object with the following format
