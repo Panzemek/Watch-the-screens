@@ -120,7 +120,8 @@ module.exports = function(app, pausedState, io) {
                   "current_round",
                   "terror",
                   "rioters",
-                  "is_paused"
+                  "is_paused",
+                  "round_duration"
                 ],
                 where: {
                   id: req.params.gameId
