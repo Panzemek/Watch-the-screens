@@ -13,11 +13,10 @@ $("#terror-button").click(function() {
       terror: $("#terror-tracker-text").val(),
       id: $("#admin-container").data("game")
     }
-  }).then(socket.emit("terror update", data));
+  }).then(socket.emit("terror update", data))
 });
 
 $("#riot-button").click(function() {
-  console.log($("#admin-container").data("game"));
   data = {
     rioters: $("#riot-tracker-text").val(),
     id: $("#admin-container").data("game")
@@ -25,7 +24,7 @@ $("#riot-button").click(function() {
   $.ajax("/api/updateRioters", {
     type: "put",
     data: {
-      rioters: $("#rioters-tracker-text").val(),
+      rioters: $("#riot-tracker-text").val(),
       id: $("#admin-container").data("game")
     }
   }).then(socket.emit("riot update", data));

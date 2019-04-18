@@ -65,7 +65,6 @@ timerInterval = setInterval(function() {
 io.on("connection", socket => {
   //terror update
   socket.on("terror update", terrorVal => {
-    console.log("terror upd makes to server");
     io.emit("terror update", terrorVal);
   });
 
