@@ -132,28 +132,31 @@ Step 4: Make the button add an element to the array and trigger a marquee update
 // }
 // </style>
 
-$(document).ready(function(){ //*window for images();
+$(document).ready(function() {
+  //*window for images();
 
-$('.marquee').marquee({   //, .marquee1 removed   
-    duration: 6000,//speed in milliseconds of the marquee    
-    gap: 50,//gap in pixels between the tickers    
-    delayBeforeStart: 0,//time in milliseconds before the marquee will start animating
-    direction: 'right',//'left' or 'right'
-    duplicated: true//true or false - should the marquee be duplicated to show an effect of continues flow
+  $(".marquee").marquee({
+    //, .marquee1 removed
+    duration: 6000, //speed in milliseconds of the marquee
+    gap: 50, //gap in pixels between the tickers
+    delayBeforeStart: 0, //time in milliseconds before the marquee will start animating
+    direction: "right", //'left' or 'right'
+    duplicated: true //true or false - should the marquee be duplicated to show an effect of continues flow
+  });
+  $(".marquee")
+    .bind("finished", function() {
+      $(this).marquee("before");
+      console.log("Welcome"); //Change text to something else after first loop finishes
+      $(this).marquee("destroy");
+      // alert("finished.destroy");WORKS!
+      //Load new content using Ajax and update the marquee container
+      $(this)
+        .html("Some new data loaded using ajax")
+        //Apply marquee plugin again
+        .marquee();
+    })
+    .showMarquee();
 });
-$('.marquee')
-	.bind('finished', function(){
-    $(this).marquee('before'); 
-		 console.log("Welcome"); //Change text to something else after first loop finishes
-		$(this).marquee('destroy');
-       // alert("finished.destroy");WORKS!
-		//Load new content using Ajax and update the marquee container
-		$(this).html('Some new data loaded using ajax')
-			//Apply marquee plugin again
-			.marquee()
-	})
-	.showMarquee();
- });  
 
 /*question of closures: https://hackernoon.com/how-to-use-javascript-closures-with-confidence-85cd1f841a6b
 Links: inventor: documentation:
