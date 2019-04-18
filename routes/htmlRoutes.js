@@ -22,22 +22,23 @@ module.exports = function(app) {
         include: [db.global_effect]
       })
       .then(function(overResult) {
-        res.render("overview", articleResult);
+        res.render("overview", overResult);
       });
   });
 
-  app.get("/:gameId", function(req, res) {
-    db.game
-      .findAll({
-        attributes: ["terror", "rioters", "current_round"],
-        where: {
-          id: req.params.gameId
-        }
-      })
-      .then(function(overviewData) {
-        res.json(overviewData);
-      });
-  });
+  // app.get("/:gameId", function(req, res) {
+  //   db.game
+  //     .findAll({
+  //       attributes: ["terror", "rioters", "current_round"],
+  //       where: {
+  //         id: req.params.gameId
+  //       }
+  //     })
+  //     .then(function(overviewData) {
+  //       console.log("heeeeelo.");
+  //       res.json(overviewData);
+  //     });
+  // });
 
   //this route should be the inital game setup route
   app.get("/admin", function(req, res) {
