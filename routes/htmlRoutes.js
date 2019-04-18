@@ -14,36 +14,15 @@ module.exports = function(app) {
 
   app.get("/:gameId/overview", function(req, res) {
     db.game
-      .findByPk(req.params.gameId, {
-        include: [
-          {
-            model: db.article,
-            where: {
-              is_hidden: false
-            },
-            include: [db.network]
-          }
-        ]
+      .findAll({
+        attributes: ["id", "terror", "rioters"],
+        where: {
+          id: req.params.gameId
+        },
+        include: [db.global_effect]
       })
-      .then(function(articleResult) {
-        let showableArts = [];
-        articleResult.articles.forEach(article => {
-          if (
-            articleResult.current_round - article.round_created <=
-            articleResult.article_decay
-          ) {
-            showableArts.push(article);
-          }
-        });
-        articleResult.articles = showableArts;
-        //TODO: this html route should include game id, terror, rioters, global_effects,
-        result = {
-          id: articleResult.id,
-          terror: articleResult.terror,
-          rioters: articleResult.rioters
-        };
-        res.render("overview", result);
-        // res.json(articleResult);
+      .then(function(overResult) {
+        res.render("overview", overResult);
       });
   });
 
