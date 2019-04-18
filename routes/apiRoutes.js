@@ -84,11 +84,20 @@ module.exports = function(app) {
   // Reporter view routes
 
   app.post("/api/addArticle", function(req, res) {
-    console.log(req.body);
     //TODO: Then, on success, update admin and overview views with global effects (all of them).
-    db.article.create(req.body).then(function(data) {
-      res.json(data);
-    });
+    db.game
+      .findAll({
+        attributes: ["current_round"],
+        where: { id: req.body.gameId }
+      })
+      .then(function(gameRound) {
+        req.body.round_created = gameRound[0].current_round;
+      })
+      .then(function() {
+        db.article.create(req.body).then(function(data) {
+          res.json(data);
+        });
+      });
   });
 
   //

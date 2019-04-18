@@ -10,7 +10,6 @@ $(this).ready(function() {
   timerInterval = setInterval(function() {
     if (!isPaused) {
       time.subtract(1, "second");
-      console.log("time_i" + time);
       $("#clock").text(time.format("mm:ss"));
     }
   }, 1000);
