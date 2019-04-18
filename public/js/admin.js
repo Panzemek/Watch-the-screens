@@ -31,6 +31,12 @@ $("#riot-button").click(function() {
   }).then(socket.emit("riot update", data));
 });
 
+$("#edit").click(() => {
+  //TODO: the following line of code will likely need some fiddling
+  var newTimeVal = $("#update-time-text").val();
+  socket.emit("change timer", newTimeVal);
+});
+
 //Send global post button click
 $("#global-post-submit-button").click(function() {
   console.log($("#global-post-text").val(), $("#global-post-duration").val());

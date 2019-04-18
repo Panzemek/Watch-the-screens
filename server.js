@@ -127,9 +127,9 @@ io.on("connection", socket => {
     isPaused = false;
     console.log("timer started");
   });
-  //TODO: the functionality to enter a new timer change still needs to be written.
   socket.on("change timer", newTimerVal => {
-    timer = moment().format(newTimerVal, "mm:ss");
+    //following line of code might need some fiddling
+    serverClock = moment().format(newTimerVal, "mm:ss");
     io.emit("change timer", newTimerVal);
     console.log("timer changed");
   });
