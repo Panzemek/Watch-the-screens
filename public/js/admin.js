@@ -180,4 +180,12 @@ socket.on("new article", art => {
 
 socket.on("hide article", () => {
   $("#admin-refresh").removeClass(".hidden");
-})
+});
+
+socket.on("global effect change", art => {
+  $("#admin-refresh").removeClass(".hidden");
+});
+
+socket.on("new global mod", val => {
+  $("#admin-refresh").removeClass(".hidden");
+});
