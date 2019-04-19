@@ -5,7 +5,7 @@ var moment = require("moment");
 var momentDurationFormatSetup = require("moment-duration-format");
 var db = require("./models");
 
-var serverClock = moment("00:05", "mm:ss");
+var serverClock = null;
 var isPaused = true;
 var defaultRoundLen = moment("01:00", "mm:ss");
 var round = 0;
@@ -62,11 +62,12 @@ timerInterval = setInterval(function() {
   //check round end logic goes here//
   if (!isPaused) {
     if (
-      moment(serverClock).isSame(moment("2019-04-18T00:00:00.000"), "second")
+      moment(serverClock).isSame(moment("2019-04-19T00:00:00.000"), "second")
     ) {
       roundEnded = true;
       roundEnd();
       serverEmitter.emit("round ended", { time: serverClock, round: round });
+      console.log("emitted round end")
     }
     //toggle the following line to see server clock
     //console.log(serverClock.format("mm:ss"));
@@ -105,6 +106,7 @@ io.on("connection", socket => {
   });
   //round end last try
   serverEmitter.on("round ended", data => {
+    console.log("round ended");
     data.time = moment(data.time, "mm:ss");
     socket.emit("new round", data);
   });
