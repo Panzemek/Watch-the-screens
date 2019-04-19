@@ -7,6 +7,7 @@ $(this).ready(function() {
   //isPaused = $("#clock").data("is_paused");
   setPauseButtonText();
   time = moment($("#clock").text(), "mm:ss");
+  socket.emit("server time init", time);
   timerInterval = setInterval(function() {
     if (!isPaused) {
       time.subtract(1, "second");
@@ -64,12 +65,19 @@ socket.on("change timer", newTime => {
   $("#clock").text(time.format("mm:ss"));
 });
 
+socket.on("new round", data => {
+  var newRoundTime = moment(data.time);
+  time = moment(newRoundTime);
+  $("#clock").text(time.format("mm:ss"));
+  $("#round").text(data.round);
+});
+
 $(this).ready(socket.emit("new page"));
 
 //TODO: This is where the button PLAY/PAUSE needs to be fixed
 socket.on("new page load", data => {
-  console.log("new page recieved");
   time = moment(data.time);
-  console.log(time);
   isPaused = data.pause;
+  $("#clock").text(time.format("mm:ss"));
+  $("#round").text(data.round);
 });
