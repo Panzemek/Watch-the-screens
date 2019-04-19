@@ -154,7 +154,6 @@ $("#global-effect-submit-button").click(function() {
     start_trigger_value: $("#global-effect-start-trigger-value").val(),
     end_trigger_type: $("#global-effect-end-trigger-type").val(),
     end_trigger_value: $("#global-effect-end-trigger-value").val(),
-    // eslint-disable-next-line camelcase
     is_hidden: $("#global-effect-is-hidden").prop("checked")
   };
   $.ajax("/api/updateGlobalEffect", {
@@ -166,7 +165,6 @@ $("#global-effect-submit-button").click(function() {
       start_trigger_value: $("#global-effect-start-trigger-value").val(),
       end_trigger_type: $("#global-effect-end-trigger-type").val(),
       end_trigger_value: $("#global-effect-end-trigger-value").val(),
-      // eslint-disable-next-line camelcase
       is_hidden: $("#global-effect-is-hidden").prop("checked")
     }
   }).then(res => {
@@ -227,7 +225,7 @@ socket.on("hide article", () => {
   $("#admin-refresh").removeClass("hidden");
 });
 
-socket.on("global effect change", art => {
+socket.on("global effect redraw", art => {
   console.log("global effect change");
   $("#admin-refresh").removeClass("hidden");
 });

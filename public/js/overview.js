@@ -2,6 +2,7 @@ var articles = [];
 var lastUsedArticle = 1;
 var carouselListener;
 var socket = io();
+var carouselRunning = false;
 // var pageLoaded = moment();
 
 // On page load we need to get all available articles and put them in our articles array.
@@ -35,6 +36,7 @@ $(this).ready(function() {
 
 // Check the articles array length and start behavior based on it.
 function checkArticleArray() {
+  console.log("article length:", articles.length);
   //One article, Advance to the one article and wait there. Remove the template carousel panel.
   if (articles.length === 1) {
     populateArticle($(".carousel-item:not(.active)"), articles[0]);
@@ -42,29 +44,35 @@ function checkArticleArray() {
     $("#article-carousel").one("slid.bs.carousel", function() {
       $("#carousel-1").remove();
       $("#article-carousel").carousel("pause");
+      carouselRunning = false;
     });
     //More than one article, Advance to the next article and begin cycling the articles.
   } else if (articles.length > 1) {
-    populateArticle($(".carousel-item:not(.active)"), articles[0]);
-    $("#article-carousel").carousel(1);
-    $("#article-carousel").one("slid.bs.carousel", function() {
-      $("#carousel-1").remove();
-      $("#article-carousel").carousel("cycle");
-    });
-    if (!carouselListener) {
-      carouselListener = $("#article-carousel").on(
-        "slid.bs.carousel",
-        function() {
-          populateArticle(
-            $(".carousel-item:not(.active)"),
-            articles[lastUsedArticle]
-          );
-          lastUsedArticle++;
-          if (lastUsedArticle >= articles.length) {
-            lastUsedArticle = 0;
+    console.log("carousel running?", carouselRunning);
+    if (!carouselRunning) {
+      populateArticle($(".carousel-item:not(.active)"), articles[0]);
+      $("#article-carousel").carousel(1);
+      $("#article-carousel").one("slid.bs.carousel", function() {
+        $("#carousel-1").remove();
+        $("#article-carousel").carousel("cycle");
+      });
+      //Prevents multiple event listeners for the carousel from being applied.
+      if (!carouselListener) {
+        carouselListener = $("#article-carousel").on(
+          "slid.bs.carousel",
+          function() {
+            populateArticle(
+              $(".carousel-item:not(.active)"),
+              articles[lastUsedArticle]
+            );
+            lastUsedArticle++;
+            if (lastUsedArticle >= articles.length) {
+              lastUsedArticle = 0;
+            }
           }
-        }
-      );
+        );
+      }
+      carouselRunning = true;
     }
   }
 }
@@ -141,13 +149,11 @@ socket.on("show article", data => {
 //one idea for this - store locally on admin and overview (with the exact same name)
 //this JS exists on both pages, so it will handle both.
 socket.on("new article", article => {
-  console.log("new article is: " + article);
-  console.log(article);
   //TODO: what exactly does data object look like?
-  console.log("articles.length", articles.length);
+  console.log("article Pushed to array");
   articles.unshift(article);
-  console.log("articles.length", articles.length);
   articles[0].seen = false;
+  checkArticleArray();
 });
 
 socket.on("new page load", data => {
