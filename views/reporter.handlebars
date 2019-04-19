@@ -1,5 +1,5 @@
-<div id="reporter-container" data-game="{{game_id}}" data-network-short="{{network_short}}" class="container">
-    <form id="article-form">
+<div id="reporter-container" data-game="{{gameId}}" data-network-short="{{network_short}}" class="container">
+    {{!-- <form id="article-form"> --}}
         <div class="form-group">
             <label for="input-author">Author</label>
             <input type="text" class="form-control" id="input-author">
@@ -16,9 +16,9 @@
             <label for="input-body">Article Text</label>
             <textarea class="form-control" id="input-body" rows="15"></textarea>
         </div>
-        <button id="article-preview-button" type="button" class="btn btn-primary" data-toggle="modal" data-target=".bd-example-modal-lg">
-            Preview</button>
-    </form>
+    {{!-- </form> --}}
+    <button id="article-preview-button" type="button" class="btn btn-primary" data-toggle="modal" data-target=".bd-example-modal-lg">
+        Preview</button>
 
     <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
         aria-hidden="true">

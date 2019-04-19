@@ -22,7 +22,7 @@ module.exports = function(app) {
         include: [db.global_effect]
       })
       .then(function(overResult) {
-        res.render("overview", overResult);
+        res.render("overview", overResult[0].dataValues);
       });
   });
 
@@ -91,7 +91,7 @@ module.exports = function(app) {
   app.get("/:gameId/news/:org", function(req, res) {
     //query for news org info here
     var org = req.params.org;
-
+    console.log(org);
     db.network
       .findAll({
         where: {
@@ -99,10 +99,14 @@ module.exports = function(app) {
         }
       })
       .then(function(networkResult) {
-        // eslint-disable-next-line camelcase
-
-        networkResult[0].dataValues.gameId = req.params.gameId;
-        res.render("reporter", networkResult[0].dataValues);
+        if (networkResult[0]) {
+          console.log(networkResult);
+          // eslint-disable-next-line camelcase
+          networkResult[0].dataValues.gameId = req.params.gameId;
+          res.render("reporter", networkResult[0].dataValues);
+        } else {
+          res.render("reporter");
+        }
       });
   });
 
