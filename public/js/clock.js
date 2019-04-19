@@ -46,18 +46,22 @@ function setPauseButtonText() {
 //Socket listeners to determine when timer is start/stopped from admin.
 socket.on("stop timer", timerVal => {
   time = moment(timerVal);
+  console.log(time);
   isPaused = true;
   setPauseButtonText();
 });
 
 socket.on("start timer", timerVal => {
   time = moment(timerVal);
+  console.log(time);
   isPaused = false;
   setPauseButtonText();
 });
 
 socket.on("change timer", newTime => {
+  console.log(newTime);
   time = moment(newTime, "mm:ss");
+  console.log(time);
   $("#clock").text(time.format("mm:ss"));
 });
 
@@ -72,6 +76,8 @@ $(this).ready(socket.emit("new page"));
 
 //TODO: This is where the button PLAY/PAUSE needs to be fixed
 socket.on("new page load", data => {
+  console.log("new page recieved");
   time = moment(data.time);
+  console.log(time);
   isPaused = data.pause;
 });
