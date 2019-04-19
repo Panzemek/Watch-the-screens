@@ -110,21 +110,17 @@ socket.on("global modal post", data => {
 });
 
 socket.on("global effect redraw", data => {
-  console.log(data);
   console.log("triggered global effect redraw");
   //destroy the thing
   $("#global-effects-ul").empty();
   for (i in data) {
+    console.log(data[i].id);
     //draw all the things
-    $("#global-effects-ul").append(
-      $(
-        "<li><span class='global-effect' data-id='" +
-          data[i].id +
-          ">" +
-          data[i].effect_text +
-          "</span></li>"
-      )
-    );
+    var listItem = $("<li>");
+    listItem.addClass("global-effect");
+    listItem.attr("data-id", data[i].id);
+    listItem.text(data[i].effect_text);
+    $("#global-effects-ul").append(listItem);
   }
 });
 

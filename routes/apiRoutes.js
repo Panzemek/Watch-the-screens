@@ -22,7 +22,7 @@ module.exports = function(app) {
 
   // Returns game global effects.
   // Req.body requires nothing
-  app.get("/:gameid/overviewGlobalEffects", function(req, res) {
+  app.get("/api/:gameid/overviewGlobalEffects", function(req, res) {
     db.global_effect
       .findAll({
         where: {
@@ -31,9 +31,7 @@ module.exports = function(app) {
         }
       })
       .then(function(effectsResult) {
-        console.log("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
-        console.log(effectsResult);
-        console.log("--------------------------------------------------------------------------------------")
+        console.log("hi");
         res.json(effectsResult);
       });
   });
