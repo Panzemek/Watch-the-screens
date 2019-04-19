@@ -147,7 +147,8 @@ io.on("connection", socket => {
 
   //global mod redraw triggers/call
   socket.on("global effect submit", data => {
-    socket.emit("global effect redraw", data);
+    console.log(data);
+    io.emit("global effect redraw", data);
   });
 
   //game end - what do we need to pass into callback? game end route?

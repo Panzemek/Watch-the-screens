@@ -31,6 +31,9 @@ module.exports = function(app) {
         }
       })
       .then(function(effectsResult) {
+        console.log("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
+        console.log(effectsResult);
+        console.log("--------------------------------------------------------------------------------------")
         res.json(effectsResult);
       });
   });

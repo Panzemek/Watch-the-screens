@@ -4,25 +4,18 @@ var carouselListener;
 var socket = io();
 // var pageLoaded = moment();
 
-//TEMP BUTTON CLICK REMOVE ONCE ARTICLES ARE SETUP
-$("#temp-article").click(function() {
-  $.ajax("/" + $("#overview-container").data("game") + "/articles", {
-    type: "get"
-  }).then(function(data) {
-    articles.push(...data.articles);
-    checkArticleArray();
-  });
-});
-
 // On page load we need to get all available articles and put them in our articles array.
 $(this).ready(function() {
   $.ajax("/" + $("#overview-container").data("game") + "/articles", {
     type: "get"
   }).then(function(data) {
     console.log(data);
-    var newArticles = [...data.articles];
+    var newArticles = data.articles.slice(0);
     var articleString = "";
+    console.log(newArticles);
     for (i in newArticles) {
+      console.log("here", i);
+      console.log(newArticles[i]);
       newArticles[i].seen = false;
       articles.push(newArticles[i]);
       articleString +=
@@ -116,8 +109,9 @@ socket.on("global modal post", data => {
   }, data.duration * 1000 * 60);
 });
 
-socket.on("global effect redraw", () => {
+socket.on("global effect redraw", data => {
   console.log(data);
+  console.log("triggered global effect redraw");
   //destroy the thing
   $("#global-effects-ul").empty();
   for (i in data) {

@@ -214,6 +214,7 @@ $("#global-effect-add-submit-button").click(function() {
 });
 
 socket.on("new article", art => {
+  console.log("New article posted!");
   $("#admin-refresh").removeClass(".hidden");
 });
 
