@@ -6,8 +6,21 @@
     <p>Here are all the games currently running</p>
     <p class="lead">
       {{#each games}}
+      {{#unless is_complete}}
         <a href="/{{id}}/overview" class="badge badge-primary">{{game_description}}</a>
+      {{/unless}}
       {{/each}}
+      
+    </p>
+
+    <p>Here are all the games which have finished</p>
+    <p class="lead">
+      {{#each games}}
+      {{#if is_complete}}
+        <a href="/{{id}}/overview" class="badge badge-primary">{{game_description}}</a>
+      {{/if}}
+      {{/each}}
+      
     </p>
   </div>
 </div>

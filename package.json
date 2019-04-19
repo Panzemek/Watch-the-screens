@@ -18,7 +18,8 @@
     "moment-duration-format": "^2.2.2",
     "mysql2": "^1.6.5",
     "sequelize": "^5.5.0",
-    "socket.io": "^2.2.0"
+    "socket.io": "^2.2.0",
+    "socket.io-client": "^2.2.0"
   },
   "devDependencies": {
     "chai": "^4.1.2",
@@ -29,5 +30,17 @@
     "eslint-plugin-prettier": "^2.6.2",
     "mocha": "^5.2.0",
     "prettier": "^1.13.7"
-  }
+  },
+  "directories": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/EwRicklefs/Watch-the-screens.git"
+  },
+  "author": "",
+  "bugs": {
+    "url": "https://github.com/EwRicklefs/Watch-the-screens/issues"
+  },
+  "homepage": "https://github.com/EwRicklefs/Watch-the-screens#readme"
 }

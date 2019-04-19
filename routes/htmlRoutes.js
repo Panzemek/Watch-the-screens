@@ -5,7 +5,7 @@ module.exports = function(app) {
   app.get("/", function(req, res) {
     db.game
       .findAll({
-        attributes: ["id", "game_description"]
+        attributes: ["id", "game_description", "is_complete"]
       })
       .then(function(gameSummary) {
         res.render("index", { games: gameSummary });
@@ -22,7 +22,7 @@ module.exports = function(app) {
         include: [db.global_effect]
       })
       .then(function(overResult) {
-        res.render("overview", overResult);
+        res.render("overview", overResult[0].dataValues);
       });
   });
 
@@ -91,7 +91,7 @@ module.exports = function(app) {
   app.get("/:gameId/news/:org", function(req, res) {
     //query for news org info here
     var org = req.params.org;
-
+    console.log(org);
     db.network
       .findAll({
         where: {
@@ -99,9 +99,15 @@ module.exports = function(app) {
         }
       })
       .then(function(networkResult) {
-        // eslint-disable-next-line camelcase
-        networkResult[0].dataValues.game_id = req.params.gameId;
-        res.render("reporter", networkResult[0].dataValues);
+        if (networkResult[0]) {
+          console.log(networkResult);
+          // eslint-disable-next-line camelcase
+          networkResult[0].dataValues.gameId = req.params.gameId;
+          // res.json(networkResult[0].dataValues);
+          res.render("reporter", networkResult[0].dataValues);
+        } else {
+          res.render("reporter");
+        }
       });
   });
 
@@ -116,7 +122,7 @@ module.exports = function(app) {
         include: [db.network]
       })
       .then(function(articleResult) {
-        var articleObject = {};
+        var articleObject = [];
         for (i in articleResult) {
           if (
             Object.keys(articleObject).includes(
@@ -133,7 +139,9 @@ module.exports = function(app) {
             };
           }
         }
-        res.render("newsViewer", { rounds: articleObject });
+        // res.json({ rounds: articleObject });
+
+        res.render("newsViewer", { rounds: articleObject.reverse() });
       });
   });
 

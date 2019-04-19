@@ -21,10 +21,21 @@ $(this).ready(function() {
   }).then(function(data) {
     console.log(data);
     var newArticles = [...data.articles];
+    var articleString = "";
     for (i in newArticles) {
       newArticles[i].seen = false;
       articles.push(newArticles[i]);
+      articleString +=
+        " | " +
+        newArticles[i].network.network_short +
+        " | " +
+        newArticles[i].title +
+        "         .";
     }
+    $(".marquee")
+      .html(articleString)
+      .marquee();
+    console.log(articleString);
     checkArticleArray();
   });
 });
@@ -85,80 +96,6 @@ function populateArticle(html, article) {
   html.find(".article-text").text(article.article_body);
 }
 
-//this is the work in progress for the scroll bar event listener for the scrolling Marquee section.
-//
-// <html>
-// <body>
-//   <div class="marquee">jQuery marquee is the best marquee plugin in the world</div>
-/*{ <h1>Random marquee text</h1>
-<div class='marquee'>Longer text lorem ipsum dolor sit amet, consectetur adipiscing elit END.</div>
-
-<div class='marquee1'>
-Coding Bootcamp Alum Leads Org. to a $1,000,000,000 valuation
-</div>
-
-
-<button id="newArticleBtn">New Article</button>
-
-<pre>Step 1: The Marquee scrolls text that is placed in it in the handlebars file (This currently works)
-Step 2: Create a button on the screen and make an on click function bound to that button.
-Inside the function, create a string variable. then make the marquee text change to the string variable.
-Step 3: Create a function that takes in an array of strings and combines them into one string. Use that output as the marquee text.
-Step 4: Make the button add an element to the array and trigger a marquee update with that change.</pre> */
-
-// <style>
-// /* /* .marquee {
-//   width: 300px;
-//   overflow: hidden;
-//   border: 1px solid #ccc;
-//   background: #ccc;
-// } */
-
-// .marquee {
-//   width: 300px; /* the plugin works for responsive layouts so width is not necessary */
-//   overflow: hidden;
-//   border:1px solid #ccc;
-// }
-
-// body {
-//     margin: 10px;
-//     font-family:'Lato', sans-serif;
-// }
-// .marquee1 {ws
-//     width: 300px;
-//     overflow: hidden;
-//     border:1px solid #ccc;
-//     background: black;
-//     color: rgb(202, 255, 195);
-// }
-// </style>
-
-$(document).ready(function() {
-  //*window for images();
-
-  $(".marquee").marquee({
-    //, .marquee1 removed
-    duration: 6000, //speed in milliseconds of the marquee
-    gap: 50, //gap in pixels between the tickers
-    delayBeforeStart: 0, //time in milliseconds before the marquee will start animating
-    direction: "right", //'left' or 'right'
-    duplicated: true //true or false - should the marquee be duplicated to show an effect of continues flow
-  });
-  $(".marquee")
-    .bind("finished", function() {
-      $(this).marquee("before");
-      console.log("Welcome"); //Change text to something else after first loop finishes
-      $(this).marquee("destroy");
-      // alert("finished.destroy");WORKS!
-      //Load new content using Ajax and update the marquee container
-      $(this)
-        .html("Some new data loaded using ajax")
-        //Apply marquee plugin again
-        .marquee();
-    })
-    .showMarquee();
-});
-
 //**** Sockets stuff below ****/
 
 socket.on("terror update", terrorVal => {
@@ -172,13 +109,29 @@ socket.on("riot update", riotVal => {
 });
 
 socket.on("global modal post", data => {
-  console.log(data);
   $("#modalBlastText").html(data.text);
   $("#modalBlast").modal("show");
+  window.setTimeout(function() {
+    $("#modalBlast").modal("hide");
+  }, data.duration * 1000 * 60);
 });
 
-socket.on("global effect submit", data => {
+socket.on("global effect redraw", () => {
   console.log(data);
+  //destroy the thing
+  $("#global-effects-ul").empty();
+  for (i in data) {
+    //draw all the things
+    $("#global-effects-ul").append(
+      $(
+        "<li><span class='global-effect' data-id='" +
+          data[i].id +
+          ">" +
+          data[i].effect_text +
+          "</span></li>"
+      )
+    );
+  }
 });
 
 socket.on("hide article", data => {
@@ -198,9 +151,9 @@ socket.on("show article", data => {
 //one idea for this - store locally on admin and overview (with the exact same name)
 //this JS exists on both pages, so it will handle both.
 socket.on("new article", article => {
-  console.log("new article is: " + data);
+  console.log("new article is: " + article);
   //TODO: what exactly does data object look like?
-  articles.unshift(data.article);
+  articles.unshift(article);
   articles[0].seen = false;
 });
 

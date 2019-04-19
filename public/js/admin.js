@@ -58,18 +58,20 @@ $("#global-post-submit-button").click(function() {
 //Update subsequent round time
 $("#default-time-button").click(function() {
   console.log($("#default-time-text").val());
+  var defVal = $("#default-time-text").val();
   $.ajax("/api/updateDefaultTime", {
     type: "put",
     data: {
       // eslint-disable-next-line camelcase
       round_duration: $("#default-time-text").val()
     }
-  });
+  }).then(socket.emit("def round changed", defVal));
 });
 
-$("#link-ul").ready(function() {
-  $("#link-ul").append(location.hostname + "/1/newsViewer");
-});
+//TODO: update to handle stuff
+// $("#link-ul").ready(function() {
+//   $("#link-ul").append(location.hostname + "/1/newsViewer");
+// });
 
 //Listener for game end confirm. Enables button only when text box reads CONFIRM.
 $("#end-game-confirm-text").keyup(function() {
@@ -167,7 +169,25 @@ $("#global-effect-submit-button").click(function() {
       // eslint-disable-next-line camelcase
       is_hidden: $("#global-effect-is-hidden").prop("checked")
     }
-  }).then(result => {
-    socket.emit("global effect submit", result);
-  });
+  }).then( res => {
+    var id = $("#admin-container").data("game");
+    $.ajax(id + "/overviewGlobalEffects", {
+      type: "get"
+    }).then(socket.emit("global effect submit", res))
+});
+
+socket.on("new article", art => {
+  $("#admin-refresh").removeClass(".hidden");
+});
+
+socket.on("hide article", () => {
+  $("#admin-refresh").removeClass(".hidden");
+});
+
+socket.on("global effect change", art => {
+  $("#admin-refresh").removeClass(".hidden");
+});
+
+socket.on("new global mod", val => {
+  $("#admin-refresh").removeClass(".hidden");
 });

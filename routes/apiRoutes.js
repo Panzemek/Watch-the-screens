@@ -84,11 +84,28 @@ module.exports = function(app) {
   // Reporter view routes
 
   app.post("/api/addArticle", function(req, res) {
-    console.log(req.body);
-    db.article.create(req.body).then(function(data) {
-      console.log(data);
-      res.json(data);
-    });
+    //TODO: Then, on success, update admin and overview views with global effects (all of them).
+    db.game
+      .findAll({
+        attributes: ["current_round"],
+        where: { id: req.body.gameId }
+      })
+      .then(function(gameRound) {
+        req.body.round_created = gameRound[0].current_round;
+      })
+      .then(function() {
+        db.network
+          .findAll({
+            attributes: ["id"],
+            where: { network_short: req.body.network_short }
+          })
+          .then(function(networkData) {
+            req.body.network_id = networkData[0].id;
+            db.article.create(req.body).then(function(data) {
+              res.json(data);
+            });
+          });
+      });
   });
 
   //
@@ -171,8 +188,8 @@ module.exports = function(app) {
     console.log(req.body);
     db.article
       .update({ is_hidden: req.body.is_hidden }, { where: { id: req.body.id } })
-      .then(function(hidden) {
-        res.json(hidden);
+      .then(function(hiddenArt) {
+        res.json(hiddenArt);
       });
 
     //TODO: if the response is good, send update to overview views with updated article array
@@ -206,12 +223,12 @@ module.exports = function(app) {
   app.put("/api/toggleArticle", function(req, res) {
     //TODO: make a put call to the db to update the is hidden status of the article. Then, on success, update admin and overview views with article data.
     console.log(req.body);
-    db.news
+    db.article
       .update(
         {
           is_hidden: req.body.is_hidden
         },
-        { where: { id: req.body.articleId } }
+        { where: { id: req.body.id } }
       )
       .then(function(data) {
         console.log(data);
@@ -260,6 +277,29 @@ module.exports = function(app) {
       )
       .then(function(pauseData) {
         res.json(pauseData);
+      });
+  });
+
+  app.put("/api/changeRound", function(req, res) {
+    db.game
+      .findAll({
+        attributes: ["current_round"],
+        where: { id: req.body.gameId }
+      })
+      .then(function(gameRound) {
+        var currentRound = gameRound[0].current_round;
+        var roundIncrement = 1;
+
+        db.game
+          .update(
+            {
+              current_round: currentRound + roundIncrement
+            },
+            { where: { id: req.body.id } }
+          )
+          .then(function(roundUpdate) {
+            res.json(roundUpdate);
+          });
       });
   });
 };
