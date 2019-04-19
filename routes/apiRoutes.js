@@ -188,8 +188,8 @@ module.exports = function(app) {
     console.log(req.body);
     db.article
       .update({ is_hidden: req.body.is_hidden }, { where: { id: req.body.id } })
-      .then(function(hidden) {
-        res.json(hidden);
+      .then(function(hiddenArt) {
+        res.json(hiddenArt);
       });
 
     //TODO: if the response is good, send update to overview views with updated article array
@@ -277,6 +277,29 @@ module.exports = function(app) {
       )
       .then(function(pauseData) {
         res.json(pauseData);
+      });
+  });
+
+  app.put("/api/changeRound", function(req, res) {
+    db.game
+      .findAll({
+        attributes: ["current_round"],
+        where: { id: req.body.gameId }
+      })
+      .then(function(gameRound) {
+        var currentRound = gameRound[0].current_round;
+        var roundIncrement = 1;
+
+        db.game
+          .update(
+            {
+              current_round: currentRound + roundIncrement
+            },
+            { where: { id: req.body.id } }
+          )
+          .then(function(roundUpdate) {
+            res.json(roundUpdate);
+          });
       });
   });
 };
