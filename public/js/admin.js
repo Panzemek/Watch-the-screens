@@ -173,3 +173,11 @@ $("#global-effect-submit-button").click(function() {
     socket.emit("global effect submit", result);
   });
 });
+
+socket.on("new article", art => {
+  $("#admin-refresh").removeClass(".hidden");
+});
+
+socket.on("hide article", () => {
+  $("#admin-refresh").removeClass(".hidden");
+})

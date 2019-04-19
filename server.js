@@ -151,18 +151,16 @@ io.on("connection", socket => {
   });
 
   //game end - what do we need to pass into callback? game end route?
-  socket.on("game ended", placeholder => {
-    io.emit("game ended", placeholder);
+  socket.on("game ended", () => {
+    io.emit("game ended");
   });
-  //TODO:clientside logic
 
   //new news article
   socket.on("new article", article => {
     io.emit("new article", article);
     console.log("article posted");
   });
-  //TODO:clientside and admin client logic;
-
+  
   //hide news article
   socket.on("hide article", data => {
     io.emit("hide article", data);
