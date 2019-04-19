@@ -3,7 +3,6 @@ var express = require("express");
 var exphbs = require("express-handlebars");
 var moment = require("moment");
 var momentDurationFormatSetup = require("moment-duration-format");
-
 var db = require("./models");
 
 var serverClock = null;
@@ -99,6 +98,11 @@ function roundEnd() {
 
 //Socket server logic will go here.
 io.on("connection", socket => {
+  socket.on("game start", () => {
+    console.log(serverClock);
+    var timeNew = moment("00:05", "mm:ss");
+    serverClock = moment(timeNew, "mm:ss");
+  });
   //round end last try
   serverEmitter.on("round ended", data => {
     data.time = moment(data.time, "mm:ss");
