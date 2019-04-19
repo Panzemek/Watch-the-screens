@@ -64,7 +64,7 @@ $("#default-time-button").click(function() {
       // eslint-disable-next-line camelcase
       round_duration: $("#default-time-text").val()
     }
-  });
+  }).then(socket.emit("def round changed", $("#default-time-text").val()));
 });
 
 $("#link-ul").ready(function() {

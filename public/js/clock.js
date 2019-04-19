@@ -7,10 +7,10 @@ $(this).ready(function() {
   //isPaused = $("#clock").data("is_paused");
   setPauseButtonText();
   time = moment($("#clock").text(), "mm:ss");
+  socket.emit("server time init", time);
   timerInterval = setInterval(function() {
     if (!isPaused) {
       time.subtract(1, "second");
-      console.log("time_i" + time);
       $("#clock").text(time.format("mm:ss"));
     }
   }, 1000);
@@ -59,6 +59,13 @@ socket.on("start timer", timerVal => {
 socket.on("change timer", newTime => {
   time = moment(newTime, "mm:ss");
   $("#clock").text(time.format("mm:ss"));
+});
+
+socket.on("new round", data => {
+  var newRoundTime = moment(data.time);
+  time = moment(newRoundTime);
+  $("#clock").text(time.format("mm:ss"));
+  $("#round").text(data.round);
 });
 
 $(this).ready(socket.emit("new page"));
