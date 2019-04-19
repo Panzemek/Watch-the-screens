@@ -9,9 +9,11 @@
         <li>Terror Level: <span id="terror">{{terror}}</span></li>
 
         {{#each global_effects}}
-        <li>
-          <span class="global-effect" data-id={{id}}>{{effect_text}}</span>
-        </li>
+          {{#unless is_hidden}}
+            <li>
+              <span class="global-effect" data-id={{id}}>{{effect_text}}</span>
+            </li>
+          {{/unless}}
         {{/each}}
 
       </ul>

@@ -15,6 +15,11 @@ INSERT INTO games
 VALUES
     ("Seattle Colossus of Atlantis", true, false, now(), now());
 
+INSERT INTO games
+    (game_description, is_paused, is_complete, createdAt, updatedAt)
+VALUES
+    ("Seattle Heirs of a Shattered Age", true, true, now(), now());
+
 INSERT INTO networks
     (network_full, network_short, createdAt, updatedAt)
 VALUES
