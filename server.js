@@ -7,7 +7,7 @@ var db = require("./models");
 
 var serverClock = null;
 var isPaused = true;
-var defaultRoundLen = moment("20:00", "mm:ss");
+var defaultRoundLen = moment("01:00", "mm:ss");
 var round = 0;
 var roundEnded = false;
 
