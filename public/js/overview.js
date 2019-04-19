@@ -109,13 +109,29 @@ socket.on("riot update", riotVal => {
 });
 
 socket.on("global modal post", data => {
-  console.log(data);
   $("#modalBlastText").html(data.text);
   $("#modalBlast").modal("show");
+  window.setTimeout(function() {
+    $("#modalBlast").modal("hide");
+  }, data.duration * 1000 * 60);
 });
 
-socket.on("global effect submit", data => {
+socket.on("global effect redraw", () => {
   console.log(data);
+  //destroy the thing
+  $("#global-effects-ul").empty();
+  for (i in data) {
+    //draw all the things
+    $("#global-effects-ul").append(
+      $(
+        "<li><span class='global-effect' data-id='" +
+          data[i].id +
+          ">" +
+          data[i].effect_text +
+          "</span></li>"
+      )
+    );
+  }
 });
 
 socket.on("hide article", data => {

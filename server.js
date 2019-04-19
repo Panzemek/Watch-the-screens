@@ -68,6 +68,7 @@ timerInterval = setInterval(function() {
       roundEnd();
       serverEmitter.emit("round ended", { time: serverClock, round: round });
     }
+    //toggle the following line to see server clock
     //console.log(serverClock.format("mm:ss"));
     serverClock = moment(serverClock).subtract(1, "second");
   }
@@ -92,14 +93,13 @@ function roundEnd() {
         { where: { id: 1 } }
       );
     });
-  console.log(serverClock);
   roundEnded = false;
 }
 
 //Socket server logic will go here.
 io.on("connection", socket => {
   socket.on("game start", () => {
-    console.log(serverClock);
+    console.log("game start clock time is " + serverClock);
     var timeNew = moment("00:05", "mm:ss");
     serverClock = moment(timeNew, "mm:ss");
   });
@@ -125,7 +125,7 @@ io.on("connection", socket => {
     newDef = parseInt(newDef);
     defServerNew = moment.duration(newDef, "minutes").format();
     defaultRoundLen = moment(defServerNew, "mm:ss");
-    console.log("def round changed to : " + defaultRoundLen.format("mm:ss"));
+    console.log("default round len changed to : " + defaultRoundLen.format("mm:ss"));
   });
   //updates the riot value
   socket.on("riot update", riotVal => {
@@ -145,23 +145,22 @@ io.on("connection", socket => {
     io.emit("global modal post", data);
   });
 
-  //global mod changes
-  socket.on("global effect change", data => {
-    io.emit("global effect change", data);
+  //global mod redraw triggers/call
+  socket.on("global effect submit", data => {
+    console.log(data);
+    socket.emit("global effect redraw", data);
   });
 
   //game end - what do we need to pass into callback? game end route?
-  socket.on("game ended", placeholder => {
-    io.emit("game ended", placeholder);
+  socket.on("game ended", () => {
+    io.emit("game ended");
   });
-  //TODO:clientside logic
 
   //new news article
   socket.on("new article", article => {
     io.emit("new article", article);
     console.log("article posted");
   });
-  //TODO:clientside and admin client logic;
 
   //hide news article
   socket.on("hide article", data => {
@@ -187,8 +186,6 @@ io.on("connection", socket => {
   socket.on("change timer", newTimerVal => {
     if (serverClock) {
       newTimerVal = parseInt(newTimerVal);
-      //following line of code might need some fiddling
-      //console.log(moment.duration(newTimerVal, "minutes").format("h:mm"));
       serverClockNew = moment.duration(newTimerVal, "minutes").format();
       serverClock = moment(serverClockNew, "mm:ss");
       io.emit("change timer", serverClockNew);
