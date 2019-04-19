@@ -147,7 +147,6 @@ io.on("connection", socket => {
 
   //global mod redraw triggers/call
   socket.on("global effect submit", data => {
-    console.log(data);
     socket.emit("global effect redraw", data);
   });
 

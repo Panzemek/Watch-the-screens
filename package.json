@@ -30,5 +30,17 @@
     "eslint-plugin-prettier": "^2.6.2",
     "mocha": "^5.2.0",
     "prettier": "^1.13.7"
-  }
+  },
+  "directories": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/EwRicklefs/Watch-the-screens.git"
+  },
+  "author": "",
+  "bugs": {
+    "url": "https://github.com/EwRicklefs/Watch-the-screens/issues"
+  },
+  "homepage": "https://github.com/EwRicklefs/Watch-the-screens#readme"
 }
