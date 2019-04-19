@@ -169,11 +169,48 @@ $("#global-effect-submit-button").click(function() {
       // eslint-disable-next-line camelcase
       is_hidden: $("#global-effect-is-hidden").prop("checked")
     }
-  }).then( res => {
+  }).then(res => {
     var id = $("#admin-container").data("game");
     $.ajax(id + "/overviewGlobalEffects", {
       type: "get"
-    }).then(socket.emit("global effect submit", res))
+    }).then(res => {
+      socket.emit("global effect submit", res);
+    });
+  });
+});
+
+//Sends an api put call to update a global effect.
+$("#global-effect-add-submit-button").click(function() {
+  dataForSocket = {
+    event_text: $("#global-effect-textadd").val(),
+    start_trigger_type: $("#global-effect-start-trigger-typeadd").val(),
+    start_trigger_value: $("#global-effect-start-trigger-valueadd").val(),
+    end_trigger_type: $("#global-effect-end-trigger-typeadd").val(),
+    end_trigger_value: $("#global-effect-end-trigger-valueadd").val(),
+    // eslint-disable-next-line camelcase
+    is_hidden: $("#global-effect-is-hiddenadd").prop("checked")
+  };
+  $.ajax("/api/newGlobalEffect", {
+    type: "post",
+    data: {
+      gameId: $("#admin-container").data("game"),
+      effect_text: $("#global-effect-textadd").val(),
+      start_trigger_type: $("#global-effect-start-trigger-typeadd").val(),
+      start_trigger_value: $("#global-effect-start-trigger-valueadd").val(),
+      end_trigger_type: $("#global-effect-end-trigger-typeadd").val(),
+      end_trigger_value: $("#global-effect-end-trigger-valueadd").val(),
+      // eslint-disable-next-line camelcase
+      is_hidden: $("#global-effect-is-hiddenadd").prop("checked"),
+      round_created: parseInt($("#round").html())
+    }
+  }).then(res => {
+    var id = $("#admin-container").data("game");
+    $.ajax(id + "/overviewGlobalEffects", {
+      type: "get"
+    }).then(res => {
+      socket.emit("global effect submit", res);
+    });
+  });
 });
 
 socket.on("new article", art => {
