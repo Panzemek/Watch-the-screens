@@ -5,7 +5,7 @@ module.exports = function(app) {
   app.get("/", function(req, res) {
     db.game
       .findAll({
-        attributes: ["id", "game_description"]
+        attributes: ["id", "game_description", "is_complete"]
       })
       .then(function(gameSummary) {
         res.render("index", { games: gameSummary });
