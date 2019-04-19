@@ -33,6 +33,8 @@ $("#article-submit-button").click(function() {
       type: "post",
       data: newArticle
     }).then(function(data) {
+      console.log(newArticle);
+      console.log(JSON.stringify(newArticle));
       socket.emit("new article", newArticle);
     });
   } else {

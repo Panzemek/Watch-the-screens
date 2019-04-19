@@ -171,9 +171,10 @@ $("#global-effect-submit-button").click(function() {
     }
   }).then(res => {
     var id = $("#admin-container").data("game");
-    $.ajax(id + "/overviewGlobalEffects", {
+    $.ajax("/api/" + id + "/overviewGlobalEffects", {
       type: "get"
     }).then(res => {
+      console.log(res);
       socket.emit("global effect submit", res);
     });
   });
@@ -205,15 +206,19 @@ $("#global-effect-add-submit-button").click(function() {
     }
   }).then(res => {
     var id = $("#admin-container").data("game");
-    $.ajax(id + "/overviewGlobalEffects", {
+    console.log(res);
+    $.ajax("/api/" + id + "/overviewGlobalEffects", {
       type: "get"
     }).then(res => {
+      console.log("HERE!!")
+      console.log(res);
       socket.emit("global effect submit", res);
     });
   });
 });
 
 socket.on("new article", art => {
+  console.log("New article posted!");
   $("#admin-refresh").removeClass(".hidden");
 });
 
