@@ -1,17 +1,17 @@
-<div>
-  {{> clock}}
-</div>
 <div id="overview-container" class="container" data-game={{id}}>
   <div class="row">
-
+  {{> clock}}
+</div>
+  <div class="row">
     <div class="col-md-4 border">
       <div class="row">
-        <ul>
-          <li>Rioters: <span id="rioters">{{rioters}}</span></li>
-          <li>Terror Level: <span id="terror">{{terror}}</span></li>
-        </ul>
+      
+          <div class="rioters text-uppercase px-2 pt-1">Rioters: <span id="rioters">{{rioters}}</span></div>
+          <div class="terror text-uppercase px-2">Terror Level: <span id="terror">{{terror}}</span></div>
+        
       </div>
       <div class="row">
+        <span class="text-center w-100 sub-header">Global Events</span>
       <ul id="global-effects-ul">
         {{#each global_effects}}
           {{#unless is_hidden}}
@@ -24,10 +24,10 @@
       </div>
     </div>
     <div class="col-md-8">
-      <div id="article-carousel" class="carousel slide" data-ride="false" data-pause="false">
+      <div id="article-carousel" class="carousel slide border" data-ride="false" data-pause="false">
         <div class="carousel-inner">
           <div id="carousel-1" class="carousel-item active">
-            <h2>Watch The Sky</h2>
+            <span class="header font-weight-bold">Watch The Sky</span>
           </div>
           <div id="carousel-2" class="carousel-item article-holder">
             {{> article}}
@@ -39,18 +39,20 @@
       </div>
     </div>
   </div>
+  <div class="row">
+    <!--this is for scroll bar-->
+    <div class="scrolling-text fixed-bottom">
+        <div class="marquee">Scrolling WTS news ticker</div>
+    </div>
+  </div>
 
+  {{!-- Modal --}}
   <div class="modal fade bd-example-modal-lg" id="modalBlast" tabindex="-1" role="dialog"
     aria-labelledby="myLargeModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
-      <div id="modalBlastText" class="modal-content">
+      <div id="modalBlastText" class="modal-content sub-header">
 
       </div>
     </div>
   </div>
-  <div class="row border">
-    <!--this is for scroll bar-->
-    <div class="scrolling-text">
-        <div class="marquee">Scrolling WTS news ticker</div>
-    </div>
-    </div>
+</div>

@@ -2,35 +2,28 @@ var articles = [];
 var lastUsedArticle = 1;
 var carouselListener;
 var socket = io();
+var carouselRunning = false;
 // var pageLoaded = moment();
-
-//TEMP BUTTON CLICK REMOVE ONCE ARTICLES ARE SETUP
-$("#temp-article").click(function() {
-  $.ajax("/" + $("#overview-container").data("game") + "/articles", {
-    type: "get"
-  }).then(function(data) {
-    articles.push(...data.articles);
-    checkArticleArray();
-  });
-});
 
 // On page load we need to get all available articles and put them in our articles array.
 $(this).ready(function() {
-  $.ajax("/" + $("#overview-container").data("game") + "/articles", {
+  $.ajax("/api/" + $("#overview-container").data("game") + "/articles", {
     type: "get"
   }).then(function(data) {
     console.log(data);
-    var newArticles = [...data.articles];
+    var newArticles = data.articles.slice(0);
     var articleString = "";
+    console.log(newArticles);
     for (i in newArticles) {
+      console.log("here", i);
+      console.log(newArticles[i]);
       newArticles[i].seen = false;
       articles.push(newArticles[i]);
       articleString +=
-        " | " +
+        " [" +
         newArticles[i].network.network_short +
-        " | " +
-        newArticles[i].title +
-        "         .";
+        "] " +
+        newArticles[i].title;
     }
     $(".marquee")
       .html(articleString)
@@ -42,6 +35,7 @@ $(this).ready(function() {
 
 // Check the articles array length and start behavior based on it.
 function checkArticleArray() {
+  console.log("article length:", articles.length);
   //One article, Advance to the one article and wait there. Remove the template carousel panel.
   if (articles.length === 1) {
     populateArticle($(".carousel-item:not(.active)"), articles[0]);
@@ -49,29 +43,35 @@ function checkArticleArray() {
     $("#article-carousel").one("slid.bs.carousel", function() {
       $("#carousel-1").remove();
       $("#article-carousel").carousel("pause");
+      carouselRunning = false;
     });
     //More than one article, Advance to the next article and begin cycling the articles.
   } else if (articles.length > 1) {
-    populateArticle($(".carousel-item:not(.active)"), articles[0]);
-    $("#article-carousel").carousel(1);
-    $("#article-carousel").one("slid.bs.carousel", function() {
-      $("#carousel-1").remove();
-      $("#article-carousel").carousel("cycle");
-    });
-    if (!carouselListener) {
-      carouselListener = $("#article-carousel").on(
-        "slid.bs.carousel",
-        function() {
-          populateArticle(
-            $(".carousel-item:not(.active)"),
-            articles[lastUsedArticle]
-          );
-          lastUsedArticle++;
-          if (lastUsedArticle >= articles.length) {
-            lastUsedArticle = 0;
+    console.log("carousel running?", carouselRunning);
+    if (!carouselRunning) {
+      populateArticle($(".carousel-item:not(.active)"), articles[0]);
+      $("#article-carousel").carousel(1);
+      $("#article-carousel").one("slid.bs.carousel", function() {
+        $("#carousel-1").remove();
+        $("#article-carousel").carousel("cycle");
+      });
+      //Prevents multiple event listeners for the carousel from being applied.
+      if (!carouselListener) {
+        carouselListener = $("#article-carousel").on(
+          "slid.bs.carousel",
+          function() {
+            populateArticle(
+              $(".carousel-item:not(.active)"),
+              articles[lastUsedArticle]
+            );
+            lastUsedArticle++;
+            if (lastUsedArticle >= articles.length) {
+              lastUsedArticle = 0;
+            }
           }
-        }
-      );
+        );
+      }
+      carouselRunning = true;
     }
   }
 }
@@ -116,21 +116,18 @@ socket.on("global modal post", data => {
   }, data.duration * 1000 * 60);
 });
 
-socket.on("global effect redraw", () => {
-  console.log(data);
+socket.on("global effect redraw", data => {
+  console.log("triggered global effect redraw");
   //destroy the thing
   $("#global-effects-ul").empty();
   for (i in data) {
+    console.log(data[i].id);
     //draw all the things
-    $("#global-effects-ul").append(
-      $(
-        "<li><span class='global-effect' data-id='" +
-          data[i].id +
-          ">" +
-          data[i].effect_text +
-          "</span></li>"
-      )
-    );
+    var listItem = $("<li>");
+    listItem.addClass("global-effect");
+    listItem.attr("data-id", data[i].id);
+    listItem.text(data[i].effect_text);
+    $("#global-effects-ul").append(listItem);
   }
 });
 
@@ -151,10 +148,11 @@ socket.on("show article", data => {
 //one idea for this - store locally on admin and overview (with the exact same name)
 //this JS exists on both pages, so it will handle both.
 socket.on("new article", article => {
-  console.log("new article is: " + article);
   //TODO: what exactly does data object look like?
+  console.log("article Pushed to array");
   articles.unshift(article);
   articles[0].seen = false;
+  checkArticleArray();
 });
 
 socket.on("new page load", data => {
@@ -163,10 +161,3 @@ socket.on("new page load", data => {
   console.log(time);
   isPaused = data.pause;
 });
-
-/*question of closures: https://hackernoon.com/how-to-use-javascript-closures-with-confidence-85cd1f841a6b
-Links: inventor: documentation:
-http://plugins.jquery.com/marquee/
-jQuery Marquee with CSS3 Support
-by AamirAfridi.com
-*/

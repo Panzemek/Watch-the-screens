@@ -1,27 +1,18 @@
-<span class="hidden" id="admin-refresh">You should refresh your page</span>
+<span class="hidden alert-text" id="admin-refresh">You should refresh your page</span>
 <div id="admin-container" class="container" data-game="{{game_params.id}}">
     <div class="row">
-        <span>{{> clock}}<button class="btn btn-primary" id="pause-button">#Pause/Play</button></span>
+            <div class="w-100">{{> clock admin=true}}</div>
     </div>
     <div class="row">
-        <div class="col col-md-8">
-            <div class="row">
-                        <div>
-            <label for="update-time-text">Update Current Round time</label>
-            <input type="number" id="update-time-text">
-            <button class="btn btn-primary" id="edit">Update</button>
-        </div>
+        <div class="col-12 col-md-4">
+            <div class="row border p-3 my-2">
+                    <h5 class="text-center w-100">Global Events</h5>
                 <ul>
                     {{#each global_events}}
-                        <li>
-                        <span>{{effect_text}}
-                            {{#if is_hidden}}
-                                (Hidden)
-                            {{/if}}
-                        </span>
+                        <li class="py-1 pr-4">
                         <button 
                             type="button" 
-                            class="btn btn-primary global-event-button" 
+                            class="btn btn-sm btn-primary global-event-button" 
                             data-toggle="modal" 
                             data-target="#global-event-modal"
                             data-event_text="{{effect_text}}"
@@ -32,78 +23,108 @@
                             data-is_hidden="{{is_hidden}}"
                             data-id={{id}}
                         >
-                        Edit
+                        <i class="fas fa-pen"></i>
                         </button>
+                        <span>{{effect_text}}
+                            {{#if is_hidden}}
+                                <i class="fas fa-eye-slash"></i>
+                            {{/if}}
+                        </span>
                     </li>
                 {{/each}}
                     <li>
                         <button 
                             type="button" 
-                            class="btn btn-primary global-event-add-button" 
+                            class="btn btn-sm btn-primary global-event-add-button" 
                             data-toggle="modal" 
                             data-target="#global-event-add-modal"
                         >
-                        +
+                        <i class="fas fa-plus"></i>
                         </button>
                     </li>
                 </ul>
             </div>
-            <div class="row">
-                <ul id="link-ul">
-                   
-                </ul>
-            </div>
         </div>
-        <div class="col col-md-4">
+        <div class="col-12 col-md-8">
             <div class="row">
-                <h2>Hide/Show Article</h2>
-                <form>
+                <div class="col-12 col-md-6">
+                    <div class="input-group border p-3 my-2">
+                        <h5 class="w-100">Update Time (minutes)</h5>
+                        <input class="form-control" type="number" id="update-time-text">
+                        <div class="input-group-append">
+                            <button class="btn btn-primary" id="edit">Update</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-md-6">
+                    <div class="input-group border p-3 my-2">
+                        <h5 class="w-100">Change Default Time (minutes)</h5>
+                        <input type="number" id="default-time-text" value="20">
+                        <div class="input-group-append">    
+                            <button class="btn btn-primary" id="default-time-button" type="button">Update</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12 col-md-6">
+                    <div class="input-group border p-3 my-2">
+                        <h5 class="w-100">Update Terror Track</h5>
+                        <input class="form-control" type="number" id="terror-tracker-text" value={{game_params.terror}}>
+                        <div class="input-group-append">
+                            <button class= "btn btn-primary" id="terror-button">Update</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-md-6">
+                    <div class="input-group border p-3 my-2">
+                        <h5 class="w-100">Riot Track</h5>
+                        <input class="form-control" type="number" id="riot-tracker-text" value={{game_params.rioters}}>
+                        <div class="input-group-append">
+                            <button type="button" class= "btn btn-primary" id="riot-button">Update</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12 col-md-6">
+                <div class="input-group border p-3 my-2">
+                    <h5 class="w-100">Hide/Show Article</h5>
                     <select id="toggle-article-dropdown">
                         {{#each articles}}
                             <option value="{{id}}" data-hidden="{{is_hidden}}">{{title}}
                             {{#if is_hidden}}
-                            (hidden)
+                                (hidden)
                             {{/if}}
                             </option>
                         {{/each}}
                     </select>
-                    <button type="button" class="btn btn-primary" id="toggle-article-button">Hide</button>
-                </form>
+                    <div class="input-group-append">
+                        <button type="button" class="btn btn-primary" id="toggle-article-button">Hide</button>
+                    </div>
+                </div>
+                </div>
+                    <div class="col-12 col-md-6">
+                    <div class="input-group border p-3 my-2">
+                        <button type="button" class="btn btn-lg btn-primary mx-auto" data-toggle="modal" data-target="#global-post-modal">
+                            Create Global Post
+                        </button>
+                    </div>
+                </div>
             </div>
             <div class="row">
-                <form>
-                    <label for=" -time-text">Change Default Time (minutes)</label>
-                    <input type="number" id="default-time-text" value="20">
-                    <button id="default-time-button" type="button">Update</button>
-                </form>
-            </div>
-            <div class="row">
-                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#global-post-modal">
-                    Create Global Post
-                </button>
-            </div>
-            <div class="row">
+
                     <!-- Button trigger modal -->
-<button type="button" class="btn btn-danger" data-toggle="modal" data-target="#game-end-modal">
-  END GAME
-</button>
-            </div>
-            <div class="row">
-                <form>
-                    <label for="terror-tracker-text">Terror Track</label>
-                    <input type="number" id="terror-tracker-text" value={{game_params.terror}}>
-                    <button type="button" class= "btn btn-primary" id="terror-button">Update</button>
-                </form>
-            </div>
-            <div class="row">
-                <form>
-                    <label for="riot-tracker-text" >Riot Track</label>
-                    <input type="number" id="riot-tracker-text" value={{game_params.rioters}}>
-                    <button type="button" class= "btn btn-primary" id="riot-button">Update</button>
-                </form>
+                <div class="input-group border p-3 my-2">
+                    <button type="button" class="btn btn-lg btn-danger mx-auto" data-toggle="modal" data-target="#game-end-modal">
+                        END GAME
+                    </button>
+                </div>
             </div>
         </div>
     </div>
+
+
     <!-- Global Post Modal -->
     <div class="modal fade" id="global-post-modal" tabindex="-1" role="dialog" aria-labelledby="global-post-Label"
         aria-hidden="true">
@@ -120,7 +141,7 @@
                         <label for="global-post-text">Post Text</label>
                         <textarea class="form-control global-post-control" id="global-post-text" rows=5></textarea>
                         <br />
-                        <label for="global-post-text">Post Duration</label>
+                        <label for="global-post-text">Post Duration (minutes)</label>
                         <input class="form-control global-post-control" id="global-post-duration" type="number">
                     </form>
                 </div>

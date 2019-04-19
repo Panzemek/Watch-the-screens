@@ -154,7 +154,6 @@ $("#global-effect-submit-button").click(function() {
     start_trigger_value: $("#global-effect-start-trigger-value").val(),
     end_trigger_type: $("#global-effect-end-trigger-type").val(),
     end_trigger_value: $("#global-effect-end-trigger-value").val(),
-    // eslint-disable-next-line camelcase
     is_hidden: $("#global-effect-is-hidden").prop("checked")
   };
   $.ajax("/api/updateGlobalEffect", {
@@ -166,14 +165,14 @@ $("#global-effect-submit-button").click(function() {
       start_trigger_value: $("#global-effect-start-trigger-value").val(),
       end_trigger_type: $("#global-effect-end-trigger-type").val(),
       end_trigger_value: $("#global-effect-end-trigger-value").val(),
-      // eslint-disable-next-line camelcase
       is_hidden: $("#global-effect-is-hidden").prop("checked")
     }
   }).then(res => {
     var id = $("#admin-container").data("game");
-    $.ajax(id + "/overviewGlobalEffects", {
+    $.ajax("/api/" + id + "/overviewGlobalEffects", {
       type: "get"
     }).then(res => {
+      console.log(res);
       socket.emit("global effect submit", res);
     });
   });
@@ -205,26 +204,33 @@ $("#global-effect-add-submit-button").click(function() {
     }
   }).then(res => {
     var id = $("#admin-container").data("game");
-    $.ajax(id + "/overviewGlobalEffects", {
+    console.log(res);
+    $.ajax("/api/" + id + "/overviewGlobalEffects", {
       type: "get"
     }).then(res => {
+      console.log("HERE!!")
+      console.log(res);
       socket.emit("global effect submit", res);
     });
   });
 });
 
 socket.on("new article", art => {
-  $("#admin-refresh").removeClass(".hidden");
+  console.log("New article posted!");
+  $("#admin-refresh").removeClass("hidden");
 });
 
 socket.on("hide article", () => {
-  $("#admin-refresh").removeClass(".hidden");
+  console.log("hidden article");
+  $("#admin-refresh").removeClass("hidden");
 });
 
-socket.on("global effect change", art => {
-  $("#admin-refresh").removeClass(".hidden");
+socket.on("global effect redraw", art => {
+  console.log("global effect change");
+  $("#admin-refresh").removeClass("hidden");
 });
 
 socket.on("new global mod", val => {
-  $("#admin-refresh").removeClass(".hidden");
+  console.log("new global mod");
+  $("#admin-refresh").removeClass("hidden");
 });
