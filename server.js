@@ -3,17 +3,21 @@ var express = require("express");
 var exphbs = require("express-handlebars");
 var moment = require("moment");
 var momentDurationFormatSetup = require("moment-duration-format");
-
 var db = require("./models");
 
 var serverClock = null;
 var isPaused = true;
+var defaultRoundLen = moment("01:00", "mm:ss");
+var round = 0;
+var roundEnded = false;
 
 var app = express();
 var PORT = process.env.PORT || 3000;
 //sockets stuff
 var http = require("http").Server(app);
 var io = require("socket.io")(http);
+var events = require("events");
+var serverEmitter = new events.EventEmitter();
 
 // Middleware
 app.use(express.urlencoded({ extended: false }));
@@ -31,7 +35,7 @@ app.set("view engine", "handlebars");
 
 // Routes
 require("./routes/apiRoutes")(app);
-require("./routes/htmlRoutes")(app,isPaused, io);
+require("./routes/htmlRoutes")(app, isPaused, io);
 
 var syncOptions = { force: false };
 
@@ -57,23 +61,73 @@ db.sequelize.sync(syncOptions).then(function() {
 timerInterval = setInterval(function() {
   //check round end logic goes here//
   if (!isPaused) {
-    //check if server clock = 00:00 or some permeation of that
-    //then fire off a "round end" emit call
+    if (
+      moment(serverClock).isSame(moment("2019-04-18T00:00:00.000"), "second")
+    ) {
+      roundEnded = true;
+      roundEnd();
+      serverEmitter.emit("round ended", { time: serverClock, round: round });
+    }
+    //console.log(serverClock.format("mm:ss"));
     serverClock = moment(serverClock).subtract(1, "second");
   }
 }, 1000);
 
+function roundEnd() {
+  round++;
+  serverClock = moment(defaultRoundLen, "mm:ss");
+  db.game
+    .findAll({
+      attributes: ["current_round"],
+      where: { id: 1 }
+    })
+    .then(function(gameRound) {
+      var currentRound = gameRound[0].current_round;
+      var roundIncrement = 1;
+      round = currentRound + roundIncrement;
+      db.game.update(
+        {
+          current_round: currentRound + roundIncrement
+        },
+        { where: { id: 1 } }
+      );
+    });
+  console.log(serverClock);
+  roundEnded = false;
+}
+
 //Socket server logic will go here.
 io.on("connection", socket => {
-  //round end
-  socket.on("round end", () => {
-    var placeholder;
+  socket.on("game start", () => {
+    console.log(serverClock);
+    var timeNew = moment("00:05", "mm:ss");
+    serverClock = moment(timeNew, "mm:ss");
+  });
+  //round end last try
+  serverEmitter.on("round ended", data => {
+    data.time = moment(data.time, "mm:ss");
+    socket.emit("new round", data);
   });
   //terror update
   socket.on("terror update", terrorVal => {
     io.emit("terror update", terrorVal);
   });
-
+  //initializes server clock
+  socket.on("server time init", time => {
+    if (!serverClock) {
+      time = moment(time).format("mm:ss");
+      serverClock = moment(time, "mm:ss");
+      console.log("server time intialized to " + serverClock.format("mm:ss"));
+    }
+  });
+  //default round value changer
+  socket.on("def round changed", newDef => {
+    newDef = parseInt(newDef);
+    defServerNew = moment.duration(newDef, "minutes").format();
+    defaultRoundLen = moment(defServerNew, "mm:ss");
+    console.log("def round changed to : " + defaultRoundLen.format("mm:ss"));
+  });
+  //updates the riot value
   socket.on("riot update", riotVal => {
     console.log("riot update makes it to server");
     io.emit("riot update", riotVal);
@@ -81,8 +135,7 @@ io.on("connection", socket => {
 
   if (serverClock) {
     socket.on("new page", () => {
-      console.log("new page is firing");
-      data = { time: serverClock, pause: isPaused };
+      data = { time: serverClock, pause: isPaused , round: round };
       io.emit("new page load", data);
     });
   }
@@ -116,15 +169,13 @@ io.on("connection", socket => {
   });
 
   //**The following sockets listen for timer start/stop/change calls**//
-  socket.on("stop timer", (timerVal) => {
+  socket.on("stop timer", timerVal => {
     //timer val above isnt needed, but if I remove it things break, so... ¯\_(ツ)_/¯
-    //timerVal = moment().format(timerVal, "mm:ss");
     io.emit("stop timer", serverClock);
     isPaused = true;
     console.log("timer stopped");
   });
   socket.on("start timer", timerVal => {
-    timerVal = moment().format(timerVal, "mm:ss");
     if (!serverClock) {
       serverClock = moment(timerVal, "mm:ss");
     }
