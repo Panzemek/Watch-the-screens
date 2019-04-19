@@ -21,8 +21,6 @@ $("#article-submit-button").click(function() {
     gameId: $("#reporter-container").data("game"),
     // eslint-disable-next-line camelcase
     network_short: $("#reporter-container").data("network-short"),
-    round_created: 1, //TODO: this needs to be filled dynamically on the server
-    networkId: "GNN",
     is_hidden: false
   };
 
