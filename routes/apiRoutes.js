@@ -84,7 +84,6 @@ module.exports = function(app) {
   // Reporter view routes
 
   app.post("/api/addArticle", function(req, res) {
-    console.log(req.body);
     //TODO: Then, on success, update admin and overview views with global effects (all of them).
     db.article.create(req.body).then(function(data) {
       res.json(data);

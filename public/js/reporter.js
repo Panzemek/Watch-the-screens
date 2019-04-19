@@ -1,11 +1,13 @@
 var socket = io();
 
 $("#article-preview-button").click(function() {
+  event.preventDefault();
   $("#author").html($("#input-author").val());
   $("#image").attr("src", $("#input-image").val());
   $("#title").html($("#input-title").val());
   $("#article-text").text($("#input-body").val());
 });
+
 
 $("#article-submit-button").click(function() {
   var newArticle = {
@@ -18,17 +20,22 @@ $("#article-submit-button").click(function() {
     // eslint-disable-next-line camelcase
     gameId: $("#reporter-container").data("game"),
     // eslint-disable-next-line camelcase
-    network_id: $("#reporter-container").data("network")
+    network_short: $("#reporter-container").data("network-short"),
+    round_created: 1, //TODO: this needs to be filled dynamically on the server
+    networkId: "GNN",
+    is_hidden: false
   };
+
   if (formFilled(newArticle)) {
     //TODO: Need to make an API call to post this info but it needs round_created, game_id, and network_id added to it (maybe through params? and passing the object through the body?)
-    console.log("TODO: article submitted");
-    //Clear form
+    //Clears the form
     $("#article-form")
       .find("input:text, textarea")
       .val("");
+
     $.ajax("/api/addArticle", {
-      type: "post"
+      type: "post",
+      data: newArticle
     }).then(function(data) {
       socket.emit("new article", newArticle);
     });
