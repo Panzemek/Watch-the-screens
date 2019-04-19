@@ -77,6 +77,22 @@ timerInterval = setInterval(function() {
 function roundEnd() {
   round++;
   serverClock = moment(defaultRoundLen, "mm:ss");
+  db.game
+    .findAll({
+      attributes: ["current_round"],
+      where: { id: 1 }
+    })
+    .then(function(gameRound) {
+      var currentRound = gameRound[0].current_round;
+      var roundIncrement = 1;
+      round = currentRound + roundIncrement;
+      db.game.update(
+        {
+          current_round: currentRound + roundIncrement
+        },
+        { where: { id: 1 } }
+      );
+    });
   console.log(serverClock);
   roundEnded = false;
 }
@@ -86,7 +102,6 @@ io.on("connection", socket => {
   //round end last try
   serverEmitter.on("round ended", data => {
     data.time = moment(data.time, "mm:ss");
-    console.log((data.time).format("mm:ss"));
     socket.emit("new round", data);
   });
   //terror update
@@ -116,8 +131,7 @@ io.on("connection", socket => {
 
   if (serverClock) {
     socket.on("new page", () => {
-      console.log("new page is firing");
-      data = { time: serverClock, pause: isPaused };
+      data = { time: serverClock, pause: isPaused , round: round };
       io.emit("new page load", data);
     });
   }

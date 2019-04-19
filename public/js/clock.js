@@ -76,8 +76,8 @@ $(this).ready(socket.emit("new page"));
 
 //TODO: This is where the button PLAY/PAUSE needs to be fixed
 socket.on("new page load", data => {
-  console.log("new page recieved");
   time = moment(data.time);
-  console.log(time);
   isPaused = data.pause;
+  $("#clock").text(time.format("mm:ss"));
+  $("#round").text(data.round);
 });
