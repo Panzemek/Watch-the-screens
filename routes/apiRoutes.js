@@ -223,12 +223,12 @@ module.exports = function(app) {
   app.put("/api/toggleArticle", function(req, res) {
     //TODO: make a put call to the db to update the is hidden status of the article. Then, on success, update admin and overview views with article data.
     console.log(req.body);
-    db.news
+    db.article
       .update(
         {
           is_hidden: req.body.is_hidden
         },
-        { where: { id: req.body.articleId } }
+        { where: { id: req.body.id } }
       )
       .then(function(data) {
         console.log(data);

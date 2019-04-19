@@ -5,7 +5,7 @@ module.exports = function(app) {
   app.get("/", function(req, res) {
     db.game
       .findAll({
-        attributes: ["id", "game_description"]
+        attributes: ["id", "game_description", "is_complete"]
       })
       .then(function(gameSummary) {
         res.render("index", { games: gameSummary });
@@ -121,7 +121,7 @@ module.exports = function(app) {
         include: [db.network]
       })
       .then(function(articleResult) {
-        var articleObject = {};
+        var articleObject = [];
         for (i in articleResult) {
           if (
             Object.keys(articleObject).includes(
@@ -138,7 +138,9 @@ module.exports = function(app) {
             };
           }
         }
-        res.render("newsViewer", { rounds: articleObject });
+        // res.json({ rounds: articleObject });
+
+        res.render("newsViewer", { rounds: articleObject.reverse() });
       });
   });
 
