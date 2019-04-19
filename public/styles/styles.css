@@ -10,3 +10,7 @@
 .hidden {
   display: none;
 }
+
+body {
+  overflow: hidden;
+}
