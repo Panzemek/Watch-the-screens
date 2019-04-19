@@ -8,7 +8,6 @@ $("#article-preview-button").click(function() {
   $("#article-text").text($("#input-body").val());
 });
 
-
 $("#article-submit-button").click(function() {
   var newArticle = {
     title: $("#input-title").val(),
@@ -23,7 +22,6 @@ $("#article-submit-button").click(function() {
     network_short: $("#reporter-container").data("network-short"),
     is_hidden: false
   };
-
   if (formFilled(newArticle)) {
     //TODO: Need to make an API call to post this info but it needs round_created, game_id, and network_id added to it (maybe through params? and passing the object through the body?)
     //Clears the form
