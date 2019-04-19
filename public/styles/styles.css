@@ -25,10 +25,20 @@ ul {
   list-style: none;
 }
 
-#clock {
+#clock, .header {
   font-size: 7em;
 }
 
 .sub-header {
-  font-size: 2em;
+  font-size: 2.5em;
+}
+
+.article-image {
+  max-height: 200px;
+  max-width: 400px;
+}
+
+.article-container {
+  height: 500px;
+  width: 400px;
 }

@@ -1,15 +1,22 @@
-<div class="container article-container">
-    <div id="article-header" class="row">
-        <span class="breaking-news hidden">BREAKING NEWS</span>
-        {{!-- <img class="network-icon" id="network-icon" src="/images/{{network_short}}.png"
+<div class="container article-container border p-4 my-3">
+    <div id="article-header" class="row pb-3">
+        {{!--<span class="breaking-news hidden">BREAKING NEWS</span>
+            <img class="network-icon" id="network-icon" src="/images/{{network_short}}.png"
             alt="{{network_short}} icon"> --}}
-        <span class="text-uppercase text-left text-weight-bold network-name" id="network-name">{{network_full}}</span>
+        <h3 class="w-100 uppercase text-left text-weight-bold network-name" id="network-name">{{network_full}}</h3>
     </div>
-
     <div class="row" id="article-body">
-        <span id="title" class="title">{{title}}</span>
-        <span class="font-italic text-black-50 author" id="author">By {{author}}</span>
-        <img id="image" class="image" src="{{img_url}}" alt="Article Image">
-        <p id="article-text" class="article-text">{{article_body}}</p>
+        <div class="col">
+            <div class="row">
+                <h4 id="title" class="title w-100">{{title}}</h4>
+                <h5 class="font-italic text-black-50 author" id="author">By {{author}}</h5>
+            </div>
+            <div class="row">
+                <img id="image" class="image article-image" src="{{img_url}}" alt="Article Image">
+            </div>
+            <div class="row">
+                <p id="article-text" class="article-text">{{article_body}}</p>
+            </div>
+        </div>
     </div>
 </div>
