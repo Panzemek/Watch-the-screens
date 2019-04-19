@@ -7,7 +7,7 @@ module.exports = function(app) {
 
   // Returns games table relevant information
   // Req.body requires nothing
-  app.get("/:gameid/overviewGame", function(req, res) {
+  app.get("/api/:gameid/overviewGame", function(req, res) {
     db.game
       .findAll({
         attributes: ["terror", "rioters", "current_round"],
@@ -113,7 +113,7 @@ module.exports = function(app) {
   //
   // Article view routes
 
-  app.get("/:gameid/articles", function(req, res) {
+  app.get("/api/:gameid/articles", function(req, res) {
     db.game
       .findByPk(req.params.gameid, {
         include: [

@@ -219,17 +219,20 @@ $("#global-effect-add-submit-button").click(function() {
 
 socket.on("new article", art => {
   console.log("New article posted!");
-  $("#admin-refresh").removeClass(".hidden");
+  $("#admin-refresh").removeClass("hidden");
 });
 
 socket.on("hide article", () => {
-  $("#admin-refresh").removeClass(".hidden");
+  console.log("hidden article");
+  $("#admin-refresh").removeClass("hidden");
 });
 
 socket.on("global effect change", art => {
-  $("#admin-refresh").removeClass(".hidden");
+  console.log("global effect change");
+  $("#admin-refresh").removeClass("hidden");
 });
 
 socket.on("new global mod", val => {
-  $("#admin-refresh").removeClass(".hidden");
+  console.log("new global mod");
+  $("#admin-refresh").removeClass("hidden");
 });

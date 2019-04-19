@@ -6,7 +6,7 @@ var socket = io();
 
 // On page load we need to get all available articles and put them in our articles array.
 $(this).ready(function() {
-  $.ajax("/" + $("#overview-container").data("game") + "/articles", {
+  $.ajax("/api/" + $("#overview-container").data("game") + "/articles", {
     type: "get"
   }).then(function(data) {
     console.log(data);
@@ -142,8 +142,11 @@ socket.on("show article", data => {
 //this JS exists on both pages, so it will handle both.
 socket.on("new article", article => {
   console.log("new article is: " + article);
+  console.log(article);
   //TODO: what exactly does data object look like?
+  console.log("articles.length", articles.length);
   articles.unshift(article);
+  console.log("articles.length", articles.length);
   articles[0].seen = false;
 });
 
@@ -153,10 +156,3 @@ socket.on("new page load", data => {
   console.log(time);
   isPaused = data.pause;
 });
-
-/*question of closures: https://hackernoon.com/how-to-use-javascript-closures-with-confidence-85cd1f841a6b
-Links: inventor: documentation:
-http://plugins.jquery.com/marquee/
-jQuery Marquee with CSS3 Support
-by AamirAfridi.com
-*/
