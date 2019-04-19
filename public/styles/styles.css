@@ -11,6 +11,12 @@
   display: none;
 }
 
+.marquee {
+  width: 100vw; /*the plugin works for responsive layouts so width is not necessary */
+  overflow: hidden;
+  /* border:1px solid #ccc; */
+}
+
 body {
   overflow: hidden;
 }

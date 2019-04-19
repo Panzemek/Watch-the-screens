@@ -9,9 +9,11 @@
         <li>Terror Level: <span id="terror">{{terror}}</span></li>
 
         {{#each global_effects}}
-        <li>
-          <span class="global-effect" data-id={{id}}>{{effect_text}}</span>
-        </li>
+          {{#unless is_hidden}}
+            <li>
+              <span class="global-effect" data-id={{id}}>{{effect_text}}</span>
+            </li>
+          {{/unless}}
         {{/each}}
 
       </ul>
@@ -48,10 +50,6 @@
   <div class="row border">
     <!--this is for scroll bar-->
     <div class="scrolling-text">
-      <!--//Suppress the <span/> after the the newArticleDisplay is T -->
-      <div class="breaking-news">
-        <icon id="breaking-title-image">BK Read more pic>></icon><span class="breaking-title"> WTS BREAKING NEWS
-        </span>
         <div class="marquee">Scrolling WTS news ticker</div>
-      </div>
+    </div>
     </div>
