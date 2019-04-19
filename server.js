@@ -5,7 +5,7 @@ var moment = require("moment");
 var momentDurationFormatSetup = require("moment-duration-format");
 var db = require("./models");
 
-var serverClock = null;
+var serverClock = moment("00:05", "mm:ss");
 var isPaused = true;
 var defaultRoundLen = moment("01:00", "mm:ss");
 var round = 0;
