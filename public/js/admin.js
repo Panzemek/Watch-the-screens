@@ -169,9 +169,11 @@ $("#global-effect-submit-button").click(function() {
       // eslint-disable-next-line camelcase
       is_hidden: $("#global-effect-is-hidden").prop("checked")
     }
-  }).then(result => {
-    socket.emit("global effect submit", result);
-  });
+  }).then( res => {
+    var id = $("#admin-container").data("game");
+    $.ajax(id + "/overviewGlobalEffects", {
+      type: "get"
+    }).then(socket.emit("global effect submit", res))
 });
 
 socket.on("new article", art => {

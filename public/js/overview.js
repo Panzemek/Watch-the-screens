@@ -114,7 +114,7 @@ socket.on("global modal post", data => {
   $("#modalBlast").modal("show");
 });
 
-socket.on("global effect submit", data => {
+socket.on("global effect redraw", () => {
   console.log(data);
 });
 
