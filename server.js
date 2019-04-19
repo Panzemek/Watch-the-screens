@@ -69,6 +69,7 @@ timerInterval = setInterval(function() {
       roundEnd();
       serverEmitter.emit("round ended", { time: serverClock, round: round });
     }
+    //console.log(serverClock.format("mm:ss"));
     serverClock = moment(serverClock).subtract(1, "second");
   }
 }, 1000);
@@ -84,14 +85,15 @@ function roundEnd() {
 io.on("connection", socket => {
   //round end last try
   serverEmitter.on("round ended", data => {
-    console.log("round ended fired to clients");
+    data.time = moment(data.time, "mm:ss");
+    console.log((data.time).format("mm:ss"));
     socket.emit("new round", data);
   });
   //terror update
   socket.on("terror update", terrorVal => {
     io.emit("terror update", terrorVal);
   });
-
+  //initializes server clock
   socket.on("server time init", time => {
     if (!serverClock) {
       time = moment(time).format("mm:ss");
@@ -99,7 +101,14 @@ io.on("connection", socket => {
       console.log("server time intialized to " + serverClock.format("mm:ss"));
     }
   });
-
+  //default round value changer
+  socket.on("def round changed", newDef => {
+    newDef = parseInt(newDef);
+    defServerNew = moment.duration(newDef, "minutes").format();
+    defaultRoundLen = moment(defServerNew, "mm:ss");
+    console.log("def round changed to : " + defaultRoundLen.format("mm:ss"));
+  });
+  //updates the riot value
   socket.on("riot update", riotVal => {
     console.log("riot update makes it to server");
     io.emit("riot update", riotVal);
