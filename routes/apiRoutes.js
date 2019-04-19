@@ -240,7 +240,6 @@ module.exports = function(app) {
   //Used by the Admin view. Creates a global effect.
   app.post("/api/newGlobalEffect", function(req, res) {
     //TODO: Then, on success, update admin and overview views with global effects (all of them).
-    console.log(req.body);
     db.global_effect.create(req.body).then(function(data) {
       console.log(data);
       res.json(data);
@@ -250,17 +249,15 @@ module.exports = function(app) {
   //Used by the Admin view. Updates an existing global effect.
   app.put("/api/updateGlobalEffect", function(req, res) {
     //TODO: Make a put call to the db to update the global effect. Then, on success, update admin and overview views with global effects (all of them).
-    console.log(req.body);
     db.global_effect
       .update(
         {
-          effect_text: req.body.effect_text,
+          effect_text: req.body.event_text,
           is_hidden: req.body.is_hidden
         },
         { where: { id: req.body.id } }
       )
       .then(function(data) {
-        console.log(data);
         res.json(data);
       });
   });
