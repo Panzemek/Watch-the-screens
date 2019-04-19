@@ -103,6 +103,7 @@ module.exports = function(app) {
           console.log(networkResult);
           // eslint-disable-next-line camelcase
           networkResult[0].dataValues.gameId = req.params.gameId;
+          // res.json(networkResult[0].dataValues);
           res.render("reporter", networkResult[0].dataValues);
         } else {
           res.render("reporter");
