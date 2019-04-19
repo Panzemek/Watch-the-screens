@@ -20,3 +20,58 @@
 body {
   overflow-x: hidden;
 }
+
+ul {
+  list-style: none;
+}
+
+#clock, .header {
+  font-size: 7em;
+}
+
+.sub-header {
+  font-size: 2.5em;
+}
+
+.article-image {
+  max-height: 125px;
+  max-width: 400px;
+}
+
+.article-container {
+  height: 500px;
+  width: 400px;
+}
+
+#article-carousel {
+  height: 500px;
+  width: 400px;
+  margin-bottom: 55px;
+}
+
+.rioters, .terror {
+  height: 2em;
+  font-size: 2em;
+  width: 100%;
+  font-weight: bold;
+}
+
+.scrolling-text {
+  background: white;
+  height: 50px;
+  font-size: 30px;
+  /* transform: translateY(-25px); */
+}
+
+.rioters {
+  background-color: rgb(179, 2, 2);
+}
+
+.terror {
+  background-color: black;
+  color: white;
+}
+
+.global-effect {
+  font-size: 1.4em;
+}

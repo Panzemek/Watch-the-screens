@@ -20,11 +20,10 @@ $(this).ready(function() {
       newArticles[i].seen = false;
       articles.push(newArticles[i]);
       articleString +=
-        " | " +
+        " [" +
         newArticles[i].network.network_short +
-        " | " +
-        newArticles[i].title +
-        "         .";
+        "] " +
+        newArticles[i].title;
     }
     $(".marquee")
       .html(articleString)

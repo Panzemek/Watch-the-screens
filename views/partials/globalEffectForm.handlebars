@@ -29,10 +29,8 @@
        class="form-control global-effect-control"
        id="global-effect-end-trigger-value{{id}}"
    > --}}
-   <label for="global-effect-is-hidden{{id}}">Hidden</label>
-   <input
-       type="checkbox"
-       class="form-control global-effect-control"
-       id="global-effect-is-hidden{{id}}"
-   >
+   <div class="custom-control custom-checkbox">
+        <input type="checkbox" class="custom-control-input global-effect-control" id="global-effect-is-hidden{{id}}">
+        <label class="custom-control-label" for="global-effect-is-hidden{{id}}">Hide Event From Players</label>
+    </div>
 </form>
