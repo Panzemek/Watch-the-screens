@@ -85,9 +85,27 @@ module.exports = function(app) {
 
   app.post("/api/addArticle", function(req, res) {
     //TODO: Then, on success, update admin and overview views with global effects (all of them).
-    db.article.create(req.body).then(function(data) {
-      res.json(data);
-    });
+    db.game
+      .findAll({
+        attributes: ["current_round"],
+        where: { id: req.body.gameId }
+      })
+      .then(function(gameRound) {
+        req.body.round_created = gameRound[0].current_round;
+      })
+      .then(function() {
+        db.network
+          .findAll({
+            attributes: ["id"],
+            where: { network_short: req.body.network_short }
+          })
+          .then(function(networkData) {
+            req.body.network_id = networkData[0].id;
+            db.article.create(req.body).then(function(data) {
+              res.json(data);
+            });
+          });
+      });
   });
 
   //
