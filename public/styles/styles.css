@@ -20,3 +20,15 @@
 body {
   overflow-x: hidden;
 }
+
+ul {
+  list-style: none;
+}
+
+#clock {
+  font-size: 7em;
+}
+
+.sub-header {
+  font-size: 2em;
+}
