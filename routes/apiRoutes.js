@@ -100,7 +100,7 @@ module.exports = function(app) {
             where: { network_short: req.body.network_short }
           })
           .then(function(networkData) {
-            req.body.network_id = networkData[0].id;
+            req.body.networkId = networkData[0].id;
             db.article.create(req.body).then(function(data) {
               res.json(data);
             });
@@ -239,7 +239,6 @@ module.exports = function(app) {
   //Used by the Admin view. Creates a global effect.
   app.post("/api/newGlobalEffect", function(req, res) {
     //TODO: Then, on success, update admin and overview views with global effects (all of them).
-    console.log("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
     console.log(req.body);
     db.global_effect.create(req.body).then(function(data) {
       console.log(data);
