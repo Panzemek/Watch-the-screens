@@ -9,3 +9,7 @@ var socket = io();
 $("#gameStart").on("click", () => {
   socket.emit("game start");
 });
+
+socket.on("game end", val => {
+  $("#end-game-modal").modal("show");
+});

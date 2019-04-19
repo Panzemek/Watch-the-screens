@@ -116,7 +116,7 @@ socket.on("global modal post", data => {
   }, data.duration * 1000 * 60);
 });
 
-socket.on("global effect submit", data => {
+socket.on("global effect redraw", () => {
   console.log(data);
   //destroy the thing
   $("#global-effects-ul").empty();
