@@ -100,7 +100,7 @@ module.exports = function(app) {
             where: { network_short: req.body.network_short }
           })
           .then(function(networkData) {
-            req.body.network_id = networkData[0].id;
+            req.body.networkId = networkData[0].id;
             db.article.create(req.body).then(function(data) {
               res.json(data);
             });
