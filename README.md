@@ -87,4 +87,8 @@ $ npm install
 $ npm start
 </pre>
 
+## Team
+
+[CPJanz](https://github.com/CPJanz) |[EwRicklefs](https://github.com/EwRicklefs) | [QuietEvolver](https://github.com/QuietEvolver)| [Panzemek](https://github.com/Panzemek)
+
 ## Enjoy!
