@@ -15,7 +15,7 @@ title: 'Watch the Screens: README.md'
 * [Software Architecture Overview](#software-architecture-overview)
 * [Technologies](#technologies)
 * [Setup](#setup)
-
+* [Team](#team)
 
 ## General Info 
 **Watch the Screens** is a communication app for gamers to use in real-time while playing Watch the Skies, see  references below for more info on game play.
@@ -25,6 +25,8 @@ Generations Working to Facilitate _Watch The Screens_, A Pilot Project of the Wa
 ## Demo
 [**Heroku:** Watch The Screens]( https://thawing-escarpment-16041.herokuapp.com/) Current: Live App 
 (*this version dependent on Admin deployment of game*)
+![](https://github.com/EwRicklefs/Watch-the-screens/tree/develop/public/images/14-watch-the-screens.png)
+
 
 ## Github Repository
 [**Github:** Watch The Screens](https://github.com/EwRicklefs/Watch-the-screens) Future Dev Rollout: TBD
