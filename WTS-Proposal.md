@@ -8,19 +8,10 @@ Generations Working to Facility ‘Watch The Screens’, A Pilot Project of the 
 #### Work in progress - [Github repo: Watch The Skies](https://github.com/EwRicklefs/Watch-the-screens)
 
 ## References
-- ["Watch the Skies" video:](https://www.shutupandsitdown.com/tag/watch-the-skies/) Watch the Skies! is a 70-person MegaGame pitting teams of players against one another as the nations of Earth… or as an extraterrestrial menace! ... If you want to play with just one friend, Corporations and Media are for teams-of-two.
+[**"Watch the Video"** for _Watch The Skies®!_](https://www.shutupandsitdown.com/tag/watch-the-skies/) a 70-person MegaGame pitting teams of players against one another as the nations of Earth… or as an extraterrestrial menace! ... If you want to play with just one friend, Corporations and Media are for teams-of-two.
 
+## Use Case(s): 
 
-## The app will have several views: 
-
-- You may delete rows for tactic/activity/benchmark place-holders that are not used.  
-
-- Also, feel free to insert rows for additional activities or benchmarks.  
-
-- Please include at least one benchmark per goal.											
-		
-## Use cases
- 
 There are three (3) users at this time to be accounted whose narrative behind each is as follows: 
 - as a user, I navigate to the app upon entering a room.  The app displays the remaining time left in the current round to play, the articles in the current news briefing, and the headlines of all of the articles displayed in scrollbar.  
 - as a reporter, I want to write up a current news story and a form will populate which will be reflected in a modal to ensure the verbiage is what I want; I then click 'submit' and it will display. 
@@ -51,9 +42,9 @@ The user interface of this application shall be a single page application based 
 
 - Another library/webpack is to be used similar to js.marquee.		
 ## CRU(D)
-- **User:** Read only privilages
-- **Reporter:** create() articles of news stories; read();
-- **Admin:** create() articles of news stories; read(); updates though changes things adhoc; reset time; adding increments, 
+- **Game Player: User-** Read only privilages
+- **Game Player: Reporter-** create() articles of news stories; read();
+- **Game Player: Admin-** create() articles of news stories; read(); updates though changes things adhoc; reset time; adding increments, 
     -    ie. new val(); start new round;			
 						
 - **Tactic:** In order to trigger the best and isolated outcome of the given event, targeted codign will be instituted as needed for the given persons playing the game.					
@@ -72,5 +63,7 @@ The user interface of this application shall be a single page application based 
 - Promotion: Tactics intended to educate the public, media and policy-makers and increase the presence of active living messages and cues to action.												
 - Programs: Organized efforts to encourage and provide greater opportunities for interpersonal dissemination of information between Players/Users/Admins aka Countries/Facilitators/Reporters	
     - Examples include gaming parameters. ie. Article names, etc.  									
-- Policy: Tactics intended to influence changes in public policies and standards as well as organizational practices. Examples include advocacy, relationship building with policy-makers, presentations to policy boards, influencing interstellar policies, working with intergalactic species to maintain intergalactic order.						
+- Policy: Tactics intended to influence changes in public policies and standards as well as organizational practices. Examples include advocacy, relationship building with policy-makers, presentations to policy boards, influencing interstellar policies, working with intergalactic species to maintain intergalactic order.					
+
+
 						
