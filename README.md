@@ -1,8 +1,3 @@
----
-title: 'Watch the Screens: README.md'
----
-
-
 # Watch the Screens
 ## An App for Watch the Skies®
 ## Table of contents
