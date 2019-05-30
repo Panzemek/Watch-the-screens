@@ -1,13 +1,11 @@
 require("dotenv").config();
 var express = require("express");
 var exphbs = require("express-handlebars");
-var moment = require("moment");
-var momentDurationFormatSetup = require("moment-duration-format");
 var db = require("./models");
 
-var serverClock = null;
+var serverClock = 0;
 var isPaused = true;
-var defaultRoundLen = moment("01:00", "mm:ss");
+var defaultRoundLen = 1800;
 var round = 0;
 var roundEnded = false;
 
@@ -58,26 +56,24 @@ db.sequelize.sync(syncOptions).then(function() {
 
 //server countdown timer here
 //TODO: this will need to work on round start
-timerInterval = setInterval(function() {
+let timerInterval = setInterval(function() {
   //check round end logic goes here//
   if (!isPaused) {
-    if (
-      moment(serverClock).isSame(moment("2019-04-19T00:00:00.000"), "second")
-    ) {
+    if (serverClock <= 0) {
       roundEnded = true;
       roundEnd();
       serverEmitter.emit("round ended", { time: serverClock, round: round });
-      console.log("emitted round end")
+      console.log("emitted round end");
     }
     //toggle the following line to see server clock
     //console.log(serverClock.format("mm:ss"));
-    serverClock = moment(serverClock).subtract(1, "second");
+    serverClock = serverClock -= 1;
   }
 }, 1000);
 
 function roundEnd() {
   round++;
-  serverClock = moment(defaultRoundLen, "mm:ss");
+  serverClock = defaultRoundLen;
   db.game
     .findAll({
       attributes: ["current_round"],
@@ -99,15 +95,16 @@ function roundEnd() {
 
 //Socket server logic will go here.
 io.on("connection", socket => {
+  console.log("socket connected...", socket.id);
+
   socket.on("game start", () => {
     console.log("game start clock time is " + serverClock);
-    var timeNew = moment("00:05", "mm:ss");
-    serverClock = moment(timeNew, "mm:ss");
+    serverClock = 5;
   });
   //round end last try
   serverEmitter.on("round ended", data => {
     console.log("round ended");
-    data.time = moment(data.time, "mm:ss");
+    data.time = defaultRoundLen;
     socket.emit("new round", data);
   });
   //terror update
@@ -117,17 +114,14 @@ io.on("connection", socket => {
   //initializes server clock
   socket.on("server time init", time => {
     if (!serverClock) {
-      time = moment(time).format("mm:ss");
-      serverClock = moment(time, "mm:ss");
-      console.log("server time intialized to " + serverClock.format("mm:ss"));
+      serverClock = time;
+      console.log("server time intialized to " + serverClock);
     }
   });
   //default round value changer
-  socket.on("def round changed", newDef => {
-    newDef = parseInt(newDef);
-    defServerNew = moment.duration(newDef, "minutes").format();
-    defaultRoundLen = moment(defServerNew, "mm:ss");
-    console.log("default round len changed to : " + defaultRoundLen.format("mm:ss"));
+  socket.on("def round changed", newDefaultLen => {
+    defaultRoundLen = newDefaultLen;
+    console.log("default round len changed to : " + defaultRoundLen);
   });
   //updates the riot value
   socket.on("riot update", riotVal => {
@@ -137,7 +131,7 @@ io.on("connection", socket => {
 
   if (serverClock) {
     socket.on("new page", () => {
-      data = { time: serverClock, pause: isPaused , round: round };
+      data = { time: serverClock, pause: isPaused, round: round };
       io.emit("new page load", data);
     });
   }
@@ -178,7 +172,7 @@ io.on("connection", socket => {
   });
   socket.on("start timer", timerVal => {
     if (!serverClock) {
-      serverClock = moment(timerVal, "mm:ss");
+      serverClock = timerVal;
     }
     io.emit("start timer", serverClock);
     isPaused = false;
@@ -187,10 +181,8 @@ io.on("connection", socket => {
 
   socket.on("change timer", newTimerVal => {
     if (serverClock) {
-      newTimerVal = parseInt(newTimerVal);
-      serverClockNew = moment.duration(newTimerVal, "minutes").format();
-      serverClock = moment(serverClockNew, "mm:ss");
-      io.emit("change timer", serverClockNew);
+      serverClock = newTimerVal;
+      io.emit("change timer", serverClock);
       console.log("timer changed");
     }
   });

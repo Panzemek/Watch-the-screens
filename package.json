@@ -36,11 +36,11 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/EwRicklefs/Watch-the-screens.git"
+    "url": "git+https://github.com/Panzemek/Watch-the-screens.git"
   },
   "author": "",
   "bugs": {
-    "url": "https://github.com/EwRicklefs/Watch-the-screens/issues"
+    "url": "https://github.com/Panzemek/Watch-the-screens.git"
   },
-  "homepage": "https://github.com/EwRicklefs/Watch-the-screens#readme"
+  "homepage": "https://github.com/Panzemek/Watch-the-screens.git#readme"
 }

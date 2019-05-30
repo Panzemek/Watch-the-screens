@@ -3,7 +3,6 @@ var lastUsedArticle = 1;
 var carouselListener;
 var socket = io();
 var carouselRunning = false;
-// var pageLoaded = moment();
 
 // On page load we need to get all available articles and put them in our articles array.
 $(this).ready(function() {
@@ -157,7 +156,7 @@ socket.on("new article", article => {
 
 socket.on("new page load", data => {
   console.log("new page recieved");
-  time = moment(data.time);
+  time = data.time;
   console.log(time);
   isPaused = data.pause;
 });

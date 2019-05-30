@@ -1,11 +1,12 @@
 {
   "development": {
     "username": "root",
-    "password": "Ff@!YO&48As&",
+    "password": null,
     "database": "wts_game_db",
     "host": "localhost",
     "port": "3306",
-    "dialect": "mysql"
+    "dialect": "mysql",
+    "logging": false
   },
   "test": {
     "username": "root",
@@ -17,6 +18,7 @@
   },
   "production": {
     "use_env_variable": "JAWSDB_URL",
-    "dialect": "mysql"
+    "dialect": "mysql",
+    "logging": false
   }
 }

@@ -2,7 +2,6 @@
 var socket = io();
 
 $("#terror-button").click(function() {
-  console.log($("#admin-container").data("game"));
   data = {
     terror: $("#terror-tracker-text").val(),
     id: $("#admin-container").data("game")
@@ -38,7 +37,6 @@ $("#edit").click(() => {
 
 //Send global post button click
 $("#global-post-submit-button").click(function() {
-  console.log($("#global-post-text").val(), $("#global-post-duration").val());
   modalData = {
     text: $("#global-post-text").val(),
     duration: $("#global-post-duration").val()
@@ -57,7 +55,6 @@ $("#global-post-submit-button").click(function() {
 
 //Update subsequent round time
 $("#default-time-button").click(function() {
-  console.log($("#default-time-text").val());
   var defVal = $("#default-time-text").val();
   $.ajax("/api/updateDefaultTime", {
     type: "put",
@@ -83,7 +80,6 @@ $("#end-game-confirm-text").keyup(function() {
 });
 
 $("#end-game-confirm-button").click(function() {
-  console.log("GAME OVER, MAN!");
   $.ajax("/api/endGame", {
     type: "put",
     data: { id: $("#admin-container").data("game") }
@@ -96,10 +92,8 @@ $("#toggle-article-button").click(function() {
   var selected = $("#toggle-article-dropdown option:selected");
   if (selected.data("hidden")) {
     newState = false;
-    console.log("Toggling to show");
   } else {
     newState = true;
-    console.log("Toggling to hide");
   }
   $.ajax("/api/toggleArticle", {
     type: "put",
@@ -139,7 +133,6 @@ $(".global-event-button").click(function() {
   if ($(this).data("is_hidden") === true) {
     $("#global-effect-is-hidden").prop("checked", true);
   } else {
-    console.log("false", $(this).data("is_hidden"));
     $("#global-effect-is-hidden").prop("checked", false);
   }
   $("#global-effect-submit-button").data("effect-id", $(this).data("id"));
@@ -172,7 +165,6 @@ $("#global-effect-submit-button").click(function() {
     $.ajax("/api/" + id + "/overviewGlobalEffects", {
       type: "get"
     }).then(res => {
-      console.log(res);
       socket.emit("global effect submit", res);
     });
   });
@@ -204,33 +196,26 @@ $("#global-effect-add-submit-button").click(function() {
     }
   }).then(res => {
     var id = $("#admin-container").data("game");
-    console.log(res);
     $.ajax("/api/" + id + "/overviewGlobalEffects", {
       type: "get"
     }).then(res => {
-      console.log("HERE!!")
-      console.log(res);
       socket.emit("global effect submit", res);
     });
   });
 });
 
 socket.on("new article", art => {
-  console.log("New article posted!");
   $("#admin-refresh").removeClass("hidden");
 });
 
 socket.on("hide article", () => {
-  console.log("hidden article");
   $("#admin-refresh").removeClass("hidden");
 });
 
 socket.on("global effect redraw", art => {
-  console.log("global effect change");
   $("#admin-refresh").removeClass("hidden");
 });
 
 socket.on("new global mod", val => {
-  console.log("new global mod");
   $("#admin-refresh").removeClass("hidden");
 });

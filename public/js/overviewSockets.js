@@ -43,7 +43,7 @@ socket.on("new article", data => {
 
 socket.on("new page load", data => {
   console.log("new page recieved");
-  time = moment(data.time);
+  time = data.time;
   console.log(time);
   isPaused = data.pause;
 });

@@ -31,7 +31,6 @@ module.exports = function(app) {
         }
       })
       .then(function(effectsResult) {
-        console.log("hi");
         res.json(effectsResult);
       });
   });
@@ -67,14 +66,11 @@ module.exports = function(app) {
       .then(function(articleResult) {
         let showableArts = [];
         articleResult.articles.forEach(article => {
-          console.log(articleResult.current_round - article.round_created);
           if (
             articleResult.current_round - article.round_created <=
             articleResult.article_decay
           ) {
-            showableArts.push(article);
-            console.log(showableArts);
-          }
+            showableArts.push(article);          }
         });
         res.json(showableArts);
       });
@@ -138,11 +134,9 @@ module.exports = function(app) {
   //Used by the admin createGame view
   app.post("/api/createGame", function(req, res) {
     //TODO: Return the gameId and use that to redirect to /<game.id>/admin.
-    console.log(req.body);
     req.body.is_paused = true;
     req.body.is_complete = false;
     db.game.create(req.body).then(function(dbgame) {
-      console.log(dbgame.id);
       res.redirect("/" + dbgame.id + "/admin");
     });
   });
@@ -155,12 +149,10 @@ module.exports = function(app) {
         res.json(endData);
       });
     //TODO: Make a put call to the db to switch the is_complete flag to true. Then on success handle end of game
-    console.log(req.body);
   });
 
   //Used by the admin view. Updates the terror level.
   app.put("/api/updateTerror", function(req, res) {
-    console.log(req.body);
     db.game
       .update({ terror: req.body.terror }, { where: { id: req.body.id } })
       .then(function(dbterror) {
@@ -175,8 +167,6 @@ module.exports = function(app) {
     db.game
       .update({ rioters: req.body.rioters }, { where: { id: req.body.id } })
       .then(function(dbRiot) {
-        console.log("should only happen if update");
-        console.log(dbRiot);
         res.json(dbRiot);
       });
 
@@ -186,7 +176,6 @@ module.exports = function(app) {
   // Article hide put route.
   // Req.body requires is_hidden, article ID
   app.put("/api/hideArticle", function(req, res) {
-    console.log(req.body);
     db.article
       .update({ is_hidden: req.body.is_hidden }, { where: { id: req.body.id } })
       .then(function(hiddenArt) {
@@ -199,14 +188,12 @@ module.exports = function(app) {
   //Used by the admin view. Sends a message to all overview screens the pops a modal with a global message for the specified duration.
   app.post("/api/postGlobal", function(req, res) {
     //TODO: push this data to the overview screen (which should trigger the modal to pop).
-    console.log(req.body);
     res.json(req.body);
   });
 
   //Used by the admin view. Updates the time that a round starts out with (should not affect current round).
   app.put("/api/updateDefaultTime", function(req, res) {
     //TODO: make a put call to the db to update the round_duration value in the game table
-    console.log(req.body);
     db.game
       .update(
         {
@@ -215,7 +202,6 @@ module.exports = function(app) {
         { where: { id: req.body.gameId } }
       )
       .then(function(data) {
-        console.log(data);
         res.json(data);
       });
   });
@@ -223,7 +209,6 @@ module.exports = function(app) {
   //Used by the admin view. Toggles an article's visibility on the overview page.
   app.put("/api/toggleArticle", function(req, res) {
     //TODO: make a put call to the db to update the is hidden status of the article. Then, on success, update admin and overview views with article data.
-    console.log(req.body);
     db.article
       .update(
         {
@@ -232,7 +217,6 @@ module.exports = function(app) {
         { where: { id: req.body.id } }
       )
       .then(function(data) {
-        console.log(data);
         res.json(data);
       });
   });
@@ -241,7 +225,6 @@ module.exports = function(app) {
   app.post("/api/newGlobalEffect", function(req, res) {
     //TODO: Then, on success, update admin and overview views with global effects (all of them).
     db.global_effect.create(req.body).then(function(data) {
-      console.log(data);
       res.json(data);
     });
   });
